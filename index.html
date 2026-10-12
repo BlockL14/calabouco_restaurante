@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Calabouço Restaurante e Pizzaria | Curitiba</title>
+    <meta
+      name="description"
+      content="Restaurante e pizzaria à luz de velas no Centro Cívico de Curitiba. Pizzas, massas e vinhos em ambiente de inspiração medieval, desde 1991."
+    />
+    <meta name="theme-color" content="#100d0b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+
+    <!-- Compartilhamento. Quando houver domínio definido, troque og:image por uma URL absoluta. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Calabouço Restaurante e Pizzaria" />
+    <meta property="og:title" content="Calabouço Restaurante e Pizzaria | Curitiba" />
+    <meta
+      property="og:description"
+      content="Pizzas, massas e vinhos à luz de velas, em ambiente de inspiração medieval no Centro Cívico de Curitiba."
+    />
+    <meta property="og:image" content="%BASE_URL%images/og-calabouco.jpg" />
+    <meta property="og:image:width" content="683" />
+    <meta property="og:image:height" content="664" />
+    <meta property="og:image:alt" content="Corredor de tijolos com arcos, grades de ferro e tocha acesa no Calabouço." />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Imagem inicial da abertura: prioridade máxima (mesmo srcset/sizes do componente). -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      fetchpriority="high"
+      imagesrcset="%BASE_URL%images/corredor-360.avif 360w, %BASE_URL%images/corredor-683.avif 683w, %BASE_URL%images/corredor-1020.avif 1020w"
+      imagesizes="(min-width: 1024px) 46vw, (min-width: 700px) 48vw, 100vw"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Calabouço Restaurante e Pizzaria",
+        "description": "Restaurante e pizzaria à luz de velas, com pizzas, massas e vinhos em ambiente de inspiração medieval.",
+        "telephone": "+55 41 3254-6112",
+        "foundingDate": "1991",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Rua Mateus Leme, 1000",
+          "addressLocality": "Curitiba",
+          "addressRegion": "PR",
+          "postalCode": "80530-010",
+          "addressCountry": "BR"
+        },
+        "sameAs": ["https://www.instagram.com/calaboucorestaurante/"]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: system-ui, sans-serif; color: #f3eadf; background: #100d0b">
+        Calabouço Restaurante e Pizzaria — Rua Mateus Leme, 1000, Centro Cívico, Curitiba/PR · (41) 3254-6112.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

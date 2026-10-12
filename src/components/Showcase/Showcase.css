@@ -1,0 +1,705 @@
+/* ==========================================================================
+   Abertura — vitrine cinematográfica
+   Celular: imagem no topo, texto, faixa de cartões entre as setas.
+   Tablet (≥700px): texto à esquerda, imagem à direita, cartões abaixo.
+   Desktop (≥1024px): texto | imagem principal 4:5 | coluna de cartões em arco.
+   ========================================================================== */
+
+.showcase {
+  --pad-b: clamp(18px, 3.6svh, 40px);
+  --hero-h: max(100svh, 600px);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--c-black);
+}
+
+/* ---------- Luz ambiente: a foto ativa, desfocada, tinge a tela ---------- */
+
+.showcase__ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.showcase__glow {
+  position: absolute;
+  inset: -12%;
+  background-position: center;
+  background-size: cover;
+  filter: blur(42px) saturate(1.25);
+  opacity: 0;
+  transition: opacity 1400ms var(--ease-in-out);
+  will-change: opacity;
+}
+
+.showcase__glow.is-active {
+  opacity: 0.62;
+}
+
+@media (min-width: 1024px) {
+  .showcase__glow.is-active {
+    opacity: 0.8;
+  }
+}
+
+.showcase__ambient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(16 13 11 / 0.55) 0%, rgb(16 13 11 / 0.35) 30%, rgb(16 13 11 / 0.86) 62%, var(--c-black) 100%);
+}
+
+/* ---------- Grade ---------- */
+
+.showcase__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'stage stage stage'
+    'copy copy copy'
+    'prev rail next';
+  column-gap: 10px;
+  max-width: 1760px;
+  margin-inline: auto;
+  padding: var(--header-h) var(--gutter) 32px;
+}
+
+/* ---------- Texto ---------- */
+
+.showcase__copy {
+  grid-area: copy;
+  position: relative;
+  z-index: 2;
+  padding-block: 22px 28px;
+  container-type: inline-size;
+}
+
+.showcase__brand {
+  margin-bottom: 14px;
+  letter-spacing: 0.16em;
+}
+
+.showcase__brand::before {
+  display: none;
+}
+
+.showcase__slide:focus-visible {
+  outline-offset: 8px;
+}
+
+.showcase__title {
+  font-size: var(--fs-display);
+  font-size: clamp(2.5rem, 13.5cqi, 5.5rem);
+  line-height: 0.98;
+  margin-bottom: 16px;
+}
+
+/* O trecho em itálico ocupa sua própria linha: “Uma noite / fora do comum.” */
+.showcase__title em {
+  display: block;
+  font-style: italic;
+  color: var(--c-gold-2);
+}
+
+.showcase__desc {
+  margin-bottom: 24px;
+  max-width: 27rem;
+}
+
+/* Palavras do título: revelação de baixo para cima, recortada só na base. */
+.w {
+  display: inline-block;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+  clip-path: inset(-0.6em -0.4em 0 -0.4em);
+  vertical-align: top;
+}
+
+.w__i {
+  display: inline-block;
+}
+
+.is-entering .w__i {
+  animation: sc-word-in var(--dur-text-in) var(--ease-out) both;
+  animation-delay: calc(40ms + var(--i, 0) * 46ms);
+}
+
+.is-entering [data-anim]:not(.showcase__title) {
+  animation: sc-fade-up var(--dur-text-in) var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * 1ms);
+}
+
+@keyframes sc-word-in {
+  from {
+    transform: translate3d(0, 108%, 0) rotate(1.5deg);
+  }
+}
+
+@keyframes sc-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+}
+
+/* ---------- Imagem principal ---------- */
+
+.showcase__stage {
+  grid-area: stage;
+  position: relative;
+  z-index: 1;
+  margin-inline: calc(var(--gutter) * -1);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.showcase__panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 54svh;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--c-coal);
+}
+
+.showcase__panel picture,
+.showcase__panel img {
+  width: 100%;
+  height: 100%;
+}
+
+.showcase__panel-img {
+  transform-origin: 50% 60%;
+  animation: sc-settle 2200ms var(--ease-out) both;
+}
+
+@keyframes sc-settle {
+  from {
+    transform: scale(1.06);
+  }
+}
+
+/* Clone em voo durante a troca (criado pelo JS) */
+.showcase__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.showcase__clone {
+  position: absolute;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.7);
+  will-change: left, top, width, height;
+}
+
+.showcase__clone picture,
+.showcase__clone img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Numeração sobre a imagem (celular) */
+.showcase__meter {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 12px 3px 10px;
+  border-radius: 999px;
+  background: rgb(16 13 11 / 0.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.showcase__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--c-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+}
+
+.showcase__count-now {
+  font-size: 1.25rem;
+  color: var(--c-ivory);
+}
+
+.showcase__progress {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.showcase__progress span {
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(243 234 223 / 0.25);
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    width var(--dur-slow) var(--ease-out);
+}
+
+.showcase__progress .is-active {
+  width: 32px;
+  background: var(--c-gold-2);
+}
+
+/* ---------- Controles ---------- */
+
+.showcase__controls {
+  display: contents;
+}
+
+.showcase__prev {
+  grid-area: prev;
+  align-self: start;
+  margin-top: 20px;
+}
+
+.showcase__next {
+  grid-area: next;
+  align-self: start;
+  margin-top: 20px;
+}
+
+.showcase__status {
+  display: none;
+}
+
+/* ---------- Cartões ---------- */
+
+.showcase__rail {
+  grid-area: rail;
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.showcase__rail-title {
+  display: none;
+}
+
+.showcase__cards {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.showcase__cards li {
+  flex: 1 1 0;
+  max-width: 96px;
+  min-width: 0;
+}
+
+.showcase__cards.is-intro li {
+  animation: sc-card-in 900ms var(--ease-out) both;
+}
+
+.showcase__cards.is-intro li:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.showcase__cards.is-intro li:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+@keyframes sc-card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+}
+
+.sc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sc-card:focus-visible {
+  outline: none;
+}
+
+.sc-card__media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 999px 999px 3px 3px;
+  background: var(--c-coal);
+  outline: 1px solid var(--c-line);
+  outline-offset: 4px;
+  transition: outline-color var(--dur-base) var(--ease-out);
+}
+
+.sc-card__media picture,
+.sc-card__media img {
+  width: 100%;
+  height: 100%;
+}
+
+.sc-card__media img {
+  filter: brightness(0.8) saturate(0.95);
+  transition:
+    transform 900ms var(--ease-out),
+    filter var(--dur-slow) var(--ease-out);
+}
+
+.sc-card:focus-visible .sc-card__media {
+  outline-color: var(--c-gold-2);
+  outline-width: 2px;
+}
+
+.sc-card:focus-visible .sc-card__media img {
+  transform: scale(1.06);
+  filter: brightness(1) saturate(1);
+}
+
+/* Hover só em dispositivos com ponteiro: no toque, o estado “grudaria” no
+   cartão que passa a ocupar a posição tocada. */
+@media (hover: hover) {
+  .sc-card:hover .sc-card__media {
+    outline-color: var(--c-gold-2);
+  }
+
+  .sc-card:hover .sc-card__media img {
+    transform: scale(1.06);
+    filter: brightness(1) saturate(1);
+  }
+
+  .sc-card:hover .sc-card__label {
+    color: var(--c-ivory);
+  }
+}
+
+.sc-card__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  line-height: 1.25;
+}
+
+.sc-card__num {
+  display: none;
+  color: var(--c-gold-2);
+  font-size: 1.0625rem;
+}
+
+.sc-card__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--c-muted);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+/* ==========================================================================
+   Tablet
+   ========================================================================== */
+
+@media (min-width: 700px) {
+  .showcase__ambient::after {
+    background:
+      linear-gradient(90deg, rgb(16 13 11 / 0.92) 0%, rgb(16 13 11 / 0.6) 45%, rgb(16 13 11 / 0.5) 100%),
+      linear-gradient(0deg, var(--c-black) 0%, transparent 24%);
+  }
+
+  .showcase__inner {
+    --panel-w: min(50vw, calc((100svh - var(--header-h) - 48px) * 0.8));
+    grid-template-columns: minmax(0, 1fr) var(--panel-w);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      'copy stage'
+      'controls stage'
+      'rail rail';
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+    padding-top: calc(var(--header-h) + 12px);
+  }
+
+  .showcase__stage {
+    grid-row: 1 / 3;
+    margin: 0;
+    padding: 10px;
+  }
+
+  /* Moldura fina, como um portal */
+  .showcase__stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--c-line);
+    pointer-events: none;
+  }
+
+  .showcase__panel {
+    width: calc(var(--panel-w) - 20px);
+    max-height: none;
+    border-radius: 2px;
+  }
+
+  .showcase__meter {
+    display: none;
+  }
+
+  .showcase__copy {
+    align-self: end;
+    padding: 0 0 28px;
+  }
+
+  .showcase__brand {
+    letter-spacing: 0.22em;
+  }
+
+  .showcase__brand::before {
+    display: block;
+  }
+
+  .showcase__controls {
+    grid-area: controls;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: end;
+    padding-bottom: 10px;
+  }
+
+  .showcase__prev,
+  .showcase__next {
+    grid-area: auto;
+    align-self: center;
+    margin: 0;
+  }
+
+  .showcase__status {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      'count label'
+      'bar bar';
+    align-items: baseline;
+    column-gap: 14px;
+    row-gap: 8px;
+    margin-left: 14px;
+  }
+
+  .showcase__status .showcase__count {
+    grid-area: count;
+  }
+
+  .showcase__status .showcase__progress {
+    grid-area: bar;
+  }
+
+  .showcase__status-label {
+    grid-area: label;
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .showcase__rail {
+    margin-top: 32px;
+  }
+
+  .showcase__cards {
+    justify-content: flex-start;
+    gap: 18px;
+  }
+
+  .showcase__cards li {
+    flex: 0 0 auto;
+    width: 116px;
+    max-width: none;
+  }
+
+  .sc-card {
+    text-align: left;
+  }
+
+  .sc-card__meta {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .sc-card__num {
+    display: inline;
+  }
+
+  .sc-card__label {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ==========================================================================
+   Desktop
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .showcase__ambient::after {
+    background:
+      linear-gradient(90deg, rgb(16 13 11 / 0.94) 0%, rgb(16 13 11 / 0.66) 30%, rgb(16 13 11 / 0.3) 62%, rgb(16 13 11 / 0.62) 100%),
+      linear-gradient(0deg, var(--c-black) 0%, transparent 22%),
+      linear-gradient(180deg, rgb(16 13 11 / 0.6) 0%, transparent 18%);
+  }
+
+  .showcase__inner {
+    --frame: 12px;
+    --stage-h: calc(var(--hero-h) - var(--header-h) - var(--pad-b) - 18px);
+    --panel-w: min(calc(var(--stage-h) * 0.8 - var(--frame) * 2), 44vw);
+    --card-gap: 16px;
+    --card-meta: 30px;
+    --rail-title: 34px;
+    --card-w: min(
+      clamp(104px, 10.4vw, 152px),
+      calc(
+        ((var(--panel-w) * 1.25 + var(--frame) * 2 - var(--rail-title) - 2 * var(--card-gap)) / 3 - var(--card-meta)) *
+          0.75
+      )
+    );
+    min-height: var(--hero-h);
+    grid-template-columns: minmax(0, 1fr) calc(var(--panel-w) + var(--frame) * 2) var(--card-w);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'copy stage rail'
+      'controls stage rail';
+    column-gap: clamp(2rem, 3.4vw, 4rem);
+    padding: calc(var(--header-h) + 18px) var(--gutter) var(--pad-b);
+  }
+
+  .showcase__stage {
+    grid-row: 1 / -1;
+    align-self: center;
+    padding: var(--frame);
+  }
+
+  .showcase__panel {
+    width: var(--panel-w);
+  }
+
+  .showcase__copy {
+    align-self: center;
+    padding: 0 0 40px;
+  }
+
+  .showcase__brand {
+    margin-bottom: clamp(20px, 4svh, 40px);
+  }
+
+  .showcase__desc {
+    margin-bottom: 36px;
+  }
+
+  .showcase__controls {
+    padding-bottom: var(--frame);
+  }
+
+  .showcase__rail {
+    grid-row: 1 / -1;
+    align-self: center;
+    margin: 0;
+  }
+
+  .showcase__rail-title {
+    display: block;
+    height: calc(var(--rail-title) - 16px);
+    margin-bottom: 16px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--c-faint);
+  }
+
+  .showcase__cards {
+    flex-direction: column;
+    gap: var(--card-gap);
+  }
+
+  .showcase__cards li {
+    width: var(--card-w);
+  }
+
+  .showcase__cards.is-intro li:nth-child(1) {
+    animation-delay: 200ms;
+  }
+
+  .showcase__cards.is-intro li:nth-child(2) {
+    animation-delay: 290ms;
+  }
+
+  .showcase__cards.is-intro li:nth-child(3) {
+    animation-delay: 380ms;
+  }
+
+  .sc-card__meta {
+    min-height: calc(var(--card-meta) - 8px);
+  }
+}
+
+/* Telas largas e baixas: título um pouco menor para caber sem cortes */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .showcase__title {
+    font-size: min(clamp(2.5rem, 13.5cqi, 5.5rem), 9svh);
+  }
+}
+
+/* Celular deitado e telas muito baixas */
+@media (max-height: 520px) and (min-width: 700px) {
+  .showcase__title {
+    font-size: min(clamp(2.5rem, 13.5cqi, 5.5rem), 12svh);
+  }
+
+  .showcase__desc {
+    margin-bottom: 18px;
+  }
+}
+
+/* ---------- Movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase__glow {
+    transition: opacity 200ms linear;
+  }
+
+  .showcase__panel-img,
+  .showcase__cards.is-intro li,
+  .is-entering .w__i,
+  .is-entering [data-anim]:not(.showcase__title) {
+    animation: none;
+  }
+
+  .sc-card__media img,
+  .showcase__progress span {
+    transition: none;
+  }
+
+  .sc-card:hover .sc-card__media img,
+  .sc-card:focus-visible .sc-card__media img {
+    transform: none;
+  }
+}

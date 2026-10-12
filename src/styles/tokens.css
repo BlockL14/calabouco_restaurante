@@ -1,0 +1,66 @@
+/* Tokens de design — cores, tipografia, espaçamento e movimento.
+   As durações também são lidas pelo JavaScript da abertura (src/lib/motion.ts). */
+
+:root {
+  /* Paleta */
+  --c-black: #100d0b;
+  --c-black-2: #14100d;
+  --c-coal: #1b1613;
+  --c-coal-2: #241c17;
+  --c-red: #8f2029;
+  --c-red-2: #a82c36;
+  --c-gold: #b28a50;
+  --c-gold-2: #d4b47e;
+  --c-ivory: #f3eadf;
+  --c-muted: #c8bbaa;
+  --c-faint: #a39584;
+  --c-line: rgb(178 138 80 / 0.22);
+  --c-line-strong: rgb(178 138 80 / 0.48);
+  --c-glass: rgb(16 13 11 / 0.82);
+
+  /* Tipografia */
+  --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --fs-eyebrow: 0.75rem;
+  --fs-small: 0.875rem;
+  --fs-body: 1rem;
+  --fs-lead: clamp(1.0625rem, 0.98rem + 0.3vw, 1.1875rem);
+  --fs-h3: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  --fs-h2: clamp(2.375rem, 1.5rem + 3.2vw, 4.5rem);
+  --fs-display: clamp(2.625rem, 1.2rem + 4.4vw, 5.75rem);
+
+  /* Layout */
+  --header-h: 64px;
+  --gutter: clamp(1rem, 4vw, 4.5rem);
+  --maxw: 1320px;
+  --section-pad: clamp(5rem, 3rem + 7vw, 10rem);
+  --radius: 4px;
+
+  /* Movimento */
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 720ms;
+  --dur-morph: 860ms;
+  --dur-text-out: 220ms;
+  --dur-text-in: 620ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-morph: cubic-bezier(0.72, 0, 0.18, 1);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-slow: 1ms;
+    --dur-morph: 1ms;
+    --dur-text-out: 1ms;
+    --dur-text-in: 1ms;
+  }
+}
