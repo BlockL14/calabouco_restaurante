@@ -24,8 +24,8 @@ type ImageMeta = Omit<ImageAsset, 'key' | 'width' | 'height' | 'widths' | 'glow'
 const meta: Record<keyof typeof manifest, ImageMeta> = {
   corredor: {
     alt: 'Corredor de tijolos aparentes com arcos sucessivos, grades de ferro, uma tocha acesa e um escudo pendurado no portão ao fundo.',
-    // Mantém o crédito do fotógrafo (borda direita) dentro do enquadramento.
-    position: { base: '78% 50%', md: '80% 50%', lg: '84% 50%' },
+    // Mantém o crédito do fotógrafo (borda direita) visível e fora dos controles da abertura.
+    position: { base: '78% 50%', md: '0% 50%' },
     credit: '@gabrielmessine',
   },
   'corredor-arte': {
@@ -39,11 +39,12 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   },
   'arte-pizza': {
     alt: 'Arte do Calabouço: forno com fogo aceso, a frase “Restaurante e Pizzaria à la carte — desde 1991” e uma pizza servida em primeiro plano.',
-    position: { base: '50% 50%' },
+    // Preserva o logotipo no topo quando a abertura recorta a altura.
+    position: { base: '50% 14%' },
   },
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',
-    position: { base: '50% 50%' },
+    position: { base: '50% 18%' },
   },
   pizza: {
     alt: 'Pizza servida em forma escura: metade com rodelas de tomate, azeitonas pretas e manjericão; metade com cebola e azeitonas verdes.',

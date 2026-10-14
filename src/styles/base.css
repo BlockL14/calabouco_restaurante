@@ -45,6 +45,25 @@ img {
   height: auto;
 }
 
+/* Fotografias: preenchem a caixa sem distorcer, com enquadramento por breakpoint
+   definido em src/content/images.ts (variáveis aplicadas pelo componente Picture). */
+.obj {
+  object-fit: cover;
+  object-position: var(--pos-base, 50% 50%);
+}
+
+@media (min-width: 700px) {
+  .obj {
+    object-position: var(--pos-md, var(--pos-base, 50% 50%));
+  }
+}
+
+@media (min-width: 1024px) {
+  .obj {
+    object-position: var(--pos-lg, var(--pos-md, var(--pos-base, 50% 50%)));
+  }
+}
+
 button {
   font: inherit;
   color: inherit;
@@ -247,6 +266,22 @@ ol[role='list'] {
 
 .btn--primary:hover {
   --btn-bg: var(--c-red-2);
+  --btn-line: var(--c-gold-2);
+}
+
+.btn--light {
+  --btn-bg: var(--c-ivory);
+  --btn-fg: var(--c-black);
+  --btn-line: var(--c-ivory);
+  font-weight: 600;
+}
+
+.btn--light::after {
+  background: linear-gradient(105deg, transparent 30%, rgb(178 138 80 / 0.28) 50%, transparent 70%);
+}
+
+.btn--light:hover {
+  --btn-bg: #fff8ee;
   --btn-line: var(--c-gold-2);
 }
 

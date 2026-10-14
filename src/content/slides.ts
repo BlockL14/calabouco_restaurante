@@ -8,11 +8,15 @@ import type { ImageKey } from './images';
 
 export type Slide = {
   id: string;
-  /** Rótulo curto exibido no cartão. */
+  /** Pequeno texto acima do título (com o traço dourado). */
+  eyebrow: string;
+  /** Título exibido no cartão. */
   label: string;
+  /** Linha curta acima do título no cartão. */
+  kicker: string;
+  /** Título em duas linhas: o trecho `emphasis` (final do título) vai para a segunda linha. */
   title: string;
-  /** Trecho final do título exibido em itálico (opcional; deve existir em `title`). */
-  emphasis?: string;
+  emphasis: string;
   description: string;
   cta: { label: string; href: string; menuCategory?: MenuCategoryId };
   image: ImageKey;
@@ -21,7 +25,9 @@ export type Slide = {
 export const slides: Slide[] = [
   {
     id: 'ambiente',
+    eyebrow: 'Calabouço · Restaurante e Pizzaria',
     label: 'Ambiente',
+    kicker: 'Luz de velas',
     title: 'Uma noite fora do comum.',
     emphasis: 'fora do comum.',
     description: 'Pizzas, massas e vinhos à luz de velas no Centro Cívico de Curitiba.',
@@ -30,7 +36,9 @@ export const slides: Slide[] = [
   },
   {
     id: 'cozinha',
+    eyebrow: 'Da cozinha',
     label: 'Da cozinha',
+    kicker: 'Sabores da casa',
     title: 'Sabor que se estende.',
     emphasis: 'se estende.',
     description: 'Pizzas, massas e pratos da casa servidos à mesa, entre tijolos e velas acesas.',
@@ -39,7 +47,9 @@ export const slides: Slide[] = [
   },
   {
     id: 'pizzas',
+    eyebrow: 'Pizzaria à la carte',
     label: 'Pizzas',
+    kicker: 'À la carte',
     title: 'Tradicionais e da casa.',
     emphasis: 'da casa.',
     description: 'Dos clássicos às receitas com nome de castelo, como Cavaleiro Negro e Guarda do Castelo.',
@@ -48,10 +58,12 @@ export const slides: Slide[] = [
   },
   {
     id: 'casa',
+    eyebrow: 'Centro Cívico · Curitiba',
     label: 'A casa',
-    title: 'No Centro Cívico, desde 1991.',
+    kicker: 'Desde 1991',
+    title: 'Tradição desde 1991.',
     emphasis: 'desde 1991.',
-    description: 'Restaurante e pizzaria à la carte na Rua Mateus Leme, em Curitiba.',
+    description: 'Restaurante e pizzaria à la carte na Rua Mateus Leme, no Centro Cívico de Curitiba.',
     cta: { label: 'Como chegar', href: `#${sectionIds.visit}` },
     image: 'arte-fachada',
   },

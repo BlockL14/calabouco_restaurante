@@ -85,7 +85,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <a className="btn btn--ghost site-header__cta" href={`#${sectionIds.flavors}`}>
+        <a className="btn btn--light site-header__cta" href={`#${sectionIds.flavors}`}>
           Explore os sabores
         </a>
 
