@@ -34,6 +34,30 @@ body {
   overflow-x: clip;
 }
 
+/* Parede de tijolos ao fundo (telas largas). A textura repete sem emenda e é a
+   mesma para a página inteira; cada seção escurece e “ilumina” a parede com
+   degradês próprios. Navegadores sem image-set() ficam no fundo escuro liso. */
+@media (min-width: 1024px) {
+  :root {
+    --wall-image: image-set(
+      url('../assets/textures/tijolos.avif') type('image/avif'),
+      url('../assets/textures/tijolos.webp') type('image/webp')
+    );
+    /* Penumbra nas bordas de cada seção: as emendas entre seções ficam no escuro */
+    --wall-edges:
+      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px),
+      linear-gradient(0deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px);
+  }
+
+  body,
+  .wall {
+    background-color: var(--c-black);
+    background-image: linear-gradient(rgb(var(--wall-shadow) / 0.5), rgb(var(--wall-shadow) / 0.5)), var(--wall-image);
+    background-size: auto, var(--wall-size);
+    background-position: 0 0;
+  }
+}
+
 img,
 picture,
 svg {
@@ -157,7 +181,7 @@ ol[role='list'] {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.22em;
@@ -189,9 +213,28 @@ ol[role='list'] {
 
 .display em,
 .display .em {
-  font-style: italic;
-  font-weight: 500;
+  font-family: var(--font-accent);
+  font-style: var(--accent-style);
+  font-weight: var(--accent-weight);
+  font-synthesis: none;
   color: var(--c-gold-2);
+}
+
+/* Telas largas: o destaque em gótica ganha linha própria, como nas artes da casa */
+@media (min-width: 1024px) {
+  .display em,
+  .display .em {
+    display: block;
+    margin-top: 0.06em;
+    font-size: 1.08em;
+    line-height: 1.02;
+    letter-spacing: 0;
+  }
+
+  .eyebrow {
+    font-size: 0.8125rem;
+    letter-spacing: 0.24em;
+  }
 }
 
 .lead {
@@ -204,7 +247,7 @@ ol[role='list'] {
 
 .numeral {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: var(--display-italic);
   font-weight: 500;
   font-variant-numeric: lining-nums;
 }

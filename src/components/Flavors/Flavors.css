@@ -116,10 +116,11 @@
 }
 
 .signature__name {
-  font-family: var(--font-display);
+  font-family: var(--font-accent);
   font-size: clamp(3.5rem, 1.6rem + 8vw, 8.5rem);
-  font-style: italic;
-  font-weight: 500;
+  font-style: var(--accent-style);
+  font-weight: var(--accent-weight);
+  font-synthesis: none;
   line-height: 0.92;
   letter-spacing: -0.02em;
   background: linear-gradient(100deg, var(--c-ivory) 20%, #e7cf9f 48%, var(--c-ivory) 72%);
@@ -185,7 +186,7 @@
 }
 
 .menu__kicker {
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.22em;
@@ -339,6 +340,7 @@
   padding-bottom: 0.75rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--c-line-strong);
+  font-family: var(--font-label);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -348,7 +350,7 @@
 
 .menu__group-count {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: var(--display-italic);
   font-size: 1rem;
   letter-spacing: 0;
   color: var(--c-faint);
@@ -508,5 +510,26 @@
   .menu__indicator,
   .menu__more-icon {
     transition: none;
+  }
+}
+
+/* ---------- Telas largas: parede de tijolos ----------
+   Penumbra geral (o cardápio fica sobre a parte mais escura) e uma luz de vela
+   junto à foto do prato. A textura vem do <body>; aqui só a luz e a sombra. */
+
+@media (min-width: 1024px) {
+  /* Em Cinzel (versaletes), como uma inscrição: um pouco menor para não pesar */
+  .signature__desc {
+    font-size: clamp(1.25rem, 0.9rem + 0.55vw, 1.5rem);
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+  }
+
+  .flavors {
+    background:
+      radial-gradient(760px 560px at 74% 520px, rgb(226 132 64 / 0.08), transparent 72%),
+      radial-gradient(70% 40% at 90% 28%, rgb(143 32 41 / 0.1), transparent 70%),
+      var(--wall-edges),
+      radial-gradient(1000px 760px at 72% 520px, rgb(var(--wall-shadow) / 0.18), rgb(var(--wall-shadow) / 0.8) 100%);
   }
 }

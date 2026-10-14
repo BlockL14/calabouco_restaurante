@@ -129,6 +129,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  font-family: var(--font-label);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -366,6 +367,20 @@
   .visit__door {
     grid-column: 2;
     grid-row: 1;
+  }
+}
+
+/* ---------- Telas largas: a porta embutida na parede de tijolos ----------
+   A luz do forno que sai pela porta “lava” a parede ao redor; o título fica
+   na penumbra, para leitura. */
+
+@media (min-width: 1024px) {
+  .visit {
+    background:
+      radial-gradient(640px 420px at 50% 100%, rgb(232 150 80 / 0.14), transparent 74%),
+      radial-gradient(60% 42% at 50% 100%, rgb(143 32 41 / 0.14), transparent 74%),
+      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px),
+      radial-gradient(1000px 640px at 50% 96%, rgb(var(--wall-shadow) / 0.08), rgb(var(--wall-shadow) / 0.8) 100%);
   }
 }
 

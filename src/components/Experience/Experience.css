@@ -361,3 +361,15 @@
     transform: none;
   }
 }
+
+/* ---------- Telas largas: parede de tijolos ---------- */
+
+@media (min-width: 1024px) {
+  .experience {
+    background:
+      radial-gradient(60% 50% at 10% 30%, rgb(143 32 41 / 0.12), transparent 70%),
+      radial-gradient(900px 760px at 76% 46%, rgb(226 132 64 / 0.06), transparent 72%),
+      var(--wall-edges),
+      radial-gradient(1100px 900px at 72% 48%, rgb(var(--wall-shadow) / 0.2), rgb(var(--wall-shadow) / 0.8) 100%);
+  }
+}

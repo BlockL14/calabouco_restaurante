@@ -92,6 +92,7 @@
 }
 
 .house__facts dt {
+  font-family: var(--font-label);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -121,5 +122,20 @@
     bottom: -0.58em;
     right: -0.04em;
     font-size: clamp(10rem, 4rem + 12vw, 17rem);
+  }
+}
+
+/* ---------- Telas largas: parede de tijolos ---------- */
+
+@media (min-width: 1024px) {
+  .house {
+    background:
+      radial-gradient(760px 640px at 24% 50%, rgb(226 132 64 / 0.07), transparent 72%),
+      var(--wall-edges),
+      radial-gradient(1000px 820px at 26% 50%, rgb(var(--wall-shadow) / 0.18), rgb(var(--wall-shadow) / 0.8) 100%);
+  }
+
+  .house__art {
+    outline-color: rgb(var(--wall-shadow));
   }
 }

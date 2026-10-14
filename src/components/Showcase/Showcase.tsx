@@ -467,8 +467,8 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
         Calabouço Restaurante e Pizzaria — Curitiba
       </h1>
 
-      {/* Fundo: luz ambiente (foto desfocada), fotografia, clone em voo e sombreamento */}
-      <div className="showcase__ambient" aria-hidden="true">
+      {/* Fundo: parede (telas largas) e luz ambiente (foto desfocada), fotografia, clone em voo e sombreamento */}
+      <div className="showcase__ambient wall" aria-hidden="true">
         {slides.map((s, i) => {
           const glow = glowSrc(images[s.image]);
           return (

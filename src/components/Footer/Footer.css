@@ -50,3 +50,9 @@
 .site-footer__top:hover svg {
   transform: translateY(-3px);
 }
+
+@media (min-width: 1024px) {
+  .site-footer {
+    background: rgb(var(--wall-shadow) / 0.78);
+  }
+}

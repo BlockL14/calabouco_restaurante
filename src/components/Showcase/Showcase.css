@@ -215,8 +215,10 @@
 }
 
 .sc-line--em {
-  font-style: italic;
-  font-weight: 500;
+  font-family: var(--font-accent);
+  font-style: var(--accent-style);
+  font-weight: var(--accent-weight);
+  font-synthesis: none;
   color: var(--c-gold-2);
 }
 
@@ -751,6 +753,93 @@
 
   .showcase__desc {
     margin-bottom: 18px;
+  }
+}
+
+/* ==========================================================================
+   Telas largas (≥1024px): parede de tijolos e tipografia medieval.
+   A foto se dissolve na parede por máscara (em vez de escurecer até o preto);
+   o clone em voo e a faixa dos cartazes usam a mesma máscara, alinhada à foto.
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .showcase {
+    --photo-fade: linear-gradient(
+      90deg,
+      transparent 0,
+      rgb(0 0 0 / 0.3) 12%,
+      rgb(0 0 0 / 0.7) 30%,
+      #000 50%
+    );
+  }
+
+  /* A luz da foto ativa tinge a parede, sem cobrir a textura */
+  .showcase__glow {
+    mix-blend-mode: soft-light;
+  }
+
+  .showcase__glow.is-active {
+    opacity: 0.8;
+  }
+
+  .showcase__photo,
+  .showcase__veil {
+    -webkit-mask-image: var(--photo-fade);
+    mask-image: var(--photo-fade);
+  }
+
+  .showcase__layer {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent calc(100% - var(--photo-w)),
+      rgb(0 0 0 / 0.3) calc(100% - var(--photo-w) * 0.88),
+      rgb(0 0 0 / 0.7) calc(100% - var(--photo-w) * 0.7),
+      #000 calc(100% - var(--photo-w) * 0.5)
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent calc(100% - var(--photo-w)),
+      rgb(0 0 0 / 0.3) calc(100% - var(--photo-w) * 0.88),
+      rgb(0 0 0 / 0.7) calc(100% - var(--photo-w) * 0.7),
+      #000 calc(100% - var(--photo-w) * 0.5)
+    );
+  }
+
+  /* Leitura do texto: penumbra atrás do título, borda superior (cabeçalho) e base */
+  .showcase__shade {
+    background:
+      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.62) 0, rgb(var(--wall-shadow) / 0) calc(var(--header-h) + 72px)),
+      linear-gradient(0deg, rgb(var(--wall-shadow) / 0.82) 0, rgb(var(--wall-shadow) / 0) 30%),
+      radial-gradient(
+        48% 62% at 22% 52%,
+        rgb(var(--wall-shadow) / 0.62) 0,
+        rgb(var(--wall-shadow) / 0.36) 60%,
+        rgb(var(--wall-shadow) / 0.12) 100%
+      );
+  }
+
+  .showcase__title {
+    font-size: clamp(2.75rem, 10.2cqi, 6rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    /* Cinzel: as minúsculas já são versaletes, como nas artes da casa */
+    text-transform: none;
+  }
+
+  .sc-line--em {
+    font-size: 1.14em;
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+
+  .sc-card__title {
+    font-size: clamp(0.75rem, 10.4cqi, 1.25rem);
+    letter-spacing: 0.02em;
+  }
+
+  .sc-number {
+    font-weight: 500;
   }
 }
 

@@ -18,8 +18,17 @@
   --c-line-strong: rgb(178 138 80 / 0.48);
   --c-glass: rgb(16 13 11 / 0.82);
 
-  /* Tipografia */
+  /* Tipografia
+     --font-display: títulos, números e rótulos de destaque
+     --font-accent + --accent-style: o trecho em destaque dos títulos (<em>)
+     --font-brand: o nome “Calabouço” no cabeçalho e no rodapé */
   --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-accent: var(--font-display);
+  --accent-style: italic;
+  --accent-weight: 500;
+  --display-italic: italic; /* itálico nos números e detalhes, quando a fonte de títulos o tem */
+  --font-brand: var(--font-display);
+  --font-label: var(--font-body); /* rótulos em versal (sobretítulos, legendas de dados) */
   --font-body: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --fs-eyebrow: 0.75rem;
@@ -53,6 +62,22 @@
 @media (min-width: 1024px) {
   :root {
     --header-h: 80px;
+
+    /* Identidade medieval (por ora só em telas largas, em avaliação antes do celular).
+       Mesma dupla das artes da casa: capitulares romanas (Cinzel) nos títulos e letra
+       gótica nas palavras em destaque. A gótica dos destaques (Grenze Gotisch) tem o “d”
+       reto e se lê de imediato; a fraktur do letreiro (UnifrakturCook) fica só no nome. */
+    --font-display: 'Cinzel Variable', Cinzel, 'Cormorant Garamond Variable', Georgia, serif;
+    --font-accent: 'Grenze Gotisch', 'Cinzel Variable', Georgia, serif;
+    --accent-style: normal;
+    --accent-weight: 700;
+    --display-italic: normal;
+    --font-brand: 'UnifrakturCook', 'Grenze Gotisch', Georgia, serif;
+    --font-label: var(--font-display);
+
+    /* Parede de tijolos (textura gerada por scripts/make-brick-texture.mjs) */
+    --wall-size: 845px 589px;
+    --wall-shadow: 12 9 8;
   }
 }
 
