@@ -22,7 +22,7 @@ const QUALITY = { avif: 56, webp: 80 };
  * name: nome de saída (usado no código)
  * source: arquivo em assets-src/originais
  * crop: recorte em pixels do original (opcional)
- * widths: larguras geradas. Valores acima da largura nativa são ampliados com
+ * widths: larguras geradas (420 atende os cartões da abertura em celulares de alta densidade). Valores acima da largura nativa são ampliados com
  *         Lanczos e nitidez leve — apenas para telas densas, sem inventar detalhes.
  * glow: gera também uma miniatura desfocada para a luz ambiente da abertura
  */
@@ -32,7 +32,7 @@ const JOBS = [
     source: 'arte-corredor-abra-as-portas.webp',
     // Recorte só da fotografia: remove a frase da arte, mantém o crédito @gabrielmessine.
     crop: { left: 0, top: 0, width: 683, height: 664 },
-    widths: [360, 683, 1020],
+    widths: [360, 420, 683, 1020],
     glow: true,
   },
   {
@@ -43,19 +43,19 @@ const JOBS = [
   {
     name: 'queijo',
     source: 'foto-queijo-puxado.webp',
-    widths: [360, 680, 1020],
+    widths: [360, 420, 680, 1020],
     glow: true,
   },
   {
     name: 'arte-pizza',
     source: 'arte-pizza-desde-1991.webp',
-    widths: [360, 684, 1020],
+    widths: [360, 420, 684, 1020],
     glow: true,
   },
   {
     name: 'arte-fachada',
     source: 'arte-fachada-tradicao-curitibana.webp',
-    widths: [360, 686, 1020],
+    widths: [360, 420, 686, 1020],
     glow: true,
   },
   {

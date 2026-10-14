@@ -1,127 +1,27 @@
 /* ==========================================================================
    Visite o Calabouço
-   Composição centralizada (título, apoio, botões em pílula) com dois cartões
-   de vidro fosco. No palco, elementos da casa: a porta em arco do calabouço,
-   com um ponto de luz que percorre o contorno, e a pizza surgindo da base
-   sob a luz quente do forno.
+   Princípios da referência (cena escura, composição central, pílula clara,
+   informações flutuando ao lado do objeto, luz quente) vestidos com os
+   materiais da casa: a porta em arco de pedra do calabouço, a pizza na
+   soleira e placas da casa com endereço e telefone.
    ========================================================================== */
 
 .visit {
-  --pizza-w: min(112vw, 560px);
-  --pizza-h: calc(var(--pizza-w) * 320 / 684);
-  /* Fração da pizza escondida abaixo da borda da seção (ela “surge” da base) */
-  --pizza-cut: 0.18;
+  /* Largura da porta: cabe na tela junto com o título (telas deitadas) */
+  --door-w: min(100%, 460px);
+  --pizza-cut: 0.2;
   overflow: clip;
   isolation: isolate;
+  padding-bottom: 0;
   text-align: center;
-  padding-bottom: calc(var(--pizza-h) * (1 - var(--pizza-cut)) + 1.5rem);
   background:
-    radial-gradient(70% 50% at 50% 100%, rgb(143 32 41 / 0.16), transparent 72%),
+    radial-gradient(60% 42% at 50% 100%, rgb(143 32 41 / 0.18), transparent 74%),
     radial-gradient(140% 110% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.4) 100%),
     var(--c-black);
   border-top: 1px solid var(--c-line);
 }
 
-/* ---------- Palco ---------- */
-
-.visit__stage {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.visit__arch {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: auto;
-  max-width: 100%;
-  height: calc(100% - 2.5rem);
-  transform: translateX(-50%);
-  overflow: visible;
-}
-
-.visit__arch-line {
-  stroke: rgb(178 138 80 / 0.32);
-  stroke-width: 1.2;
-  vector-effect: non-scaling-stroke;
-}
-
-.visit__arch-line--inner {
-  stroke: rgb(178 138 80 / 0.14);
-}
-
-/* Reflexo quente que percorre o arco, sobe por uma perna e desce pela outra */
-.visit__arch-spark {
-  stroke: #f4dcaa;
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-dasharray: 64 1936;
-  stroke-dashoffset: 0;
-  filter: drop-shadow(0 0 5px rgb(230 186 116 / 0.9));
-  animation: visit-spark 14s linear infinite;
-  animation-play-state: paused;
-}
-
-.visit__stage[data-inview='true'] .visit__arch-spark {
-  animation-play-state: running;
-}
-
-@keyframes visit-spark {
-  to {
-    stroke-dashoffset: -2000;
-  }
-}
-
-/* Luz do forno atrás da pizza: respira devagar */
-.visit__glow {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: calc(var(--pizza-w) * 1.7);
-  height: calc(var(--pizza-h) * 2.4);
-  transform: translateX(-50%);
-  transform-origin: 50% 100%;
-  background: radial-gradient(50% 58% at 50% 100%, rgb(226 168 92 / 0.34), rgb(160 58 30 / 0.16) 46%, transparent 76%);
-  animation: visit-breathe 6.5s var(--ease-in-out) infinite alternate;
-  animation-play-state: paused;
-}
-
-.visit__stage[data-inview='true'] .visit__glow {
-  animation-play-state: running;
-}
-
-@keyframes visit-breathe {
-  from {
-    opacity: 0.72;
-    transform: translateX(-50%) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.03);
-  }
-}
-
-.visit__pizza {
-  position: absolute;
-  left: 50%;
-  bottom: calc(var(--pizza-h) * var(--pizza-cut) * -1);
-  width: var(--pizza-w);
-  aspect-ratio: 684 / 320;
-  transform: translateX(-50%);
-  /* Funde o fundo escuro da foto com a seção */
-  -webkit-mask-image: radial-gradient(ellipse 56% 64% at 50% 74%, #000 66%, transparent 100%);
-  mask-image: radial-gradient(ellipse 56% 64% at 50% 74%, #000 66%, transparent 100%);
-}
-
-.visit__pizza picture,
-.visit__pizza img {
-  width: 100%;
-  height: 100%;
-}
-
-/* ---------- Texto e botões ---------- */
+/* ---------- Título e botões ---------- */
 
 .visit__head .eyebrow {
   margin-bottom: 1.25rem;
@@ -156,221 +56,321 @@
 }
 
 .visit__actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.625rem;
-  width: min(100%, 24rem);
   margin: 2rem auto 0;
   padding: 0;
   list-style: none;
 }
 
 .visit__actions li:first-child {
-  grid-column: 1 / -1;
+  flex: 1 0 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .visit__btn {
-  width: 100%;
   gap: 0.5rem;
-  padding-inline: 1rem;
+  padding-inline: 1.375rem;
 }
 
-.visit__btn--glass {
-  --btn-bg: rgb(16 13 11 / 0.55);
-  --btn-line: rgb(243 234 223 / 0.24);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+.visit__btn--dark {
+  --btn-bg: rgb(16 13 11 / 0.7);
+  --btn-line: rgb(243 234 223 / 0.26);
 }
 
-.visit__btn--glass:hover {
-  --btn-bg: rgb(36 28 23 / 0.75);
+.visit__btn--dark:hover {
+  --btn-bg: rgb(36 28 23 / 0.85);
   --btn-line: var(--c-gold-2);
 }
 
-@media (min-width: 640px) {
-  .visit__actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: auto;
-  }
-
-  .visit__btn {
-    width: auto;
-    gap: 0.625rem;
-    padding-inline: 1.5rem;
+@media (min-width: 520px) {
+  .visit__actions li:first-child {
+    flex: 0 0 auto;
   }
 }
 
-/* ---------- Cartões de vidro fosco ---------- */
+/* ---------- Cena: placas + porta ---------- */
 
-.visit__chips {
+.visit__scene {
+  display: grid;
+  justify-items: center;
+  gap: 2rem;
+  margin-top: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+}
+
+.visit__contact {
   display: grid;
   gap: 0.75rem;
-  width: min(100%, 24rem);
-  margin: 2.5rem auto 0;
+  width: min(100%, 26rem);
   font-style: normal;
+}
+
+/* Placa da casa: madeira escura translúcida, filete dourado, rótulo em versalete */
+.visit__plaque {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 1rem 1.25rem 1.125rem;
+  border: 1px solid rgb(212 180 126 / 0.36);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgb(58 38 26 / 0.55), rgb(28 20 15 / 0.75)),
+    var(--c-coal);
+  box-shadow:
+    inset 0 1px 0 rgb(255 230 190 / 0.06),
+    0 18px 40px -22px rgb(0 0 0 / 0.85);
   text-align: left;
 }
 
-.visit__chip {
-  display: grid;
-  align-content: start;
-  gap: 0.875rem;
-  padding: 1.125rem 1.25rem 1.25rem;
-  border: 1px solid rgb(243 234 223 / 0.13);
-  border-radius: 18px;
-  background: rgb(20 16 13 / 0.62);
-  -webkit-backdrop-filter: blur(18px) saturate(1.3);
-  backdrop-filter: blur(18px) saturate(1.3);
-  box-shadow:
-    inset 0 1px 0 rgb(255 243 221 / 0.07),
-    0 24px 48px -24px rgb(0 0 0 / 0.7);
-  color: var(--c-ivory);
-}
-
-.visit__chip-head {
+.visit__plaque-label {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 0.6rem;
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-gold-2);
 }
 
-.visit__chip-label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--c-muted);
-}
-
-.visit__chip-icon {
-  display: inline-grid;
-  place-items: center;
+/* Losango, o mesmo ornamento do destaque “Sugestão da casa” */
+.visit__plaque-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
   flex: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--c-ivory);
-  color: var(--c-black);
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
 }
 
-.visit__chip-icon svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 1.75;
-  transition: transform var(--dur-base) var(--ease-out);
-}
-
-.visit__chip-arrow {
-  transform: rotate(-45deg);
-}
-
-.visit__chip-lines {
+.visit__plaque-text {
   display: grid;
   gap: 0.125rem;
   font-size: 0.9375rem;
   line-height: 1.45;
   color: var(--c-ivory);
+  overflow-wrap: anywhere;
 }
 
-.visit__chip-strong {
+.visit__plaque-strong {
   font-size: 1.0625rem;
   font-weight: 600;
 }
 
-.visit__chip-muted {
+.visit__plaque-muted {
   color: var(--c-muted);
 }
 
-.visit__chip-value {
+.visit__plaque-phone {
   font-family: var(--font-display);
-  font-size: 2.125rem;
+  font-size: 1.625rem;
   font-weight: 500;
   font-variant-numeric: lining-nums;
-  line-height: 1;
+  line-height: 1.15;
   letter-spacing: 0.01em;
-  white-space: nowrap;
 }
 
-.visit__chip--phone {
-  min-height: 44px;
-  text-decoration: none;
-  transition:
-    border-color var(--dur-base) var(--ease-out),
-    background-color var(--dur-base) var(--ease-out);
+/* ---------- A porta ---------- */
+
+.visit__door {
+  position: relative;
+  width: var(--door-w);
+  aspect-ratio: 10 / 8;
 }
 
-.visit__chip--phone:hover {
-  border-color: rgb(212 180 126 / 0.55);
-  background: rgb(28 22 18 / 0.72);
+/* Vão da porta: arco perfeito no topo (raio = metade da largura) */
+.visit__door-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
 }
 
-.visit__chip--phone:hover .visit__chip-arrow {
-  transform: rotate(-45deg) translateX(2px);
+/* Profundidade: sombra interna junto à pedra */
+.visit__door-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.45),
+    inset 0 40px 70px -30px rgb(0 0 0 / 0.75),
+    inset 18px 0 40px -24px rgb(0 0 0 / 0.6),
+    inset -18px 0 40px -24px rgb(0 0 0 / 0.6);
+  pointer-events: none;
 }
 
-.visit__chip--phone:focus-visible {
-  border-radius: 18px;
-  outline-offset: 4px;
+/* Luz do corredor de tijolos vista pela porta: a própria foto, desfocada e escura */
+.visit__door-light {
+  position: absolute;
+  inset: -6%;
+  background-color: #2a120c;
+  background-position: center 40%;
+  background-size: cover;
+  filter: blur(18px) saturate(1.1) brightness(0.55);
 }
 
-@media (min-width: 640px) and (max-width: 1023.98px) {
+/* Brilho quente vindo de baixo (forno) que tremula de leve, como chama de vela */
+.visit__door-flame {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 55% at 50% 100%, rgb(232 164 84 / 0.42), rgb(170 64 32 / 0.18) 50%, transparent 78%),
+    linear-gradient(180deg, rgb(16 13 11 / 0.55) 0%, rgb(16 13 11 / 0) 45%);
+  animation: visit-flicker 5.2s steps(1, end) infinite;
+  animation-play-state: paused;
+}
+
+.visit__door[data-inview='true'] .visit__door-flame {
+  animation-play-state: running;
+}
+
+@keyframes visit-flicker {
+  0% {
+    opacity: 1;
+  }
+  9% {
+    opacity: 0.9;
+  }
+  14% {
+    opacity: 0.97;
+  }
+  31% {
+    opacity: 0.86;
+  }
+  37% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.92;
+  }
+  62% {
+    opacity: 0.98;
+  }
+  78% {
+    opacity: 0.88;
+  }
+  86% {
+    opacity: 1;
+  }
+}
+
+.visit__pizza {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 92%;
+  aspect-ratio: 684 / 320;
+  /* Parte da pizza fica abaixo da soleira: ela “surge” da base */
+  transform: translate(-50%, calc(var(--pizza-cut) * 100%));
+  /* Funde o fundo escuro da foto com o vão da porta (sem emenda nas laterais) */
+  -webkit-mask-image: radial-gradient(ellipse 48% 68% at 50% 72%, #000 55%, transparent 96%);
+  mask-image: radial-gradient(ellipse 48% 68% at 50% 72%, #000 55%, transparent 96%);
+}
+
+.visit__pizza picture,
+.visit__pizza img {
+  width: 100%;
+  height: 100%;
+}
+
+.visit__arch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.visit__arch-mortar {
+  stroke: #1d110c;
+  stroke-width: 38;
+}
+
+.visit__arch-stones {
+  stroke-width: 32;
+  /* Aduelas: pedras de ~70 unidades separadas por juntas de argamassa */
+  stroke-dasharray: 62 9;
+  stroke-dashoffset: 4;
+}
+
+.visit__arch-edge {
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.visit__arch-key {
+  fill: #c9a165;
+  fill-opacity: 0.75;
+  stroke: #e7c48a;
+  stroke-opacity: 0.6;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width: 640px) {
   .visit {
-    --pizza-w: min(86vw, 640px);
+    --door-w: min(100%, 560px);
   }
 
-  .visit__chips {
+  .visit__contact {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     width: min(100%, 40rem);
   }
 }
 
-/* ---------- Desktop: seção na altura da tela, cartões ao lado da pizza ---------- */
+/* ---------- Desktop: placas ladeando a porta, tudo na altura da tela ---------- */
 
 @media (min-width: 1024px) {
   .visit {
-    --visit-h: max(600px, calc(100svh - var(--header-h) - 8px));
-    --pizza-w: min(800px, 56vw, calc(var(--visit-h) * 0.92));
-    min-height: var(--visit-h);
-    padding-top: clamp(3.5rem, 8vh, 6.5rem);
-    padding-bottom: calc(var(--pizza-h) * (1 - var(--pizza-cut)) + 1rem);
+    /* A porta encolhe para que título, botões e porta caibam abaixo do cabeçalho */
+    --door-w: clamp(400px, calc((100svh - var(--header-h) - 30rem) * 1.25), min(680px, 44vw));
+    padding-top: clamp(3rem, 7svh, 5.5rem);
   }
 
-  .visit__chips {
-    margin: 0;
-    width: auto;
+  .visit__scene {
+    grid-template-columns: minmax(0, 1fr) var(--door-w) minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+    margin-top: clamp(1.75rem, 3svh, 2.75rem);
   }
 
-  .visit__chip {
-    position: absolute;
-    width: 17.5rem;
+  /* As placas entram na grade como irmãs da porta */
+  .visit__contact {
+    display: contents;
   }
 
-  /* Como na referência: cartões flutuando sobre as bordas do objeto central */
-  /* Em telas baixas, os cartões descem para nunca encostar nos botões */
-  .visit__chip--address {
-    bottom: max(0.75rem, min(calc(var(--pizza-h) * 0.42), calc(var(--visit-h) - 600px)));
-    right: min(calc(50% + var(--pizza-w) * 0.3), calc(100% - var(--gutter) - 17.5rem));
+  .visit__plaque {
+    width: min(100%, 17rem);
+    margin-bottom: calc(var(--door-w) * 0.16);
   }
 
-  .visit__chip--phone {
-    bottom: max(0.75rem, min(calc(var(--pizza-h) * 0.12), calc(var(--visit-h) - 610px)));
-    left: min(calc(50% + var(--pizza-w) * 0.3), calc(100% - var(--gutter) - 17.5rem));
+  .visit__plaque--address {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .visit__plaque--phone {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .visit__door {
+    grid-column: 2;
+    grid-row: 1;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .visit__arch-spark,
-  .visit__glow {
+  .visit__door-flame {
     animation: none;
-  }
-
-  .visit__arch-spark {
-    display: none;
-  }
-
-  .visit__chip--phone,
-  .visit__chip-icon svg {
-    transition: none;
   }
 }

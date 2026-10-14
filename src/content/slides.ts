@@ -20,6 +20,8 @@ export type Slide = {
   description: string;
   cta: { label: string; href: string; menuCategory?: MenuCategoryId };
   image: ImageKey;
+  /** 'poster': a imagem é uma arte com texto próprio; a abertura escurece a faixa dos cartões. */
+  tone?: 'poster';
 };
 
 export const slides: Slide[] = [
@@ -38,7 +40,7 @@ export const slides: Slide[] = [
     id: 'cozinha',
     eyebrow: 'Da cozinha',
     label: 'Da cozinha',
-    kicker: 'Sabores da casa',
+    kicker: 'Sabores',
     title: 'Sabor que se estende.',
     emphasis: 'se estende.',
     description: 'Pizzas, massas e pratos da casa servidos à mesa, entre tijolos e velas acesas.',
@@ -49,12 +51,13 @@ export const slides: Slide[] = [
     id: 'pizzas',
     eyebrow: 'Pizzaria à la carte',
     label: 'Pizzas',
-    kicker: 'À la carte',
+    kicker: 'Cardápio',
     title: 'Tradicionais e da casa.',
     emphasis: 'da casa.',
     description: 'Dos clássicos às receitas com nome de castelo, como Cavaleiro Negro e Guarda do Castelo.',
     cta: { label: 'Ver as pizzas', href: `#${sectionIds.flavors}`, menuCategory: 'pizzas' },
     image: 'arte-pizza',
+    tone: 'poster',
   },
   {
     id: 'casa',
@@ -66,5 +69,6 @@ export const slides: Slide[] = [
     description: 'Restaurante e pizzaria à la carte na Rua Mateus Leme, no Centro Cívico de Curitiba.',
     cta: { label: 'Como chegar', href: `#${sectionIds.visit}` },
     image: 'arte-fachada',
+    tone: 'poster',
   },
 ];

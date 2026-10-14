@@ -19,11 +19,11 @@ O build usa caminhos relativos (`base: './'`), então a pasta `dist/` funciona e
 
 | Parte | Componente | Observações |
 |---|---|---|
-| Abertura | `src/components/Showcase` | Vitrine com transição cartão → imagem principal, setas, teclado (← →) e gesto lateral no celular |
+| Abertura | `src/components/Showcase` | Carrossel no padrão da referência: foto de fundo, título em duas linhas, cartões em fileira, setas + progresso + numeração. O cartão escolhido cresce até cobrir o fundo. Teclado (← →) e gesto lateral no celular |
 | Sabores | `src/components/Flavors` | Destaque da Coroa Real + seleção do cardápio em abas acessíveis |
 | A experiência | `src/components/Experience` | Galeria assimétrica + visualização ampliada (`<dialog>`) |
 | A casa | `src/components/House` | Fachada, arte de identidade e “Desde 1991” |
-| Visite | `src/components/Visit` | Endereço, Como chegar (Google Maps), Ligar, Instagram |
+| Visite | `src/components/Visit` | Composição centralizada com pílulas e cartões de vidro fosco; porta em arco do calabouço com reflexo percorrendo o contorno e a pizza da casa surgindo da base |
 
 ## Onde editar
 
@@ -56,7 +56,12 @@ O logotipo está provisoriamente em tipografia (classe `.brand` em `Header.tsx`)
 | `arte-fachada-tradicao-curitibana.webp` | Entrada em arco com o letreiro; faixa “Tradição curitibana” | 686×856 | Sim (faixa) | Destaque “A casa” e seção A casa; recorte do letreiro na galeria |
 | `assets-src/referencias/cardapio-fotografado.webp` | Cardápio fotografado | 556×829 | — | Apenas fonte de conteúdo, não publicado |
 
-Os originais recebidos nesta sessão já estavam em WebP com cerca de 680 px de largura, e isso limita a nitidez em telas grandes. Por isso a abertura usa a fotografia vertical em uma moldura 4:5, sem esticar a imagem para a largura da tela.
+Os originais recebidos nesta sessão já estavam em WebP com cerca de 680 px de largura, e isso limita a nitidez em telas grandes. Por isso, em telas deitadas, a foto da abertura ocupa o lado direito (do topo ao rodapé) e se dissolve no escuro à esquerda, em vez de ser esticada para a largura inteira.
+
+## Referências de design
+
+- **Carrossel (vídeo de referência principal):** estrutura e coreografia da abertura — título em duas linhas com traço e rótulo, cartões em fileira, setas, linha de progresso e numeração grande; o cartão cresce até cobrir o fundo, o fundo anterior escurece, os cartões deslizam e o título sobe linha a linha.
+- **Forma metálica (vídeo secundário):** usada só como princípio — cena escura, composição central, botão em pílula clara, cartões de vidro fosco e reflexos quentes. A forma abstrata em si não foi usada: no lugar dela entram elementos da casa (a porta em arco e a pizza), para que a página lembre sempre uma pizzaria temática.
 
 ## Decisões de conteúdo
 
