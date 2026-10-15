@@ -525,6 +525,21 @@
     letter-spacing: 0.01em;
   }
 
+  /* Abas em Cinzel são mais largas: o rótulo sobe e a faixa ganha a largura inteira */
+  .menu__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .menu__kicker {
+    padding-bottom: 0;
+  }
+
+  .menu__tab {
+    padding-inline: 0.8rem;
+    font-size: clamp(1.0625rem, 0.45rem + 0.85vw, 1.5rem);
+  }
+
   .flavors {
     background:
       radial-gradient(760px 560px at 74% 520px, rgb(226 132 64 / 0.08), transparent 72%),

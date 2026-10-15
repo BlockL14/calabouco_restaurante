@@ -18,13 +18,16 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUT = path.join(root, 'src', 'assets', 'textures');
 const PREVIEW = process.argv.includes('--preview') ? process.argv[process.argv.indexOf('--preview') + 1] : null;
 
-// Geometria em px de CSS (aparelho 1x). SCALE define a resolução do arquivo.
+// Geometria em unidades de desenho; SCALE define a resolução do arquivo. Na página, a
+// ladrilha é exibida a DISPLAY desse tamanho (--wall-size em src/styles/tokens.css):
+// ao mudar a geometria ou DISPLAY, atualize --wall-size com o valor que o script imprime.
 const COLS = 8; // tijolos por fiada
 const ROWS = 16; // fiadas
 const PITCH_X = 132; // tijolo + junta
 const PITCH_Y = 46;
 const JOINT = 9; // largura da junta de argamassa
 const SCALE = Number(process.env.BRICK_SCALE || 1.5);
+const DISPLAY = 0.8;
 
 const W_CSS = COLS * PITCH_X;
 const H_CSS = ROWS * PITCH_Y;
@@ -156,7 +159,7 @@ for (let py = 0; py < H; py++) {
     // Lascas: mais frequentes nos cantos
     const chip = valueNoise(x, y, Math.round(W_CSS / 7), Math.round(H_CSS / 7), 53);
     const cornerness = smoothstep(0.55, 0.95, Math.abs(b.lx) / b.hx) * smoothstep(0.2, 0.9, Math.abs(b.ly) / b.hy);
-    const nearEdge = 1 - smoothstep(-6, 0, -Math.abs(b.d + 2));
+    const nearEdge = smoothstep(-6, 0, b.d); // 1 na aresta, 0 a 6 px para dentro
     const chipT = 0.8 - cornerness * 0.16;
     if (chip > chipT) d += (chip - chipT) * 34 * Math.max(nearEdge, cornerness);
 
@@ -251,5 +254,5 @@ if (PREVIEW) {
   await mkdir(OUT, { recursive: true });
   const avif = await img.clone().avif({ quality: 50, effort: 7 }).toFile(path.join(OUT, 'tijolos.avif'));
   const webp = await img.clone().webp({ quality: 72, effort: 6 }).toFile(path.join(OUT, 'tijolos.webp'));
-  console.log(`tijolos ${W}×${H} (exibido a ${W_CSS}×${H_CSS} px): avif ${(avif.size / 1024).toFixed(1)} KB, webp ${(webp.size / 1024).toFixed(1)} KB`);
+  console.log(`tijolos ${W}×${H} (--wall-size: ${Math.round(W_CSS * DISPLAY)}px ${Math.round(H_CSS * DISPLAY)}px): avif ${(avif.size / 1024).toFixed(1)} KB, webp ${(webp.size / 1024).toFixed(1)} KB`);
 }

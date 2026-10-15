@@ -51,6 +51,7 @@
   --dur-base: 320ms;
   --dur-slow: 720ms;
   --dur-morph: 860ms;
+  --dur-fade: 1400ms; /* fusão entre fotos da abertura (telas largas, sem cartões) */
   --dur-text-out: 220ms;
   --dur-text-in: 620ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -85,6 +86,7 @@
   :root {
     --dur-slow: 1ms;
     --dur-morph: 1ms;
+    --dur-fade: 1ms;
     --dur-text-out: 1ms;
     --dur-text-in: 1ms;
   }

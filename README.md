@@ -50,15 +50,17 @@ O logotipo está provisoriamente em tipografia (classe `.brand` em `Header.tsx`)
 
 ## Identidade medieval (telas largas — em avaliação)
 
-A partir de 1024 px de largura, a página usa a mesma dupla tipográfica das artes da casa e um fundo de parede de tijolos. **No celular e no tablet nada mudou**: a adaptação aguarda aprovação.
+A partir de 1024 px de largura, a página usa a mesma dupla tipográfica das artes da casa e um fundo de parede de tijolos. **Abaixo de 1024 px (celulares e a maioria dos tablets) nada mudou**: a adaptação aguarda aprovação. Tablets grandes em pé (1024 px ou mais) já recebem as fontes novas, mas mantêm a abertura em pé, com cartões.
 
 - **Títulos:** Cinzel (capitulares romanas; as minúsculas saem em versalete, como em “Abra as portas para uma noite” e “Tradição” nas artes).
 - **Palavras em destaque** (`<em>` dos títulos, “Coroa Real”): Grenze Gotisch, uma gótica de “d” reto, legível em frases curtas. A UnifrakturCook (fraktur mais próxima do letreiro) foi testada nos destaques, mas o “d” redondo dificulta a leitura de “desde”, “do”, “da”; ficou só no nome “Calabouço”, que é logotipo.
 - **Texto corrido, botões e menu:** Inter, como antes.
-- **Parede:** textura procedimental gerada por `npm run texture` (determinística, sem emenda), com cores calibradas nos tijolos das fotos da fachada e do corredor. Cada seção escurece a parede com degradês próprios e “acende” um trecho junto às fotos; na abertura, a luz da foto ativa tinge a parede e a foto se dissolve nela por máscara.
-- **Peso:** no desktop entram Cinzel (26 KB), Grenze Gotisch (17 KB), UnifrakturCook (17 KB) e a textura (87 KB em AVIF); Cormorant deixa de ser baixada ali. O celular continua baixando só Inter e Cormorant. As fontes são pré-carregadas com `media`, cada uma só na faixa de tela que a usa.
+- **Parede:** textura procedimental gerada por `npm run texture` (determinística, sem emenda), com cores calibradas nos tijolos das fotos da fachada e do corredor. Cada seção escurece a parede com degradês próprios e “acende” um trecho junto às fotos; na abertura, a luz da foto ativa tinge a parede.
+- **Fotos × parede:** a foto da abertura se dissolve na parede por uma máscara longa em curva suave (também no topo e na base), com uma penumbra sobre a faixa de fusão; as fotos das seções têm bordas esfumadas (classe `.feather`), sem moldura retangular.
+- **Abertura sem cartões (telas deitadas ≥ 1024 px):** a troca de destaque é feita pelas setas, pelo teclado (← →) e por gesto, com fusão lenta entre as fotos (`--dur-fade`). No celular e no tablet os cartões continuam.
+- **Peso:** no desktop entram Cinzel (26 KB), Grenze Gotisch (17 KB), UnifrakturCook (17 KB) e a textura (≈ 90 KB em AVIF); Cormorant deixa de ser baixada ali. O celular continua baixando só Inter e Cormorant. As fontes são pré-carregadas com `media`, cada uma só na faixa de tela que a usa.
 
-Para levar a identidade ao celular, basta mover as variáveis do bloco `@media (min-width: 1024px)` de `src/styles/tokens.css` para o `:root` geral (e o fundo de `base.css`), revisando tamanhos dos títulos em telas estreitas.
+Para levar a identidade ao celular não basta mover as variáveis de `src/styles/tokens.css`: os blocos `@media (min-width: 1024px)` dos componentes (tamanhos dos títulos em Cinzel, abas do cardápio, luz de cada seção, máscaras da abertura e `.feather`) também precisam de versões para telas estreitas, e o layout em pé da abertura precisa de uma máscara vertical própria.
 
 ## Materiais usados
 

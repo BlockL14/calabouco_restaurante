@@ -58,7 +58,7 @@ export function Experience() {
                 }}
                 aria-label={`Ampliar imagem: ${item.caption}`}
               >
-                <Picture image={item.image} sizes={SIZES[item.layout]} />
+                <Picture image={item.image} sizes={SIZES[item.layout]} className="feather" />
                 <span className="experience__zoom" aria-hidden="true">
                   <Expand />
                 </span>

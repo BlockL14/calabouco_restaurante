@@ -135,7 +135,10 @@
       radial-gradient(1000px 820px at 26% 50%, rgb(var(--wall-shadow) / 0.18), rgb(var(--wall-shadow) / 0.8) 100%);
   }
 
+  /* As artes se esfumam na parede (.feather): sem moldura nem sombra retangular */
+  .house__facade,
   .house__art {
-    outline-color: rgb(var(--wall-shadow));
+    outline: none;
+    box-shadow: none;
   }
 }

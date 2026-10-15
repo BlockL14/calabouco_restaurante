@@ -372,4 +372,17 @@
       var(--wall-edges),
       radial-gradient(1100px 900px at 72% 48%, rgb(var(--wall-shadow) / 0.2), rgb(var(--wall-shadow) / 0.8) 100%);
   }
+
+  /* As fotos se esfumam na parede (.feather): sem fundo, moldura ou sombra retangular */
+  .experience__open,
+  .experience__item--wide .experience__open {
+    background: none;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .experience__open:focus-visible {
+    outline: 2px solid var(--c-gold-2);
+    outline-offset: 4px;
+  }
 }

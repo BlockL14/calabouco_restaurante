@@ -168,6 +168,13 @@ function createController(refs: Refs, set: Setters) {
     const D = duration('--dur-morph', 900);
     const ease = easing('--ease-morph', 'cubic-bezier(0.72, 0, 0.18, 1)');
     const easeIn = easing('--ease-in', 'cubic-bezier(0.5, 0, 0.75, 0)');
+
+    // Telas largas não exibem os cartões: a nova foto surge por fusão lenta sobre a atual.
+    if (!card.getClientRects().length) {
+      await crossfade(target, ready, { photo, layer, oldImg, easeIn });
+      return;
+    }
+
     const layerBox = layer.getBoundingClientRect();
     const from = media.getBoundingClientRect();
     const to = photo.getBoundingClientRect();
@@ -251,21 +258,12 @@ function createController(refs: Refs, set: Setters) {
     window.addEventListener('resize', onResize);
 
     // 4. O texto atual sai para cima.
-    const textOut = duration('--dur-text-out', 220);
-    refs.slide.current?.querySelectorAll('[data-anim]').forEach((el, i) => {
-      el.animate(
-        [
-          { opacity: 1, transform: 'none' },
-          { opacity: 0, transform: 'translate3d(0, -14px, 0)' },
-        ],
-        { duration: textOut, delay: i * 30, easing: easeIn, fill: 'forwards' },
-      );
-    });
+    const out = textOut(easeIn);
 
     // 5. Novo texto, nova ordem dos cartões e nova numeração durante o voo do clone.
     //    Quando o cartão está abaixo do fundo (celular), espera o clone passar pelo texto.
     const fromBelow = from.top > to.bottom - 8;
-    await wait(fromBelow ? D * 0.55 : Math.max(textOut + 80, D * 0.42));
+    await wait(fromBelow ? D * 0.55 : Math.max(out + 80, D * 0.42));
     commit(target);
 
     await morph.finished.catch(() => undefined);
@@ -280,6 +278,83 @@ function createController(refs: Refs, set: Setters) {
     await nextFrame();
     clone.remove();
     card.style.visibility = '';
+    finish();
+  }
+
+  /** O texto atual sai para cima (comum às duas transições). */
+  const textOut = (easeIn: string) => {
+    const D = duration('--dur-text-out', 220);
+    refs.slide.current?.querySelectorAll('[data-anim]').forEach((el, i) => {
+      el.animate(
+        [
+          { opacity: 1, transform: 'none' },
+          { opacity: 0, transform: 'translate3d(0, -14px, 0)' },
+        ],
+        { duration: D, delay: i * 30, easing: easeIn, fill: 'forwards' },
+      );
+    });
+    return D;
+  };
+
+  /**
+   * Transição sem cartões: a nova foto aparece por cima da atual numa fusão longa, com
+   * um leve assentamento de escala; a luz da parede muda junto. O clone usa a mesma
+   * máscara da foto, então a borda continua se dissolvendo na parede durante a fusão.
+   */
+  async function crossfade(
+    target: number,
+    ready: Promise<unknown>,
+    el: { photo: HTMLElement; layer: HTMLElement; oldImg: HTMLImageElement; easeIn: string },
+  ) {
+    const D = duration('--dur-fade', 1400);
+    const ease = easing('--ease-in-out', 'cubic-bezier(0.65, 0, 0.35, 1)');
+    const out = textOut(el.easeIn);
+    set.setGlowIndex(target);
+    await ready;
+
+    const layerBox = el.layer.getBoundingClientRect();
+    const to = el.photo.getBoundingClientRect();
+    const clone = document.createElement('div');
+    clone.className = 'showcase__clone';
+    Object.assign(clone.style, {
+      left: `${to.left - layerBox.left}px`,
+      top: `${to.top - layerBox.top}px`,
+      width: `${to.width}px`,
+      height: `${to.height}px`,
+    });
+    const { picture, img } = createPictureElement(images[slides[target].image], PHOTO_SIZES);
+    clone.appendChild(picture);
+    el.layer.appendChild(clone);
+    await img.decode().catch(() => undefined);
+
+    const anims = [
+      clone.animate(
+        [
+          { opacity: 0, transform: 'scale(1.06)' },
+          { opacity: 1, transform: 'scale(1)' },
+        ],
+        { duration: D, easing: ease, fill: 'forwards' },
+      ),
+      el.oldImg.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(0.55)' }], {
+        duration: D,
+        easing: ease,
+        fill: 'forwards',
+      }),
+    ];
+    const onResize = () => anims.forEach((a) => a.finish());
+    window.addEventListener('resize', onResize);
+
+    await wait(Math.max(out + 80, D * 0.3));
+    commit(target);
+    await anims[0].finished.catch(() => undefined);
+    window.removeEventListener('resize', onResize);
+
+    anims[1].cancel();
+    set.setPhotoIndex(target);
+    await nextFrame();
+    await refs.photoImg.current?.decode().catch(() => undefined);
+    await nextFrame();
+    clone.remove();
     finish();
   }
 

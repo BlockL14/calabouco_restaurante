@@ -82,7 +82,7 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
           </div>
           <figure className="flavors__photo" data-reveal style={{ '--reveal-delay': '120ms' } as CSSProperties}>
             <div className="flavors__photo-frame">
-              <Picture image="queijo" sizes="(min-width: 1024px) 400px, (min-width: 700px) 42vw, 86vw" />
+              <Picture image="queijo" sizes="(min-width: 1024px) 400px, (min-width: 700px) 42vw, 86vw" className="feather" />
             </div>
             <figcaption>Da cozinha do Calabouço</figcaption>
           </figure>
@@ -162,7 +162,7 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
               <p className="menu__intro">{current.intro}</p>
               {current.image && (
                 <div className="menu__image">
-                  <Picture image={current.image} sizes="(min-width: 1024px) 380px, 90vw" />
+                  <Picture image={current.image} sizes="(min-width: 1024px) 380px, 90vw" className="feather" />
                 </div>
               )}
             </div>

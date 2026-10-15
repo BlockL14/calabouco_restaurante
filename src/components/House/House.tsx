@@ -19,10 +19,10 @@ export function House() {
 
         <div className="house__media" data-reveal>
           <div className="house__facade">
-            <Picture image="arte-fachada" sizes="(min-width: 1024px) 460px, (min-width: 700px) 46vw, 80vw" />
+            <Picture image="arte-fachada" sizes="(min-width: 1024px) 460px, (min-width: 700px) 46vw, 80vw" className="feather" />
           </div>
           <div className="house__art" data-reveal style={{ '--reveal-delay': '160ms' } as CSSProperties}>
-            <Picture image="arte-pizza" sizes="(min-width: 1024px) 220px, 34vw" />
+            <Picture image="arte-pizza" sizes="(min-width: 1024px) 220px, 34vw" className="feather" />
           </div>
         </div>
 

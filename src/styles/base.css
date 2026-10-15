@@ -49,6 +49,19 @@ body {
       linear-gradient(0deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px);
   }
 
+  /* Fotos das seções: bordas esfumadas, sem recorte duro contra os tijolos.
+     A máscara fica no <picture>: contorno de foco e legendas não são afetados. */
+  .feather {
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
+      linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+    mask-image:
+      linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
+      linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
   body,
   .wall {
     background-color: var(--c-black);

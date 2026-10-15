@@ -757,67 +757,10 @@
 }
 
 /* ==========================================================================
-   Telas largas (≥1024px): parede de tijolos e tipografia medieval.
-   A foto se dissolve na parede por máscara (em vez de escurecer até o preto);
-   o clone em voo e a faixa dos cartazes usam a mesma máscara, alinhada à foto.
+   Telas largas (≥1024px): tipografia medieval.
    ========================================================================== */
 
 @media (min-width: 1024px) {
-  .showcase {
-    --photo-fade: linear-gradient(
-      90deg,
-      transparent 0,
-      rgb(0 0 0 / 0.3) 12%,
-      rgb(0 0 0 / 0.7) 30%,
-      #000 50%
-    );
-  }
-
-  /* A luz da foto ativa tinge a parede, sem cobrir a textura */
-  .showcase__glow {
-    mix-blend-mode: soft-light;
-  }
-
-  .showcase__glow.is-active {
-    opacity: 0.8;
-  }
-
-  .showcase__photo,
-  .showcase__veil {
-    -webkit-mask-image: var(--photo-fade);
-    mask-image: var(--photo-fade);
-  }
-
-  .showcase__layer {
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      transparent calc(100% - var(--photo-w)),
-      rgb(0 0 0 / 0.3) calc(100% - var(--photo-w) * 0.88),
-      rgb(0 0 0 / 0.7) calc(100% - var(--photo-w) * 0.7),
-      #000 calc(100% - var(--photo-w) * 0.5)
-    );
-    mask-image: linear-gradient(
-      90deg,
-      transparent calc(100% - var(--photo-w)),
-      rgb(0 0 0 / 0.3) calc(100% - var(--photo-w) * 0.88),
-      rgb(0 0 0 / 0.7) calc(100% - var(--photo-w) * 0.7),
-      #000 calc(100% - var(--photo-w) * 0.5)
-    );
-  }
-
-  /* Leitura do texto: penumbra atrás do título, borda superior (cabeçalho) e base */
-  .showcase__shade {
-    background:
-      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.62) 0, rgb(var(--wall-shadow) / 0) calc(var(--header-h) + 72px)),
-      linear-gradient(0deg, rgb(var(--wall-shadow) / 0.82) 0, rgb(var(--wall-shadow) / 0) 30%),
-      radial-gradient(
-        48% 62% at 22% 52%,
-        rgb(var(--wall-shadow) / 0.62) 0,
-        rgb(var(--wall-shadow) / 0.36) 60%,
-        rgb(var(--wall-shadow) / 0.12) 100%
-      );
-  }
-
   .showcase__title {
     font-size: clamp(2.75rem, 10.2cqi, 6rem);
     font-weight: 600;
@@ -838,8 +781,112 @@
     letter-spacing: 0.02em;
   }
 
+  /* Cinzel não tem algarismos tabulares: largura fixa evita que a linha de progresso pule */
   .sc-number {
+    min-width: 1.4em;
     font-weight: 500;
+    text-align: end;
+  }
+}
+
+/* ==========================================================================
+   Telas largas deitadas: parede de tijolos, sem cartões.
+   A foto se dissolve na parede por uma máscara longa e suave (curva em S) e
+   some também no topo e na base; uma penumbra sobre a faixa de fusão evita que
+   foto e parede apareçam sobrepostas. O clone da transição usa a mesma máscara,
+   ancorada à direita com a largura da foto. As trocas são por fusão lenta.
+   ========================================================================== */
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  .showcase {
+    --photo-fade:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        rgb(0 0 0 / 0.03) 6%,
+        rgb(0 0 0 / 0.1) 12%,
+        rgb(0 0 0 / 0.22) 18%,
+        rgb(0 0 0 / 0.37) 24%,
+        rgb(0 0 0 / 0.5) 30%,
+        rgb(0 0 0 / 0.63) 36%,
+        rgb(0 0 0 / 0.78) 42%,
+        rgb(0 0 0 / 0.9) 48%,
+        rgb(0 0 0 / 0.97) 54%,
+        #000 60%
+      ),
+      linear-gradient(180deg, rgb(0 0 0 / 0.35) 0, #000 14%, #000 74%, rgb(0 0 0 / 0.4) 90%, transparent 100%);
+  }
+
+  /* A luz da foto ativa tinge a parede, sem cobrir a textura */
+  .showcase__glow {
+    mix-blend-mode: soft-light;
+  }
+
+  .showcase__glow.is-active {
+    opacity: 0.8;
+  }
+
+  .showcase__photo,
+  .showcase__layer {
+    -webkit-mask-image: var(--photo-fade);
+    mask-image: var(--photo-fade);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /* A camada do clone cobre a abertura inteira: a máscara ocupa só a faixa da foto */
+  .showcase__layer {
+    -webkit-mask-size: var(--photo-w) 100%;
+    mask-size: var(--photo-w) 100%;
+    -webkit-mask-position: right top;
+    mask-position: right top;
+  }
+
+  /* Faixa dos cartazes: cobre o texto impresso da arte antes de a foto aparecer */
+  .showcase__veil {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 18%);
+  }
+
+  /* Leitura do texto (penumbra atrás do título, topo e base) e sombra na faixa de fusão */
+  .showcase__shade {
+    background:
+      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.62) 0, rgb(var(--wall-shadow) / 0) calc(var(--header-h) + 72px)),
+      linear-gradient(0deg, rgb(var(--wall-shadow) / 0.82) 0, rgb(var(--wall-shadow) / 0) 30%),
+      linear-gradient(
+        90deg,
+        rgb(var(--wall-shadow) / 0) calc(100% - var(--photo-w) * 1.12),
+        rgb(var(--wall-shadow) / 0.42) calc(100% - var(--photo-w) * 0.96),
+        rgb(var(--wall-shadow) / 0.36) calc(100% - var(--photo-w) * 0.78),
+        rgb(var(--wall-shadow) / 0) calc(100% - var(--photo-w) * 0.5)
+      ),
+      radial-gradient(
+        48% 62% at 22% 52%,
+        rgb(var(--wall-shadow) / 0.62) 0,
+        rgb(var(--wall-shadow) / 0.36) 60%,
+        rgb(var(--wall-shadow) / 0.12) 100%
+      );
+  }
+
+  /* Sem cartões: título, texto e controles numa coluna; a foto fica livre */
+  .showcase__rail {
+    display: none;
+  }
+
+  .showcase__inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      '.'
+      'copy'
+      'controls'
+      '.';
+  }
+
+  .showcase__controls {
+    width: min(100%, 30rem);
+    margin-top: clamp(28px, 5svh, 56px);
   }
 }
 
