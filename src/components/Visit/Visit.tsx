@@ -1,3 +1,7 @@
+import archAvif from '../../assets/textures/arco.avif';
+import archSmAvif from '../../assets/textures/arco-p.avif';
+import archSmWebp from '../../assets/textures/arco-p.webp';
+import archWebp from '../../assets/textures/arco.webp';
 import { business, sectionIds } from '../../content/business';
 import { images } from '../../content/images';
 import { glowSrc } from '../../lib/images';
@@ -6,36 +10,19 @@ import { Picture } from '../Picture';
 import './Visit.css';
 
 /*
- * Porta em arco de pedra (viewBox 1000 × 800, mesma proporção da porta):
- * aduelas marcadas por juntas, pedra-chave no topo e filetes dourados,
- * iluminados de baixo para cima como pela boca de um forno.
+ * Arco de tijolos (imagem gerada por scripts/make-arch.mjs): aduelas radiais com a
+ * profundidade de um tijolo e ombreiras em fiadas, como o arco real da fachada.
+ * A imagem cobre o vão e o anel ao redor; o vão é transparente.
  */
-const STONES = 'M20 800V500A480 480 0 0 1 980 500V800';
-const EDGE_OUT = 'M1 800V500A499 499 0 0 1 999 500V800';
-const EDGE_IN = 'M39 800V500A461 461 0 0 1 961 500V800';
+const ARCH_SIZES = '(min-width: 640px) 744px, 100vw';
 
-function StoneArch() {
+function BrickArch() {
   return (
-    <svg className="visit__arch" viewBox="0 0 1000 800" fill="none" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="visit-stone" x1="0" y1="800" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#b8683c" stopOpacity="0.62" />
-          <stop offset="0.55" stopColor="#6e3424" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#4a2419" stopOpacity="0.42" />
-        </linearGradient>
-        <linearGradient id="visit-gold" x1="0" y1="800" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#e7c48a" stopOpacity="0.85" />
-          <stop offset="1" stopColor="#b28a50" stopOpacity="0.35" />
-        </linearGradient>
-      </defs>
-      {/* Argamassa (base contínua) e aduelas por cima: as juntas aparecem mais escuras */}
-      <path className="visit__arch-mortar" d={STONES} />
-      <path className="visit__arch-stones" d={STONES} stroke="url(#visit-stone)" />
-      <path className="visit__arch-edge" d={EDGE_OUT} stroke="url(#visit-gold)" />
-      <path className="visit__arch-edge" d={EDGE_IN} stroke="url(#visit-gold)" strokeOpacity="0.6" />
-      {/* Pedra-chave */}
-      <path className="visit__arch-key" d="M474 -2H526L519 44H481Z" />
-    </svg>
+    <picture className="visit__arch">
+      <source type="image/avif" srcSet={`${archSmAvif} 930w, ${archAvif} 1594w`} sizes={ARCH_SIZES} />
+      <source type="image/webp" srcSet={`${archSmWebp} 930w, ${archWebp} 1594w`} sizes={ARCH_SIZES} />
+      <img src={archWebp} alt="" width={1594} height={1157} loading="lazy" decoding="async" draggable={false} />
+    </picture>
   );
 }
 
@@ -114,7 +101,7 @@ export function Visit() {
               <Picture image="pizza" sizes="(min-width: 1024px) 640px, 92vw" alt="" />
             </div>
           </div>
-          <StoneArch />
+          <BrickArch />
         </div>
       </div>
     </section>

@@ -12,6 +12,7 @@ npm run preview    # serve o build em http://localhost:4173
 npm run lint       # ESLint
 npm run images     # regera as imagens otimizadas a partir dos originais
 npm run texture    # regera a textura da parede de tijolos (duas resoluções)
+npm run arch       # regera o arco de tijolos da seção Visite (duas resoluções)
 ```
 
 O build usa caminhos relativos (`base: './'`), então a pasta `dist/` funciona em qualquer subdiretório.
@@ -24,7 +25,7 @@ O build usa caminhos relativos (`base: './'`), então a pasta `dist/` funciona e
 | Sabores | `src/components/Flavors` | Destaque da Coroa Real + seleção do cardápio em abas acessíveis |
 | A experiência | `src/components/Experience` | Galeria assimétrica + visualização ampliada (`<dialog>`) |
 | A casa | `src/components/House` | Fachada, arte de identidade e “Desde 1991” |
-| Visite | `src/components/Visit` | Composição centralizada com pílulas; placas da casa com endereço e telefone ladeando a porta em arco de pedra, com a pizza da casa surgindo da soleira |
+| Visite | `src/components/Visit` | Composição centralizada com pílulas; placas da casa com endereço e telefone ladeando a porta em arco de tijolos (aduelas radiais e ombreiras em fiadas, como o arco da fachada), com a pizza da casa surgindo da soleira |
 
 ## Onde editar
 
@@ -57,6 +58,7 @@ A página usa, em todas as larguras, a mesma dupla tipográfica das artes da cas
 - **Texto corrido, botões e itens do cardápio:** Inter.
 - **Parede:** textura procedimental gerada por `npm run texture` (determinística, sem emenda), com cores calibradas nos tijolos das fotos da fachada e do corredor. Há duas resoluções: `tijolos-p` (≈ 42 KB, celulares) e `tijolos` (≈ 90 KB, a partir de 700 px). Cada seção escurece a parede com degradês próprios e “acende” um trecho junto às fotos; na abertura, a luz da foto ativa tinge a parede.
 - **Fotos × parede:** a foto da abertura se dissolve na parede por uma máscara longa em curva suave — pela base em telas em pé, pela esquerda (e topo e base) em telas deitadas —, com penumbra sobre a faixa de fusão. As fotos das seções têm bordas esfumadas (classe `.feather`), sem moldura retangular.
+- **Arco da seção Visite:** imagem gerada por `npm run arch` com a mesma paleta e a mesma luz da parede: 35 aduelas radiais com a profundidade de um tijolo, ombreiras em fiadas alternadas que se encaixam na parede, sombra onde o arco encosta nos tijolos e a luz quente do forno saindo pelo vão (≈ 17 KB no celular, ≈ 38 KB nas telas largas, em AVIF).
 - **Abertura sem cartões:** a troca de destaque é feita pelas setas, pelo teclado (← →) e por gesto lateral, com fusão lenta entre as fotos (`--dur-fade`).
 - **Peso das fontes:** Inter (48 KB), Cinzel (26 KB), Grenze Gotisch (17 KB) e UnifrakturCook (17 KB), só o subconjunto latino, todas pré-carregadas.
 

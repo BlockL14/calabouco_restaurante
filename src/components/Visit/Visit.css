@@ -2,13 +2,14 @@
    Visite o Calabouço
    Princípios da referência (cena escura, composição central, pílula clara,
    informações flutuando ao lado do objeto, luz quente) vestidos com os
-   materiais da casa: a porta em arco de pedra do calabouço, a pizza na
+   materiais da casa: a porta em arco de tijolos do calabouço, a pizza na
    soleira e placas da casa com endereço e telefone.
    ========================================================================== */
 
 .visit {
   /* Largura da porta: cabe na tela junto com o título (telas deitadas) */
-  --door-w: min(100%, 460px);
+  /* Vão da porta; o arco ocupa 1,33× essa largura e precisa caber inteiro na tela */
+  --door-w: min(75%, 460px);
   --pizza-cut: 0.2;
   overflow: clip;
   isolation: isolate;
@@ -183,6 +184,8 @@
   position: relative;
   width: var(--door-w);
   aspect-ratio: 10 / 8;
+  /* Espaço para o anel do arco, que sobe acima do vão */
+  margin-top: calc(var(--door-w) * 0.164);
 }
 
 /* Vão da porta: arco perfeito no topo (raio = metade da largura) */
@@ -193,7 +196,7 @@
   border-radius: 999px 999px 0 0;
 }
 
-/* Profundidade: sombra interna junto à pedra */
+/* Profundidade: sombra interna junto aos tijolos */
 .visit__door-inner::after {
   content: '';
   position: absolute;
@@ -283,44 +286,26 @@
 
 .visit__arch {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  /* O anel e as ombreiras ficam fora do vão: 164 de 1000 na largura, 164 de 800 na altura */
+  top: -20.5%;
+  left: -16.4%;
+  right: -16.4%;
+  bottom: 0;
+  max-width: none;
   pointer-events: none;
 }
 
-.visit__arch-mortar {
-  stroke: #1d110c;
-  stroke-width: 38;
-}
-
-.visit__arch-stones {
-  stroke-width: 32;
-  /* Aduelas: pedras de ~70 unidades separadas por juntas de argamassa */
-  stroke-dasharray: 62 9;
-  stroke-dashoffset: 4;
-}
-
-.visit__arch-edge {
-  stroke-width: 1.2;
-  vector-effect: non-scaling-stroke;
-}
-
-.visit__arch-key {
-  fill: #c9a165;
-  fill-opacity: 0.75;
-  stroke: #e7c48a;
-  stroke-opacity: 0.6;
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
+.visit__arch img {
+  width: 100%;
+  max-width: none;
+  height: 100%;
 }
 
 /* ---------- Tablet ---------- */
 
 @media (min-width: 640px) {
   .visit {
-    --door-w: min(100%, 560px);
+    --door-w: min(75%, 520px);
   }
 
   .visit__contact {
@@ -329,20 +314,27 @@
   }
 }
 
-/* ---------- Desktop: placas ladeando a porta, tudo na altura da tela ---------- */
+/* ---------- Desktop: a porta cabe na tela junto com título e botões ---------- */
 
 @media (min-width: 1024px) {
   .visit {
-    /* A porta encolhe para que título, botões e porta caibam abaixo do cabeçalho */
-    --door-w: clamp(400px, calc((100svh - var(--header-h) - 30rem) * 1.25), min(680px, 44vw));
+    /* Altura do vão (0,8) + anel (0,164) = 0,964 da largura */
+    --door-w: clamp(400px, calc((100svh - var(--header-h) - 30rem) / 0.964), min(560px, 38vw));
     padding-top: clamp(3rem, 7svh, 5.5rem);
   }
 
   .visit__scene {
+    margin-top: clamp(1.75rem, 3svh, 2.75rem);
+  }
+}
+
+/* ---------- Telas largas: placas ladeando a porta, fora do anel do arco ---------- */
+
+@media (min-width: 1200px) {
+  .visit__scene {
     grid-template-columns: minmax(0, 1fr) var(--door-w) minmax(0, 1fr);
     align-items: end;
-    column-gap: clamp(1.5rem, 3vw, 3.5rem);
-    margin-top: clamp(1.75rem, 3svh, 2.75rem);
+    column-gap: calc(var(--door-w) * 0.164 + clamp(1.25rem, 2vw, 2.5rem));
   }
 
   /* As placas entram na grade como irmãs da porta */
