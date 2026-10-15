@@ -4,8 +4,11 @@
 
 .house {
   overflow: clip;
-  background: var(--c-black-2);
   border-top: 1px solid var(--c-line);
+  background:
+    radial-gradient(90% 460px at 40% 420px, rgb(226 132 64 / 0.07), transparent 72%),
+    var(--wall-edges),
+    radial-gradient(130% 700px at 40% 420px, rgb(var(--wall-shadow) / 0.18), rgb(var(--wall-shadow) / 0.8) 100%);
 }
 
 .house__grid {
@@ -13,6 +16,8 @@
   display: grid;
   gap: 3rem;
 }
+
+/* As artes não têm moldura: as bordas se esfumam na parede (.feather no <picture>) */
 
 /* “1991” em contorno dourado, ao fundo */
 .house__year {
@@ -40,8 +45,6 @@
   width: 82%;
   aspect-ratio: 686 / 856;
   overflow: hidden;
-  border-radius: 2px;
-  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
 }
 
 .house__art {
@@ -51,9 +54,6 @@
   width: 44%;
   aspect-ratio: 684 / 855;
   overflow: hidden;
-  border-radius: 2px;
-  outline: 8px solid var(--c-black-2);
-  box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.9);
 }
 
 .house__facade picture,
@@ -125,20 +125,13 @@
   }
 }
 
-/* ---------- Telas largas: parede de tijolos ---------- */
+/* ---------- Telas largas: luz junto às artes, à esquerda ---------- */
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .house {
     background:
       radial-gradient(760px 640px at 24% 50%, rgb(226 132 64 / 0.07), transparent 72%),
       var(--wall-edges),
       radial-gradient(1000px 820px at 26% 50%, rgb(var(--wall-shadow) / 0.18), rgb(var(--wall-shadow) / 0.8) 100%);
-  }
-
-  /* As artes se esfumam na parede (.feather): sem moldura nem sombra retangular */
-  .house__facade,
-  .house__art {
-    outline: none;
-    box-shadow: none;
   }
 }

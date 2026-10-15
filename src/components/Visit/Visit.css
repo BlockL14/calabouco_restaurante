@@ -14,10 +14,13 @@
   isolation: isolate;
   padding-bottom: 0;
   text-align: center;
+  /* A luz do forno que sai pela porta “lava” a parede ao redor; o título fica
+     na penumbra, para leitura. */
   background:
-    radial-gradient(60% 42% at 50% 100%, rgb(143 32 41 / 0.18), transparent 74%),
-    radial-gradient(140% 110% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.4) 100%),
-    var(--c-black);
+    radial-gradient(640px 420px at 50% 100%, rgb(232 150 80 / 0.14), transparent 74%),
+    radial-gradient(60% 42% at 50% 100%, rgb(143 32 41 / 0.14), transparent 74%),
+    linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px),
+    radial-gradient(1000px 640px at 50% 96%, rgb(var(--wall-shadow) / 0.08), rgb(var(--wall-shadow) / 0.8) 100%);
   border-top: 1px solid var(--c-line);
 }
 
@@ -367,20 +370,6 @@
   .visit__door {
     grid-column: 2;
     grid-row: 1;
-  }
-}
-
-/* ---------- Telas largas: a porta embutida na parede de tijolos ----------
-   A luz do forno que sai pela porta “lava” a parede ao redor; o título fica
-   na penumbra, para leitura. */
-
-@media (min-width: 1024px) {
-  .visit {
-    background:
-      radial-gradient(640px 420px at 50% 100%, rgb(232 150 80 / 0.14), transparent 74%),
-      radial-gradient(60% 42% at 50% 100%, rgb(143 32 41 / 0.14), transparent 74%),
-      linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px),
-      radial-gradient(1000px 640px at 50% 96%, rgb(var(--wall-shadow) / 0.08), rgb(var(--wall-shadow) / 0.8) 100%);
   }
 }
 

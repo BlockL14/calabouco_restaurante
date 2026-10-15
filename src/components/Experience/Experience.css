@@ -4,9 +4,12 @@
 
 .experience {
   background:
-    radial-gradient(60% 50% at 10% 30%, rgb(143 32 41 / 0.14), transparent 70%),
-    linear-gradient(180deg, var(--c-black), var(--c-black-2));
+    radial-gradient(60% 50% at 10% 30%, rgb(143 32 41 / 0.12), transparent 70%),
+    radial-gradient(90% 520px at 50% 62%, rgb(226 132 64 / 0.06), transparent 72%),
+    var(--wall-edges),
+    radial-gradient(130% 760px at 50% 62%, rgb(var(--wall-shadow) / 0.2), rgb(var(--wall-shadow) / 0.8) 100%);
 }
+
 
 .experience__grid {
   display: grid;
@@ -71,9 +74,13 @@
   padding: 0;
   border: 0;
   overflow: hidden;
-  border-radius: 2px;
-  background: var(--c-coal);
+  /* Sem fundo nem moldura: a foto se esfuma na parede (.feather no <picture>) */
+  background: none;
   cursor: zoom-in;
+}
+
+.experience__open:focus-visible {
+  outline-offset: 4px;
 }
 
 .experience__item--main .experience__open {
@@ -191,11 +198,6 @@
     z-index: 1;
   }
 
-  /* Sobreposição: o letreiro avança sobre a borda da foto principal */
-  .experience__item--wide .experience__open {
-    box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.8);
-    outline: 10px solid var(--c-black-2);
-  }
 }
 
 /* Desktop */
@@ -362,7 +364,7 @@
   }
 }
 
-/* ---------- Telas largas: parede de tijolos ---------- */
+/* ---------- Telas largas: luz junto à foto principal, à direita ---------- */
 
 @media (min-width: 1024px) {
   .experience {
@@ -371,18 +373,5 @@
       radial-gradient(900px 760px at 76% 46%, rgb(226 132 64 / 0.06), transparent 72%),
       var(--wall-edges),
       radial-gradient(1100px 900px at 72% 48%, rgb(var(--wall-shadow) / 0.2), rgb(var(--wall-shadow) / 0.8) 100%);
-  }
-
-  /* As fotos se esfumam na parede (.feather): sem fundo, moldura ou sombra retangular */
-  .experience__open,
-  .experience__item--wide .experience__open {
-    background: none;
-    box-shadow: none;
-    outline: none;
-  }
-
-  .experience__open:focus-visible {
-    outline: 2px solid var(--c-gold-2);
-    outline-offset: 4px;
   }
 }

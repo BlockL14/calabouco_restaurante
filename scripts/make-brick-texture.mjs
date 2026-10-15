@@ -18,21 +18,23 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUT = path.join(root, 'src', 'assets', 'textures');
 const PREVIEW = process.argv.includes('--preview') ? process.argv[process.argv.indexOf('--preview') + 1] : null;
 
-// Geometria em unidades de desenho; SCALE define a resolução do arquivo. Na página, a
-// ladrilha é exibida a DISPLAY desse tamanho (--wall-size em src/styles/tokens.css):
-// ao mudar a geometria ou DISPLAY, atualize --wall-size com o valor que o script imprime.
+// Geometria em unidades de desenho. Cada saída tem sua resolução (scale, pixels por
+// unidade) e é exibida na página no tamanho de --wall-size (src/styles/tokens.css):
+// ao mudar a geometria, atualize --wall-size com os valores que o script imprime.
 const COLS = 8; // tijolos por fiada
 const ROWS = 16; // fiadas
 const PITCH_X = 132; // tijolo + junta
 const PITCH_Y = 46;
 const JOINT = 9; // largura da junta de argamassa
-const SCALE = Number(process.env.BRICK_SCALE || 1.5);
-const DISPLAY = 0.8;
+// tijolos: telas a partir de 700px (exibida a 0,8 da geometria);
+// tijolos-p: celulares (exibida a ~0,6), mais leve
+const OUTPUTS = [
+  { name: 'tijolos', scale: 1.5, display: 0.8 },
+  { name: 'tijolos-p', scale: 1, display: 640 / (8 * 132) },
+];
 
 const W_CSS = COLS * PITCH_X;
 const H_CSS = ROWS * PITCH_Y;
-const W = Math.round(W_CSS * SCALE);
-const H = Math.round(H_CSS * SCALE);
 
 // ---------- Aleatoriedade determinística ----------
 
@@ -143,116 +145,124 @@ function brickAt(x, y) {
 
 // ---------- Renderização ----------
 
-const height = new Float32Array(W * H);
-const albedo = new Float32Array(W * H * 3);
-const isBrick = new Uint8Array(W * H);
+async function render({ name, scale: SCALE, display }) {
+  const W = Math.round(W_CSS * SCALE);
+  const H = Math.round(H_CSS * SCALE);
 
-for (let py = 0; py < H; py++) {
-  const y = (py + 0.5) / SCALE;
-  for (let px = 0; px < W; px++) {
-    const x = (px + 0.5) / SCALE;
-    const i = py * W + px;
-    const b = brickAt(x, y);
+  const height = new Float32Array(W * H);
+  const albedo = new Float32Array(W * H * 3);
+  const isBrick = new Uint8Array(W * H);
 
-    // Borda irregular + lascas nos cantos e arestas
-    let d = b.d + (fbm(x, y, 14, 2, 41) - 0.5) * 3 + (fbm(x, y, 3.5, 2, 43) - 0.5) * 0.7;
-    // Lascas: mais frequentes nos cantos
-    const chip = valueNoise(x, y, Math.round(W_CSS / 7), Math.round(H_CSS / 7), 53);
-    const cornerness = smoothstep(0.55, 0.95, Math.abs(b.lx) / b.hx) * smoothstep(0.2, 0.9, Math.abs(b.ly) / b.hy);
-    const nearEdge = smoothstep(-6, 0, b.d); // 1 na aresta, 0 a 6 px para dentro
-    const chipT = 0.8 - cornerness * 0.16;
-    if (chip > chipT) d += (chip - chipT) * 34 * Math.max(nearEdge, cornerness);
+  for (let py = 0; py < H; py++) {
+    const y = (py + 0.5) / SCALE;
+    for (let px = 0; px < W; px++) {
+      const x = (px + 0.5) / SCALE;
+      const i = py * W + px;
+      const b = brickAt(x, y);
 
-    let h;
-    let c;
-    if (d < 0) {
-      isBrick[i] = 1;
-      const bevel = smoothstep(0, 3.2, -d);
-      const bumps = fbm(x, y, 9, 4, 61);
-      h = 0.4 + 0.6 * bevel + (bumps - 0.5) * 0.14;
+      // Borda irregular + lascas nos cantos e arestas
+      let d = b.d + (fbm(x, y, 14, 2, 41) - 0.5) * 3 + (fbm(x, y, 3.5, 2, 43) - 0.5) * 0.7;
+      // Lascas: mais frequentes nos cantos
+      const chip = valueNoise(x, y, Math.round(W_CSS / 7), Math.round(H_CSS / 7), 53);
+      const cornerness = smoothstep(0.55, 0.95, Math.abs(b.lx) / b.hx) * smoothstep(0.2, 0.9, Math.abs(b.ly) / b.hy);
+      const nearEdge = smoothstep(-6, 0, b.d); // 1 na aresta, 0 a 6 px para dentro
+      const chipT = 0.8 - cornerness * 0.16;
+      if (chip > chipT) d += (chip - chipT) * 34 * Math.max(nearEdge, cornerness);
 
-      const base = brickColor(b.col, b.row);
-      // Manchas grandes (queima irregular), grão fino e poros
-      const mott = fbm(x, y, 26, 3, 71);
-      const mott2 = fbm(x, y, 7, 2, 73);
-      const grain = fbm(x, y, 1.1, 2, 83);
-      const pore = fbm(x, y, 1.2, 2, 97);
-      // Um lado do tijolo um pouco mais escuro (fogo do forno)
-      const side = hash(b.col, b.row, 31) < 0.5 ? b.lx / b.hx : -b.lx / b.hx;
-      let k = 0.74 + mott * 0.4 + (mott2 - 0.5) * 0.16;
-      k *= 1 + (grain - 0.5) * 0.2;
-      k *= 1 - Math.max(0, side) * 0.18 * hash(b.col, b.row, 37);
-      if (pore > 0.8) k *= 0.74;
-      // Fuligem nas arestas
-      k *= 0.86 + 0.14 * bevel;
-      c = [base[0] * k, base[1] * k, base[2] * k];
-    } else {
-      const grain = fbm(x, y, 1.2, 2, 109);
-      const dirt = fbm(x, y, 14, 3, 113);
-      h = 0.14 + (grain - 0.5) * 0.1 - smoothstep(0, JOINT / 2, d) * 0.04;
-      const k = (0.72 + dirt * 0.42) * (1 + (grain - 0.5) * 0.36);
-      c = [MORTAR[0] * k, MORTAR[1] * k, MORTAR[2] * k];
-    }
-    height[i] = h;
-    albedo[i * 3] = c[0];
-    albedo[i * 3 + 1] = c[1];
-    albedo[i * 3 + 2] = c[2];
-  }
-}
+      let h;
+      let c;
+      if (d < 0) {
+        isBrick[i] = 1;
+        const bevel = smoothstep(0, 3.2, -d);
+        const bumps = fbm(x, y, 9, 4, 61);
+        h = 0.4 + 0.6 * bevel + (bumps - 0.5) * 0.14;
 
-// Luz quente vinda de cima e um pouco da esquerda (como de uma tocha na parede)
-const L = (() => {
-  const v = [-0.32, -0.72, 0.62];
-  const n = Math.hypot(...v);
-  return v.map((a) => a / n);
-})();
-const RELIEF = 0.9 * SCALE; // inclinação por diferença de altura entre pixels vizinhos
-const shadowReach = Math.max(1, Math.round(3.2 * SCALE));
-
-const out = Buffer.alloc(W * H * 3);
-for (let py = 0; py < H; py++) {
-  for (let px = 0; px < W; px++) {
-    const i = py * W + px;
-    const hl = height[py * W + mod(px - 1, W)];
-    const hr = height[py * W + mod(px + 1, W)];
-    const hu = height[mod(py - 1, H) * W + px];
-    const hd = height[mod(py + 1, H) * W + px];
-    let nx = -(hr - hl) * RELIEF;
-    let ny = -(hd - hu) * RELIEF;
-    let nz = 1;
-    const nl = Math.hypot(nx, ny, nz);
-    nx /= nl;
-    ny /= nl;
-    nz /= nl;
-    const diffuse = Math.max(0, nx * L[0] + ny * L[1] + nz * L[2]) / L[2];
-    let shade = 0.25 + 0.75 * diffuse;
-
-    if (!isBrick[i]) {
-      // Sombra projetada pelo tijolo de cima e oclusão no fundo da junta
-      let occ = 0;
-      for (let t = 1; t <= shadowReach; t++) {
-        if (isBrick[mod(py - t, H) * W + mod(px - Math.round(t * 0.4), W)]) {
-          occ = Math.max(occ, 1 - (t - 1) / shadowReach);
-        }
+        const base = brickColor(b.col, b.row);
+        // Manchas grandes (queima irregular), grão fino e poros
+        const mott = fbm(x, y, 26, 3, 71);
+        const mott2 = fbm(x, y, 7, 2, 73);
+        const grain = fbm(x, y, 1.1, 2, 83);
+        const pore = fbm(x, y, 1.2, 2, 97);
+        // Um lado do tijolo um pouco mais escuro (fogo do forno)
+        const side = hash(b.col, b.row, 31) < 0.5 ? b.lx / b.hx : -b.lx / b.hx;
+        let k = 0.74 + mott * 0.4 + (mott2 - 0.5) * 0.16;
+        k *= 1 + (grain - 0.5) * 0.2;
+        k *= 1 - Math.max(0, side) * 0.18 * hash(b.col, b.row, 37);
+        if (pore > 0.8) k *= 0.74;
+        // Fuligem nas arestas
+        k *= 0.86 + 0.14 * bevel;
+        c = [base[0] * k, base[1] * k, base[2] * k];
+      } else {
+        const grain = fbm(x, y, 1.2, 2, 109);
+        const dirt = fbm(x, y, 14, 3, 113);
+        h = 0.14 + (grain - 0.5) * 0.1 - smoothstep(0, JOINT / 2, d) * 0.04;
+        const k = (0.72 + dirt * 0.42) * (1 + (grain - 0.5) * 0.36);
+        c = [MORTAR[0] * k, MORTAR[1] * k, MORTAR[2] * k];
       }
-      shade *= 1 - occ * 0.45;
-      shade *= 0.82;
-    }
-
-    for (let ch = 0; ch < 3; ch++) {
-      const v = albedo[i * 3 + ch] * shade;
-      out[i * 3 + ch] = Math.max(0, Math.min(255, Math.round(Math.pow(clamp01(v), 1 / 1.08) * 255)));
+      height[i] = h;
+      albedo[i * 3] = c[0];
+      albedo[i * 3 + 1] = c[1];
+      albedo[i * 3 + 2] = c[2];
     }
   }
+
+  // Luz quente vinda de cima e um pouco da esquerda (como de uma tocha na parede)
+  const L = (() => {
+    const v = [-0.32, -0.72, 0.62];
+    const n = Math.hypot(...v);
+    return v.map((a) => a / n);
+  })();
+  const RELIEF = 0.9 * SCALE; // inclinação por diferença de altura entre pixels vizinhos
+  const shadowReach = Math.max(1, Math.round(3.2 * SCALE));
+
+  const out = Buffer.alloc(W * H * 3);
+  for (let py = 0; py < H; py++) {
+    for (let px = 0; px < W; px++) {
+      const i = py * W + px;
+      const hl = height[py * W + mod(px - 1, W)];
+      const hr = height[py * W + mod(px + 1, W)];
+      const hu = height[mod(py - 1, H) * W + px];
+      const hd = height[mod(py + 1, H) * W + px];
+      let nx = -(hr - hl) * RELIEF;
+      let ny = -(hd - hu) * RELIEF;
+      let nz = 1;
+      const nl = Math.hypot(nx, ny, nz);
+      nx /= nl;
+      ny /= nl;
+      nz /= nl;
+      const diffuse = Math.max(0, nx * L[0] + ny * L[1] + nz * L[2]) / L[2];
+      let shade = 0.25 + 0.75 * diffuse;
+
+      if (!isBrick[i]) {
+        // Sombra projetada pelo tijolo de cima e oclusão no fundo da junta
+        let occ = 0;
+        for (let t = 1; t <= shadowReach; t++) {
+          if (isBrick[mod(py - t, H) * W + mod(px - Math.round(t * 0.4), W)]) {
+            occ = Math.max(occ, 1 - (t - 1) / shadowReach);
+          }
+        }
+        shade *= 1 - occ * 0.45;
+        shade *= 0.82;
+      }
+
+      for (let ch = 0; ch < 3; ch++) {
+        const v = albedo[i * 3 + ch] * shade;
+        out[i * 3 + ch] = Math.max(0, Math.min(255, Math.round(Math.pow(clamp01(v), 1 / 1.08) * 255)));
+      }
+    }
+  }
+
+  const img = sharp(out, { raw: { width: W, height: H, channels: 3 } });
+  if (PREVIEW) {
+    await img.clone().png().toFile(PREVIEW);
+    console.log(`prévia: ${PREVIEW} (${W}×${H})`);
+  } else {
+    await mkdir(OUT, { recursive: true });
+    const avif = await img.clone().avif({ quality: 50, effort: 7 }).toFile(path.join(OUT, `${name}.avif`));
+    const webp = await img.clone().webp({ quality: 72, effort: 6 }).toFile(path.join(OUT, `${name}.webp`));
+    console.log(`${name} ${W}×${H} (--wall-size: ${Math.round(W_CSS * display)}px ${Math.round(H_CSS * display)}px): avif ${(avif.size / 1024).toFixed(1)} KB, webp ${(webp.size / 1024).toFixed(1)} KB`);
+  }
+
 }
 
-const img = sharp(out, { raw: { width: W, height: H, channels: 3 } });
-if (PREVIEW) {
-  await img.clone().png().toFile(PREVIEW);
-  console.log(`prévia: ${PREVIEW} (${W}×${H})`);
-} else {
-  await mkdir(OUT, { recursive: true });
-  const avif = await img.clone().avif({ quality: 50, effort: 7 }).toFile(path.join(OUT, 'tijolos.avif'));
-  const webp = await img.clone().webp({ quality: 72, effort: 6 }).toFile(path.join(OUT, 'tijolos.webp'));
-  console.log(`tijolos ${W}×${H} (--wall-size: ${Math.round(W_CSS * DISPLAY)}px ${Math.round(H_CSS * DISPLAY)}px): avif ${(avif.size / 1024).toFixed(1)} KB, webp ${(webp.size / 1024).toFixed(1)} KB`);
-}
+for (const o of PREVIEW ? OUTPUTS.slice(0, 1) : OUTPUTS) await render(o);

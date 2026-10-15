@@ -23,7 +23,6 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--c-black);
   color: var(--c-ivory);
   font-family: var(--font-body);
   font-size: var(--fs-body);
@@ -34,41 +33,51 @@ body {
   overflow-x: clip;
 }
 
-/* Parede de tijolos ao fundo (telas largas). A textura repete sem emenda e é a
-   mesma para a página inteira; cada seção escurece e “ilumina” a parede com
-   degradês próprios. Navegadores sem image-set() ficam no fundo escuro liso. */
-@media (min-width: 1024px) {
+/* Parede de tijolos ao fundo. A textura repete sem emenda e é a mesma para a página
+   inteira; cada seção escurece e “ilumina” a parede com degradês próprios. Celulares
+   recebem uma versão mais leve. Navegadores sem image-set() ficam no fundo escuro liso. */
+:root {
+  --wall-image: image-set(
+    url('../assets/textures/tijolos-p.avif') type('image/avif'),
+    url('../assets/textures/tijolos-p.webp') type('image/webp')
+  );
+  /* Penumbra nas bordas de cada seção: as emendas entre seções ficam no escuro */
+  --wall-edges:
+    linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 160px),
+    linear-gradient(0deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 160px);
+}
+
+@media (min-width: 700px) {
   :root {
     --wall-image: image-set(
       url('../assets/textures/tijolos.avif') type('image/avif'),
       url('../assets/textures/tijolos.webp') type('image/webp')
     );
-    /* Penumbra nas bordas de cada seção: as emendas entre seções ficam no escuro */
     --wall-edges:
       linear-gradient(180deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px),
       linear-gradient(0deg, rgb(var(--wall-shadow) / 0.7), rgb(var(--wall-shadow) / 0) 240px);
   }
+}
 
-  /* Fotos das seções: bordas esfumadas, sem recorte duro contra os tijolos.
-     A máscara fica no <picture>: contorno de foco e legendas não são afetados. */
-  .feather {
-    -webkit-mask-image:
-      linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
-      linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
-    mask-image:
-      linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
-      linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-  }
+body,
+.wall {
+  background-color: var(--c-black);
+  background-image: linear-gradient(rgb(var(--wall-shadow) / 0.5), rgb(var(--wall-shadow) / 0.5)), var(--wall-image);
+  background-size: auto, var(--wall-size);
+  background-position: 0 0;
+}
 
-  body,
-  .wall {
-    background-color: var(--c-black);
-    background-image: linear-gradient(rgb(var(--wall-shadow) / 0.5), rgb(var(--wall-shadow) / 0.5)), var(--wall-image);
-    background-size: auto, var(--wall-size);
-    background-position: 0 0;
-  }
+/* Fotos das seções: bordas esfumadas, sem recorte duro contra os tijolos.
+   A máscara fica no <picture>: contorno de foco e legendas não são afetados. */
+.feather {
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image:
+    linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 img,
@@ -233,17 +242,18 @@ ol[role='list'] {
   color: var(--c-gold-2);
 }
 
-/* Telas largas: o destaque em gótica ganha linha própria, como nas artes da casa */
-@media (min-width: 1024px) {
-  .display em,
-  .display .em {
-    display: block;
-    margin-top: 0.06em;
-    font-size: 1.08em;
-    line-height: 1.02;
-    letter-spacing: 0;
-  }
+/* O destaque em gótica ganha linha própria, como nas artes da casa
+   (“PARA UMA NOITE / diferente”) */
+.display em,
+.display .em {
+  display: block;
+  margin-top: 0.06em;
+  font-size: 1.08em;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
 
+@media (min-width: 1024px) {
   .eyebrow {
     font-size: 0.8125rem;
     letter-spacing: 0.24em;

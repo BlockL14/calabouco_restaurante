@@ -1,18 +1,9 @@
-import {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type KeyboardEvent,
-  type MouseEvent,
-  type PointerEvent,
-} from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
 import { sectionIds } from '../../content/business';
-import { images, type ImageAsset } from '../../content/images';
+import { images } from '../../content/images';
 import type { MenuCategoryId } from '../../content/menu';
 import { slides, type Slide } from '../../content/slides';
-import { createPictureElement, glowSrc, positionStyle, preloadImage } from '../../lib/images';
+import { createPictureElement, glowSrc, preloadImage } from '../../lib/images';
 import { duration, easing, nextFrame, prefersReducedMotion, wait } from '../../lib/motion';
 import { ArrowLeft, ArrowRight } from '../Icons';
 import { Picture } from '../Picture';
@@ -23,8 +14,6 @@ import './Showcase.css';
  * Telas deitadas: a foto ocupa o lado direito (≈ 50–64% da largura). Em pé: largura total.
  */
 const PHOTO_SIZES = '(orientation: landscape) and (min-width: 700px) 62vw, 100vw';
-const CARD_SIZES = '(orientation: landscape) and (min-width: 700px) 200px, 34vw';
-const CARD_RADIUS = 12;
 
 const total = slides.length;
 const wrap = (i: number) => ((i % total) + total) % total;
@@ -37,16 +26,11 @@ type Refs = {
   busy: Box<boolean>;
   target: Box<number | null>;
   pending: Box<number | null>;
-  focusAfter: Box<boolean>;
   prefetchedAll: Box<boolean>;
-  region: Box<HTMLDivElement | null>;
   photo: Box<HTMLDivElement | null>;
   photoImg: Box<HTMLImageElement | null>;
   layer: Box<HTMLDivElement | null>;
   slide: Box<HTMLDivElement | null>;
-  rail: Box<HTMLUListElement | null>;
-  cards: Box<Map<string, HTMLLIElement>>;
-  firstRects: Box<Map<string, DOMRect> | null>;
 };
 
 type Setters = {
@@ -58,40 +42,12 @@ type Setters = {
   setAnnouncement: (s: string) => void;
 };
 
-const currentScale = (el: Element | null) => {
-  if (!el) return 1;
-  const t = getComputedStyle(el).transform;
-  return !t || t === 'none' ? 1 : new DOMMatrixReadOnly(t).a || 1;
-};
-
-/** Frações (0–1) do object-position calculado de uma imagem. */
-const objectPosition = (img: HTMLImageElement) => {
-  const [x = '50%', y = '50%'] = getComputedStyle(img).objectPosition.split(' ');
-  return { x: parseFloat(x) / 100, y: parseFloat(y) / 100 };
-};
-
-/**
- * Região da imagem (em pixels da imagem original) visível numa caixa com
- * object-fit: cover, dado o object-position. `zoom` > 1 encolhe a região ao redor
- * do centro (zoom de hover do cartão).
- */
-function visibleRegion(asset: ImageAsset, w: number, h: number, pos: { x: number; y: number }, zoom = 1) {
-  const k = Math.max(w / asset.width, h / asset.height);
-  const ox = (w - asset.width * k) * pos.x;
-  const oy = (h - asset.height * k) * pos.y;
-  const rw = w / k / zoom;
-  const rh = h / k / zoom;
-  const cx = -ox / k + w / k / 2;
-  const cy = -oy / k + h / k / 2;
-  return { x: cx - rw / 2, y: cy - rh / 2, w: rw, h: rh, k, ox, oy };
-}
-
 /**
  * Controlador da transição (criado uma única vez; usa apenas refs e setters estáveis).
- * Sequência, como na referência: o cartão escolhido cresce até cobrir o fundo, o fundo
- * anterior escurece, os demais cartões deslizam uma posição, o título entra linha a linha
- * e a numeração rola. Cliques rápidos não acumulam animações: durante uma troca, só o
- * último destino pedido fica pendente e é executado ao final.
+ * O texto atual sobe e some, a nova foto surge por fusão lenta sobre a anterior (que
+ * escurece), a luz da parede muda de cor, o título entra linha a linha e a numeração rola.
+ * Cliques rápidos não acumulam animações: durante uma troca, só o último destino pedido
+ * fica pendente e é executado ao final.
  */
 function createController(refs: Refs, set: Setters) {
   const announce = (i: number) => {
@@ -100,20 +56,11 @@ function createController(refs: Refs, set: Setters) {
   };
 
   const commit = (target: number) => {
-    const railBox = refs.rail.current?.getBoundingClientRect();
-    if (railBox) {
-      const map = new Map<string, DOMRect>();
-      refs.cards.current.forEach((el, id) => {
-        const r = el.getBoundingClientRect();
-        map.set(id, new DOMRect(r.left - railBox.left, r.top - railBox.top, r.width, r.height));
-      });
-      refs.firstRects.current = map;
-    }
     set.setPrevious(refs.active.current);
     refs.active.current = target;
     set.setEntering(true);
     set.setActive(target);
-    if (!refs.focusAfter.current) announce(target);
+    announce(target);
   };
 
   const finish = () => {
@@ -122,13 +69,8 @@ function createController(refs: Refs, set: Setters) {
     const pending = refs.pending.current;
     refs.pending.current = null;
     if (pending !== null && pending !== refs.active.current) {
-      // O foco pedido (ativação por teclado) fica para o fim da última troca.
       void run(pending);
       return;
-    }
-    if (refs.focusAfter.current) {
-      refs.focusAfter.current = false;
-      refs.slide.current?.focus({ preventScroll: true });
     }
     // Depois da primeira interação, prepara as demais imagens em segundo plano.
     if (!refs.prefetchedAll.current) {
@@ -137,23 +79,34 @@ function createController(refs: Refs, set: Setters) {
     }
   };
 
+  /** O texto atual sai para cima. Devolve a duração. */
+  const textOut = () => {
+    const D = duration('--dur-text-out', 220);
+    const ease = easing('--ease-in', 'cubic-bezier(0.5, 0, 0.75, 0)');
+    refs.slide.current?.querySelectorAll('[data-anim]').forEach((el, i) => {
+      el.animate(
+        [
+          { opacity: 1, transform: 'none' },
+          { opacity: 0, transform: 'translate3d(0, -14px, 0)' },
+        ],
+        { duration: D, delay: i * 30, easing: ease, fill: 'forwards' },
+      );
+    });
+    return D;
+  };
+
   async function run(target: number) {
     refs.busy.current = true;
     refs.target.current = target;
-    const next = slides[target];
-    const asset = images[next.image];
-    // Começa a baixar já; a animação não espera (resposta imediata ao clique).
+    const asset = images[slides[target].image];
     const ready = preloadImage(asset, PHOTO_SIZES);
 
     const photo = refs.photo.current;
     const layer = refs.layer.current;
     const oldImg = refs.photoImg.current;
-    const card = refs.cards.current.get(next.id) ?? null;
-    const media = card?.querySelector<HTMLElement>('.sc-card__media') ?? null;
-    const cardImg = media?.querySelector('img') ?? null;
 
     // Movimento reduzido (ou elementos indisponíveis): troca direta com leve fusão.
-    if (prefersReducedMotion() || !photo || !layer || !oldImg || !card || !media || !cardImg) {
+    if (prefersReducedMotion() || !photo || !layer || !oldImg) {
       await ready;
       set.setGlowIndex(target);
       commit(target);
@@ -165,22 +118,16 @@ function createController(refs: Refs, set: Setters) {
       return;
     }
 
-    const D = duration('--dur-morph', 900);
-    const ease = easing('--ease-morph', 'cubic-bezier(0.72, 0, 0.18, 1)');
-    const easeIn = easing('--ease-in', 'cubic-bezier(0.5, 0, 0.75, 0)');
+    const D = duration('--dur-fade', 1400);
+    const ease = easing('--ease-in-out', 'cubic-bezier(0.65, 0, 0.35, 1)');
+    const out = textOut();
+    set.setGlowIndex(target);
+    await ready;
 
-    // Telas largas não exibem os cartões: a nova foto surge por fusão lenta sobre a atual.
-    if (!card.getClientRects().length) {
-      await crossfade(target, ready, { photo, layer, oldImg, easeIn });
-      return;
-    }
-
+    // A nova foto entra num clone exatamente sobre a atual (mesma máscara de bordas,
+    // via .showcase__layer), com um leve assentamento de escala; a atual escurece.
     const layerBox = layer.getBoundingClientRect();
-    const from = media.getBoundingClientRect();
     const to = photo.getBoundingClientRect();
-
-    // 1. O clone já nasce com o tamanho final do fundo (sem animar geometria: nada de
-    //    mudança de layout). Uma janela (clip-path) + escala o fazem coincidir com o cartão.
     const clone = document.createElement('div');
     clone.className = 'showcase__clone';
     Object.assign(clone.style, {
@@ -189,167 +136,36 @@ function createController(refs: Refs, set: Setters) {
       width: `${to.width}px`,
       height: `${to.height}px`,
     });
-    // Enquanto a foto grande não chega, a imagem já decodificada do cartão serve de base.
-    const placeholder = document.createElement('img');
-    placeholder.className = 'obj showcase__clone-ph';
-    placeholder.alt = '';
-    placeholder.src = cardImg.currentSrc || cardImg.src;
-    Object.entries(positionStyle(asset)).forEach(([prop, value]) => {
-      if (value) placeholder.style.setProperty(prop, String(value));
-    });
-    clone.appendChild(placeholder);
     const { picture, img } = createPictureElement(asset, PHOTO_SIZES);
     clone.appendChild(picture);
     layer.appendChild(clone);
+    await img.decode().catch(() => undefined);
 
-    // Região da imagem que o cartão mostra, levada para as coordenadas do clone.
-    const cardRegion = visibleRegion(asset, from.width, from.height, objectPosition(cardImg), currentScale(cardImg));
-    const big = visibleRegion(asset, to.width, to.height, objectPosition(img));
-    const Lx = big.ox + cardRegion.x * big.k;
-    const Ly = big.oy + cardRegion.y * big.k;
-    const Lw = cardRegion.w * big.k;
-    const Lh = cardRegion.h * big.k;
-    const s = from.width / Lw;
-    const tx = from.left - to.left - s * Lx;
-    const ty = from.top - to.top - s * Ly;
-    const inset = (t: number, r: number, b: number, l: number, round: number) =>
-      `inset(${Math.max(0, t)}px ${Math.max(0, r)}px ${Math.max(0, b)}px ${Math.max(0, l)}px round ${round}px)`;
-    card.style.visibility = 'hidden';
-
-    // Em pé, o clone voa acima do sombreamento; leva consigo o mesmo degradê,
-    // que surge durante o voo, para pousar idêntico ao fundo sem perder a leitura do texto.
-    const shade = layer.parentElement?.querySelector<HTMLElement>('.showcase__shade');
-    const aboveShade = !!shade && Number(getComputedStyle(layer).zIndex) > Number(getComputedStyle(shade).zIndex);
-    const anims: Animation[] = [];
-    if (aboveShade) {
-      const cloneShade = document.createElement('div');
-      cloneShade.className = 'showcase__clone-shade';
-      clone.appendChild(cloneShade);
-      anims.push(cloneShade.animate([{ opacity: 0 }, { opacity: 1 }], { duration: D, easing: ease, fill: 'forwards' }));
-    }
-
-    // 2. A janela se abre até cobrir todo o fundo; os cantos arredondados se desfazem.
-    const morph = clone.animate(
+    const fadeIn = clone.animate(
       [
-        {
-          transform: `translate(${tx}px, ${ty}px) scale(${s})`,
-          clipPath: inset(Ly, to.width - Lx - Lw, to.height - Ly - Lh, Lx, CARD_RADIUS / s),
-        },
-        { transform: 'translate(0px, 0px) scale(1)', clipPath: inset(0, 0, 0, 0, 0) },
+        { opacity: 0, transform: 'scale(1.06)' },
+        { opacity: 1, transform: 'scale(1)' },
       ],
       { duration: D, easing: ease, fill: 'forwards' },
     );
-    anims.push(morph);
-
-    // 3. O fundo anterior escurece até quase o preto, cedendo espaço.
-    const recede = oldImg.animate(
-      [
-        { transform: 'scale(1)', filter: 'brightness(1)' },
-        { transform: 'scale(1.05)', filter: 'brightness(0.12)' },
-      ],
-      { duration: D * 0.8, easing: ease, fill: 'forwards' },
-    );
-    anims.push(recede);
-    set.setGlowIndex(target);
-
-    // Se a janela mudar de tamanho no meio do voo, encerra a animação em vez de
-    // seguir para um retângulo desatualizado; o pouso usa o layout novo.
-    const onResize = () => anims.forEach((a) => a.finish());
-    window.addEventListener('resize', onResize);
-
-    // 4. O texto atual sai para cima.
-    const out = textOut(easeIn);
-
-    // 5. Novo texto, nova ordem dos cartões e nova numeração durante o voo do clone.
-    //    Quando o cartão está abaixo do fundo (celular), espera o clone passar pelo texto.
-    const fromBelow = from.top > to.bottom - 8;
-    await wait(fromBelow ? D * 0.55 : Math.max(out + 80, D * 0.42));
-    commit(target);
-
-    await morph.finished.catch(() => undefined);
-    window.removeEventListener('resize', onResize);
-
-    // 6. Pouso: com a foto pronta, o fundo assume o novo destaque por baixo do clone.
-    await ready;
-    recede.cancel();
-    set.setPhotoIndex(target);
-    await nextFrame();
-    await refs.photoImg.current?.decode().catch(() => undefined);
-    await nextFrame();
-    clone.remove();
-    card.style.visibility = '';
-    finish();
-  }
-
-  /** O texto atual sai para cima (comum às duas transições). */
-  const textOut = (easeIn: string) => {
-    const D = duration('--dur-text-out', 220);
-    refs.slide.current?.querySelectorAll('[data-anim]').forEach((el, i) => {
-      el.animate(
-        [
-          { opacity: 1, transform: 'none' },
-          { opacity: 0, transform: 'translate3d(0, -14px, 0)' },
-        ],
-        { duration: D, delay: i * 30, easing: easeIn, fill: 'forwards' },
-      );
+    const dim = oldImg.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(0.55)' }], {
+      duration: D,
+      easing: ease,
+      fill: 'forwards',
     });
-    return D;
-  };
 
-  /**
-   * Transição sem cartões: a nova foto aparece por cima da atual numa fusão longa, com
-   * um leve assentamento de escala; a luz da parede muda junto. O clone usa a mesma
-   * máscara da foto, então a borda continua se dissolvendo na parede durante a fusão.
-   */
-  async function crossfade(
-    target: number,
-    ready: Promise<unknown>,
-    el: { photo: HTMLElement; layer: HTMLElement; oldImg: HTMLImageElement; easeIn: string },
-  ) {
-    const D = duration('--dur-fade', 1400);
-    const ease = easing('--ease-in-out', 'cubic-bezier(0.65, 0, 0.35, 1)');
-    const out = textOut(el.easeIn);
-    set.setGlowIndex(target);
-    await ready;
-
-    const layerBox = el.layer.getBoundingClientRect();
-    const to = el.photo.getBoundingClientRect();
-    const clone = document.createElement('div');
-    clone.className = 'showcase__clone';
-    Object.assign(clone.style, {
-      left: `${to.left - layerBox.left}px`,
-      top: `${to.top - layerBox.top}px`,
-      width: `${to.width}px`,
-      height: `${to.height}px`,
-    });
-    const { picture, img } = createPictureElement(images[slides[target].image], PHOTO_SIZES);
-    clone.appendChild(picture);
-    el.layer.appendChild(clone);
-    await img.decode().catch(() => undefined);
-
-    const anims = [
-      clone.animate(
-        [
-          { opacity: 0, transform: 'scale(1.06)' },
-          { opacity: 1, transform: 'scale(1)' },
-        ],
-        { duration: D, easing: ease, fill: 'forwards' },
-      ),
-      el.oldImg.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(0.55)' }], {
-        duration: D,
-        easing: ease,
-        fill: 'forwards',
-      }),
-    ];
-    const onResize = () => anims.forEach((a) => a.finish());
+    // Se a janela mudar de tamanho no meio da fusão, encerra a animação em vez de seguir
+    // num retângulo desatualizado; o pouso usa o layout novo.
+    const onResize = () => [fadeIn, dim].forEach((a) => a.finish());
     window.addEventListener('resize', onResize);
 
     await wait(Math.max(out + 80, D * 0.3));
     commit(target);
-    await anims[0].finished.catch(() => undefined);
+    await fadeIn.finished.catch(() => undefined);
     window.removeEventListener('resize', onResize);
 
-    anims[1].cancel();
+    // Pouso: o fundo assume o novo destaque por baixo do clone.
+    dim.cancel();
     set.setPhotoIndex(target);
     await nextFrame();
     await refs.photoImg.current?.decode().catch(() => undefined);
@@ -358,25 +174,13 @@ function createController(refs: Refs, set: Setters) {
     finish();
   }
 
-  const go = (index: number, opts: { focus?: boolean } = {}) => {
+  const go = (index: number) => {
     const target = wrap(index);
-    if (opts.focus) {
-      // O cartão ativado vai sair da fileira: o foco fica na região até a troca terminar.
-      refs.focusAfter.current = true;
-      refs.region.current?.focus({ preventScroll: true });
-    }
     if (refs.busy.current) {
       refs.pending.current = target;
       return;
     }
-    if (target === refs.active.current) {
-      if (opts.focus) {
-        refs.focusAfter.current = false;
-        refs.slide.current?.focus({ preventScroll: true });
-      }
-      return;
-    }
-    void run(target);
+    if (target !== refs.active.current) void run(target);
   };
 
   const step = (dir: 1 | -1) => {
@@ -387,7 +191,7 @@ function createController(refs: Refs, set: Setters) {
   return { go, step };
 }
 
-/** Título em duas linhas; cada linha é revelada de baixo para cima, como na referência. */
+/** Título em duas linhas; cada linha é revelada de baixo para cima. */
 function SlideTitle({ slide }: { slide: Slide }) {
   const { title, emphasis } = slide;
   const split = title.endsWith(emphasis) ? title.length - emphasis.length : title.length;
@@ -421,60 +225,20 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
     busy: useRef(false),
     target: useRef<number | null>(null),
     pending: useRef<number | null>(null),
-    focusAfter: useRef(false),
     prefetchedAll: useRef(false),
-    region: useRef<HTMLDivElement | null>(null),
     photo: useRef<HTMLDivElement | null>(null),
     photoImg: useRef<HTMLImageElement | null>(null),
     layer: useRef<HTMLDivElement | null>(null),
     slide: useRef<HTMLDivElement | null>(null),
-    rail: useRef<HTMLUListElement | null>(null),
-    cards: useRef(new Map<string, HTMLLIElement>()),
-    firstRects: useRef<Map<string, DOMRect> | null>(null),
   };
   const [controller] = useState(() =>
     createController(refs, { setActive, setPrevious, setPhotoIndex, setGlowIndex, setEntering, setAnnouncement }),
   );
-  const { cards: cardEls, firstRects, rail } = refs;
   const prevBtn = useRef<HTMLButtonElement>(null);
   const nextBtn = useRef<HTMLButtonElement>(null);
 
   const slide = slides[active];
-  const order = Array.from({ length: total - 1 }, (_, k) => wrap(active + 1 + k));
   const credit = images[slide.image].credit;
-
-  // Reorganização dos cartões (FLIP): os que ficam deslizam uma posição; o destaque
-  // que saiu do fundo volta como último cartão, entrando pela direita.
-  useLayoutEffect(() => {
-    const first = firstRects.current;
-    firstRects.current = null;
-    const railBox = rail.current?.getBoundingClientRect();
-    if (!first || !railBox || prefersReducedMotion()) return;
-    const D = duration('--dur-slow', 720);
-    const ease = easing('--ease-out', 'cubic-bezier(0.16, 1, 0.3, 1)');
-    cardEls.current.forEach((el, id) => {
-      const r = el.getBoundingClientRect();
-      const prev = first.get(id);
-      if (prev) {
-        const dx = prev.x - (r.left - railBox.left);
-        const dy = prev.y - (r.top - railBox.top);
-        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
-          el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0, 0)' }], {
-            duration: D,
-            easing: ease,
-          });
-        }
-      } else {
-        el.animate(
-          [
-            { opacity: 0, transform: 'translate3d(48px, 0, 0)' },
-            { opacity: 1, transform: 'none' },
-          ],
-          { duration: D, delay: 180, easing: ease, fill: 'backwards' },
-        );
-      }
-    });
-  }, [active, cardEls, firstRects, rail]);
 
   // Pré-carrega o próximo destaque quando o navegador estiver ocioso.
   useEffect(() => {
@@ -488,7 +252,7 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
   }, []);
 
   // Setas do teclado: o foco vai para a seta correspondente antes da troca, porque o
-  // link da chamada e os cartões são recriados/reordenados e perderiam o foco.
+  // link da chamada é recriado a cada destaque e perderia o foco.
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
@@ -498,9 +262,9 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
     controller.step(dir);
   };
 
-  // Gesto horizontal em telas de toque (inclusive sobre os cartões);
-  // `touch-action: pan-y pinch-zoom` preserva a rolagem vertical e o zoom.
-  // Se o gesto vira troca de destaque, o clique que viria em seguida é descartado.
+  // Gesto horizontal em telas de toque; `touch-action: pan-y pinch-zoom` preserva a
+  // rolagem vertical e o zoom. Se o gesto vira troca de destaque, o clique que viria
+  // em seguida (por exemplo, sobre a chamada) é descartado.
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
   const onPointerDown = (e: PointerEvent) => {
@@ -542,7 +306,7 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
         Calabouço Restaurante e Pizzaria — Curitiba
       </h1>
 
-      {/* Fundo: parede (telas largas) e luz ambiente (foto desfocada), fotografia, clone em voo e sombreamento */}
+      {/* Fundo: parede com a luz da foto ativa (foto desfocada), fotografia, clone da fusão e sombreamento */}
       <div className="showcase__ambient wall" aria-hidden="true">
         {slides.map((s, i) => {
           const glow = glowSrc(images[s.image]);
@@ -566,19 +330,17 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
       </div>
       <div ref={refs.layer} className="showcase__layer" aria-hidden="true" />
       <div className="showcase__shade" aria-hidden="true" />
-      {/* Artes com texto próprio (cartazes): faixa escura atrás dos cartões e controles */}
+      {/* Artes com texto próprio (cartazes): faixa escura que esconde o texto impresso */}
       <div
         className={`showcase__veil${slides[glowIndex].tone === 'poster' ? ' is-on' : ''}`}
         aria-hidden="true"
       />
 
       <div
-        ref={refs.region}
         className="showcase__inner"
         role="region"
         aria-roledescription="carrossel"
         aria-label="Destaques do Calabouço"
-        tabIndex={-1}
         onKeyDown={onKeyDown}
       >
         <div className="showcase__copy">
@@ -589,7 +351,6 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
             role="group"
             aria-roledescription="destaque"
             aria-label={`${active + 1} de ${total}: ${slide.label}`}
-            tabIndex={-1}
           >
             <p className="showcase__eyebrow" data-anim>
               <span className="showcase__dash" aria-hidden="true" />
@@ -616,46 +377,6 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
           </div>
         </div>
 
-        <div className="showcase__rail">
-          {/* A entrada inicial dos cartões só roda antes da primeira troca: depois, a
-              reordenação do React reinseriria os nós e reiniciaria a animação. */}
-          <ul ref={refs.rail} className={`showcase__cards${entering ? '' : ' is-intro'}`} role="list">
-            {order.map((i) => {
-              const s = slides[i];
-              return (
-                <li
-                  key={s.id}
-                  ref={(el) => {
-                    if (el) cardEls.current.set(s.id, el);
-                    else cardEls.current.delete(s.id);
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="sc-card"
-                    onClick={(e) => controller.go(i, { focus: e.detail === 0 })}
-                    onPointerEnter={() => prefetch(i)}
-                    onPointerDown={() => prefetch(i)}
-                    onFocus={() => prefetch(i)}
-                  >
-                    <span className="sc-card__media">
-                      <Picture image={s.image} sizes={CARD_SIZES} alt="" />
-                    </span>
-                    <span className="sc-card__body">
-                      <span className="sc-card__dash" aria-hidden="true" />
-                      <span className="sc-card__kicker">{s.kicker}</span>
-                      <span className="sc-card__title">
-                        <span className="sr-only">Ver destaque: </span>
-                        {s.label}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
         <div className="showcase__controls">
           <button
             ref={prevBtn}
@@ -663,6 +384,7 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
             className="icon-btn sc-arrow"
             onClick={() => controller.step(-1)}
             onPointerEnter={() => prefetch(wrap(active - 1))}
+            onFocus={() => prefetch(wrap(active - 1))}
             aria-label="Destaque anterior"
           >
             <ArrowLeft />
@@ -673,6 +395,7 @@ export function Showcase({ onSelectCategory }: ShowcaseProps) {
             className="icon-btn sc-arrow"
             onClick={() => controller.step(1)}
             onPointerEnter={() => prefetch(wrap(active + 1))}
+            onFocus={() => prefetch(wrap(active + 1))}
             aria-label="Próximo destaque"
           >
             <ArrowRight />

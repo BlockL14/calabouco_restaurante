@@ -1,6 +1,6 @@
 .site-footer {
   border-top: 1px solid var(--c-line);
-  background: var(--c-black);
+  background: rgb(var(--wall-shadow) / 0.78);
 }
 
 .site-footer__inner {
@@ -49,10 +49,4 @@
 
 .site-footer__top:hover svg {
   transform: translateY(-3px);
-}
-
-@media (min-width: 1024px) {
-  .site-footer {
-    background: rgb(var(--wall-shadow) / 0.78);
-  }
 }

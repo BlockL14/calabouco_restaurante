@@ -1,11 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource-variable/inter/wght.css';
-import '@fontsource-variable/cormorant-garamond/wght.css';
-import '@fontsource-variable/cormorant-garamond/wght-italic.css';
-// Telas largas: Cinzel (títulos), Grenze Gotisch (destaques) e UnifrakturCook (só o nome,
-// como no letreiro). As fontes só são baixadas onde são usadas: o celular continua
-// carregando apenas Inter e Cormorant.
+// Cinzel (títulos), Grenze Gotisch (destaques) e UnifrakturCook (só o nome, como no letreiro)
 import '@fontsource-variable/cinzel/wght.css';
 import '@fontsource/grenze-gotisch/700.css';
 import '@fontsource/unifrakturcook/700.css';
