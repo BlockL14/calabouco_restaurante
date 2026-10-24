@@ -1,8 +1,8 @@
 import { business, sectionIds } from '../../content/business';
 import { visit } from '../../content/home';
 import { Clock, Instagram, Phone, Pin } from '../Icons';
-import { Picture } from '../Picture';
 import { Split } from '../Split/Split';
+import { BannerArt } from './BannerArt';
 import './Visit.css';
 
 export function Visit() {
@@ -13,7 +13,7 @@ export function Visit() {
       labelledBy="visit-title"
       side="right"
       className="visit"
-      media={<Picture image={visit.image} sizes="(min-width: 900px) 54vw, 100vw" />}
+      media={<BannerArt />}
     >
       <p className="eyebrow">{visit.eyebrow}</p>
       <h2 id="visit-title" className="display">
@@ -27,9 +27,11 @@ export function Visit() {
           <span>
             {address.street}
             <br />
-            {address.district} — {address.city}/{address.state}
-            <br />
-            <span className="visit__muted">CEP {address.postalCode}</span>
+            <span className="visit__muted">
+              {address.district} – {address.city}/{address.state}
+              <br />
+              CEP {address.postalCode}
+            </span>
           </span>
         </p>
         <p className="visit__item">

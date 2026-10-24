@@ -1,12 +1,11 @@
-import type { ImageKey } from './images';
-
 // Seleção do cardápio — transcrita apenas dos trechos legíveis dos materiais.
 // Sem preços, gramaturas ou tamanhos: há versões do cardápio com valores diferentes.
 // Itens com leitura incerta ficaram de fora. Para editar, altere as listas abaixo.
 
-export type MenuCategoryId = 'entradas' | 'pizzas' | 'massas' | 'especiais' | 'sobremesas' | 'vinhos';
+export type MenuCategoryId = 'pizzas' | 'entradas' | 'pratos' | 'sobremesas' | 'vinhos';
 
-export type MenuItem = { name: string; note?: string };
+/** `featured`: item em destaque na página (a Coroa Real). */
+export type MenuItem = { name: string; note?: string; featured?: boolean };
 export type MenuGroup = { title: string; items: MenuItem[] };
 
 export type MenuCategory = {
@@ -16,8 +15,6 @@ export type MenuCategory = {
   /** Quantos itens aparecem antes de “Ver todos”. */
   preview: number;
   groups: MenuGroup[];
-  /** Foto apenas quando a correspondência com a categoria é segura. */
-  image?: ImageKey;
 };
 
 const list = (...names: string[]): MenuItem[] => names.map((name) => ({ name }));
@@ -33,34 +30,10 @@ export const menuNote = 'Consulte a casa sobre valores e disponibilidade.';
 
 export const menuCategories: MenuCategory[] = [
   {
-    id: 'entradas',
-    label: 'Entradas',
-    intro: 'Para começar a noite: antepastos, queijos ao forno e sopas.',
-    preview: 9,
-    groups: [
-      {
-        title: 'Para começar',
-        items: list(
-          'Bolinho de parmesão',
-          'Bruschetta',
-          'Burrata com rúcula e pesto genovese',
-          'Carpaccio',
-          'Carpaccio com tomate seco',
-          'Mignon aperitivo',
-          'Provolone ao forno',
-          'Provolone ao forno com tomate seco',
-          'Travessa de frios',
-        ),
-      },
-      { title: 'Sopas', items: list('Creme de milho', 'Creme de palmito', 'Sopa de cebola') },
-    ],
-  },
-  {
     id: 'pizzas',
     label: 'Pizzas',
     intro: 'Receitas da casa com nomes de castelo, sabores tradicionais e calzones.',
     preview: 12,
-    image: 'pizza',
     groups: [
       {
         title: 'Pizzas da casa',
@@ -113,13 +86,40 @@ export const menuCategories: MenuCategory[] = [
     ],
   },
   {
-    id: 'massas',
-    label: 'Massas',
-    intro: 'Espaguete, talharim ou penne, além de lasanhas, canelones e capeletti.',
+    id: 'entradas',
+    label: 'Entradas',
+    intro: 'Para começar a noite: antepastos, queijos ao forno e sopas.',
+    preview: 9,
+    groups: [
+      {
+        title: 'Para começar',
+        items: list(
+          'Bolinho de parmesão',
+          'Bruschetta',
+          'Burrata com rúcula e pesto genovese',
+          'Carpaccio',
+          'Carpaccio com tomate seco',
+          'Mignon aperitivo',
+          'Provolone ao forno',
+          'Provolone ao forno com tomate seco',
+          'Travessa de frios',
+        ),
+      },
+      { title: 'Sopas', items: list('Creme de milho', 'Creme de palmito', 'Sopa de cebola') },
+    ],
+  },
+  {
+    id: 'pratos',
+    label: 'Pratos',
+    intro: 'Massas, mignon, frango e salmão — e a sugestão da casa, a Coroa Real.',
     preview: 12,
     groups: [
       {
-        title: 'Espaguete, talharim ou penne',
+        title: 'Sugestão da casa',
+        items: [{ name: 'Coroa Real', note: 'Massa assada recheada com mignon em tiras', featured: true }],
+      },
+      {
+        title: 'Massas: espaguete, talharim ou penne',
         items: list('Alho e óleo', 'Bolonhesa', 'Carbonara', 'Funghi', 'Quatro queijos', 'Sugo'),
       },
       { title: 'Lasanhas', items: list('Ao sugo', 'Bolonhesa', 'De frango com catupiry', 'Quatro queijos') },
@@ -134,15 +134,6 @@ export const menuCategories: MenuCategory[] = [
         ),
       },
       { title: 'Capeletti', items: list('De frango com cream cheese', 'De ricota e nozes') },
-    ],
-  },
-  {
-    id: 'especiais',
-    label: 'Pratos especiais',
-    intro: 'Mignon, frango e salmão — e a sugestão da casa, a Coroa Real.',
-    preview: 12,
-    groups: [
-      { title: 'Sugestão da casa', items: [{ name: 'Coroa Real', note: 'Massa assada recheada com mignon em tiras' }] },
       { title: 'Mignon especial', items: list('Mignon Calabouço', 'Mignon grelhado com massa') },
       {
         title: 'Mignon',

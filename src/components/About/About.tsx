@@ -20,7 +20,8 @@ export function About() {
         id={sectionIds.about}
         labelledBy="about-title"
         side="left"
-        media={<Picture image={about.image} sizes="(min-width: 900px) 54vw, 100vw" />}
+        className="about"
+        media={<Picture image={about.image} sizes="(min-width: 900px) 50vw, 100vw" />}
       >
         <p className="eyebrow">{about.eyebrow}</p>
         <h2 id="about-title" className="display">
@@ -31,7 +32,7 @@ export function About() {
           ))}
         </h2>
         <p className="lead">{about.text}</p>
-        <a className="text-link" href={`#${sectionIds.ambience}`}>
+        <a className="text-link" href={`#${sectionIds.visit}`}>
           <span className="text-link__label">{about.link}</span>
           <ArrowRight />
         </a>

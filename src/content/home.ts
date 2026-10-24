@@ -17,7 +17,7 @@ export const about = {
   eyebrow: 'Sobre nós',
   title: ['Tradição', 'em cada detalhe'],
   text: 'Desde 1991, o Calabouço recebe Curitiba entre arcos de tijolos, grades de ferro e velas acesas. Restaurante e pizzaria à la carte, com pizzas de nomes de castelo, massas, pratos especiais e vinhos.',
-  link: 'Conheça o ambiente',
+  link: 'Venha nos visitar',
   image: 'letreiro' as ImageKey,
 };
 
@@ -39,7 +39,7 @@ export const menuIntro = {
 };
 
 export const signature = {
-  link: 'Ver nos pratos especiais',
+  link: 'Ver no cardápio',
 };
 
 export const ambience = {
@@ -57,5 +57,4 @@ export const visit = {
   hoursLabel: 'Horário de funcionamento',
   hoursText: 'Consulte pelo telefone',
   button: 'Como chegar',
-  image: 'arte-fachada' as ImageKey,
 };

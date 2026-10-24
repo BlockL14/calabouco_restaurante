@@ -7,8 +7,7 @@
       420,
       683,
       1020
-    ],
-    "glow": true
+    ]
   },
   "corredor-arte": {
     "width": 683,
@@ -16,66 +15,49 @@
     "widths": [
       400,
       683
-    ],
-    "glow": false
+    ]
   },
   "queijo": {
-    "width": 680,
+    "width": 646,
     "height": 849,
     "widths": [
       360,
       420,
-      680,
+      646,
       1020
-    ],
-    "glow": true
-  },
-  "arte-pizza": {
-    "width": 684,
-    "height": 855,
-    "widths": [
-      360,
-      420,
-      684,
-      1020
-    ],
-    "glow": true
+    ]
   },
   "arte-fachada": {
     "width": 686,
     "height": 856,
     "widths": [
-      360,
-      420,
-      686,
-      1020
-    ],
-    "glow": true
+      400,
+      686
+    ]
   },
   "pizza": {
     "width": 684,
     "height": 320,
     "widths": [
       420,
-      684
-    ],
-    "glow": false
+      684,
+      1020
+    ]
   },
   "letreiro": {
     "width": 686,
     "height": 366,
     "widths": [
       420,
-      686
-    ],
-    "glow": false
+      686,
+      1020
+    ]
   },
   "velas": {
     "width": 244,
     "height": 400,
     "widths": [
       244
-    ],
-    "glow": false
+    ]
   }
 }

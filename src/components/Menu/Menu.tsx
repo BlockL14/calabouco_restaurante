@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEve
 import { sectionIds } from '../../content/business';
 import { menuIntro } from '../../content/home';
 import { countItems, menuCategories, menuNote, type MenuCategoryId } from '../../content/menu';
-import { Plus } from '../Icons';
+import { CrownMark, Plus } from '../Icons';
 import { Picture } from '../Picture';
 import { Split } from '../Split/Split';
 import './Menu.css';
@@ -23,12 +23,13 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
   const total = countItems(current);
   const hasMore = total > current.preview;
 
-  // Posiciona o filete sob a aba ativa e mantém a aba visível na faixa rolável.
+  // Posiciona o filete sob o nome da aba ativa e mantém a aba visível na faixa rolável.
   useLayoutEffect(() => {
     const list = tabsRef.current;
     const tab = list?.querySelector<HTMLButtonElement>(`[data-id="${current.id}"]`);
-    if (!list || !tab) return;
-    const measure = () => setIndicator({ x: tab.offsetLeft, w: tab.offsetWidth });
+    const label = tab?.querySelector<HTMLElement>('.menu__tab-label');
+    if (!list || !tab || !label) return;
+    const measure = () => setIndicator({ x: tab.offsetLeft + label.offsetLeft, w: label.offsetWidth });
     measure();
     const left = tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2;
     list.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
@@ -77,10 +78,11 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
         id={sectionIds.menu}
         labelledBy="menu-title"
         side="right"
-        media={<Picture image={menuIntro.image} sizes="(min-width: 900px) 54vw, 100vw" />}
+        className="menu-intro"
+        media={<Picture image={menuIntro.image} sizes="(min-width: 900px) 61vw, 100vw" />}
       >
         <p className="eyebrow">{menuIntro.eyebrow}</p>
-        <h2 id="menu-title" className="display">
+        <h2 id="menu-title" className="display display--xl">
           {menuIntro.title.map((line) => (
             <span key={line} className="display__line">
               {line}
@@ -88,7 +90,8 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
           ))}
         </h2>
         <p className="lead">{menuIntro.text}</p>
-        <a className="btn" href={`#${sectionIds.menuList}`}>
+        {/* Leva à lista e já abre todos os itens da categoria escolhida */}
+        <a className="btn" href={`#${sectionIds.menuList}`} onClick={() => setExpandedFor(current.id)}>
           {menuIntro.button}
         </a>
       </Split>
@@ -113,7 +116,7 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
                     onClick={() => select(c.id)}
                     onKeyDown={(e) => onTabKeyDown(e, index)}
                   >
-                    {c.label}
+                    <span className="menu__tab-label">{c.label}</span>
                   </button>
                 );
               })}
@@ -136,15 +139,12 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
             className="menu__panel"
             tabIndex={0}
           >
-            <div className="menu__aside">
-              <p className="menu__count">
-                <span className="numeral">{String(total).padStart(2, '0')}</span> itens nesta seleção
-              </p>
-              <p className="menu__title" aria-hidden="true">
-                {current.label}
-              </p>
-              <p className="menu__intro">{current.intro}</p>
-            </div>
+            <p className="menu__summary">
+              <span className="menu__count">
+                <span className="numeral">{String(total).padStart(2, '0')}</span> itens
+              </span>
+              <span className="menu__intro">{current.intro}</span>
+            </p>
 
             <div className="menu__groups" id="menu-items">
               {current.groups.map((group) => {
@@ -165,10 +165,15 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
                         return (
                           <li
                             key={item.name}
-                            className={`menu__item${i >= current.preview ? ' is-extra' : ''}`}
+                            className={['menu__item', i >= current.preview && 'is-extra', item.featured && 'is-featured']
+                              .filter(Boolean)
+                              .join(' ')}
                             style={{ '--i': Math.min(i, 14) } as CSSProperties}
                           >
-                            <span className="menu__item-name">{item.name}</span>
+                            <span className="menu__item-name">
+                              {item.featured && <CrownMark className="menu__item-crown" />}
+                              {item.name}
+                            </span>
                             {item.note && <span className="menu__item-note">{item.note}</span>}
                           </li>
                         );

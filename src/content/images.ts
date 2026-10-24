@@ -13,13 +13,12 @@ export type ImageAsset = {
   width: number;
   height: number;
   widths: readonly number[];
-  glow: boolean;
   alt: string;
   position: ImagePosition;
   credit?: string;
 };
 
-type ImageMeta = Omit<ImageAsset, 'key' | 'width' | 'height' | 'widths' | 'glow'>;
+type ImageMeta = Omit<ImageAsset, 'key' | 'width' | 'height' | 'widths'>;
 
 const meta: Record<keyof typeof manifest, ImageMeta> = {
   corredor: {
@@ -35,17 +34,12 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   },
   queijo: {
     alt: 'Massa assada e dourada, com orégano por cima, sendo servida com o queijo derretido se esticando; ao fundo, paredes de tijolo e velas acesas.',
-    position: { base: '40% 40%', md: '42% 40%', lg: '40% 45%' },
-  },
-  'arte-pizza': {
-    alt: 'Arte do Calabouço: forno com fogo aceso, a frase “Restaurante e Pizzaria à la carte — desde 1991” e uma pizza servida em primeiro plano.',
-    // Preserva o logotipo no topo quando a abertura recorta a altura.
-    position: { base: '50% 14%' },
+    // Foto espelhada no tratamento: o queijo fica à direita.
+    position: { base: '62% 28%', md: '60% 30%', lg: '50% 0%' },
   },
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',
-    // Prioriza o letreiro e o arco da entrada
-    position: { base: '50% 6%', md: '50% 4%' },
+    position: { base: '50% 50%' },
   },
   pizza: {
     alt: 'Pizza servida em forma escura: metade com rodelas de tomate, azeitonas pretas e manjericão; metade com cebola e azeitonas verdes.',

@@ -5,7 +5,7 @@ import { Picture } from '../Picture';
 import './Hero.css';
 
 /** Mesmo `sizes` do pré-carregamento em index.html. */
-export const HERO_SIZES = '(min-width: 900px) 62vw, 100vw';
+export const HERO_SIZES = '(min-width: 900px) 52vw, 100vw';
 
 export function Hero() {
   return (
@@ -17,7 +17,7 @@ export function Hero() {
       <div className="container hero__inner">
         <div className="hero__content">
           <p className="eyebrow eyebrow--plain">{hero.eyebrow}</p>
-          <h1 id="hero-title" className="display hero__title">
+          <h1 id="hero-title" className="display display--xl hero__title">
             <span className="sr-only">{business.legalName}: </span>
             {hero.title.map((line) => (
               <span key={line} className="display__line">
@@ -30,7 +30,7 @@ export function Hero() {
             <a className="btn" href={`#${sectionIds.menu}`}>
               {hero.primary}
             </a>
-            <a className="text-link" href={`#${sectionIds.ambience}`}>
+            <a className="text-link text-link--light" href={`#${sectionIds.ambience}`}>
               <span className="text-link__label">{hero.secondary}</span>
               <ArrowRight />
             </a>

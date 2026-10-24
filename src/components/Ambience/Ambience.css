@@ -2,6 +2,14 @@
    Ambiente + galeria ampliada (<dialog>)
    ========================================================================== */
 
+@media (min-width: 900px) {
+  .ambience {
+    --band-h: clamp(400px, 31.7vw, 540px);
+    --content-x: calc(50% + clamp(1.5rem, 5.77vw - 1.8rem, 3.5rem));
+    --content-w: 37rem;
+  }
+}
+
 .lightbox {
   width: 100%;
   max-width: none;

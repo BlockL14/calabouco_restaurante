@@ -2,8 +2,9 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  height: var(--header-h);
+  height: var(--header-top);
   transition:
+    height var(--dur-slow) var(--ease-out),
     background-color var(--dur-slow) var(--ease-out),
     border-color var(--dur-slow) var(--ease-out),
     backdrop-filter var(--dur-slow) var(--ease-out);
@@ -22,6 +23,7 @@
 }
 
 .site-header.is-scrolled {
+  height: var(--header-h);
   background: var(--c-glass);
   border-bottom-color: var(--c-line);
   backdrop-filter: blur(14px) saturate(1.2);
@@ -37,7 +39,7 @@
   align-items: center;
   gap: 2rem;
   height: 100%;
-  max-width: 1760px;
+  max-width: calc(var(--maxw) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -52,12 +54,14 @@
   min-height: 44px;
   text-decoration: none;
   line-height: 1;
+  transform-origin: 0 50%;
+  transition: transform var(--dur-slow) var(--ease-out);
 }
 
 .brand__crown {
-  width: 22px;
+  width: 28px;
   height: auto;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   color: var(--c-gold);
 }
 
@@ -65,7 +69,7 @@
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--c-ivory);
 }
@@ -75,7 +79,7 @@
   font-family: var(--font-display);
   font-size: 0.5rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--c-tan);
 }
@@ -84,12 +88,11 @@
 
 .site-nav {
   display: none;
-  margin-left: auto;
 }
 
 .site-nav ul {
   display: flex;
-  gap: clamp(1.25rem, 2.6vw, 2.75rem);
+  gap: clamp(1.25rem, 2.8vw, 2.5rem);
   margin: 0;
   padding: 0;
 }
@@ -99,9 +102,9 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: clamp(0.8125rem, 0.197rem + 0.962vw, 1.0625rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--c-ivory);
   text-shadow: 0 1px 6px rgb(0 0 0 / 0.7);
@@ -114,7 +117,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 8px;
+  bottom: 6px;
   height: 1px;
   background: var(--c-copper);
   transform: scaleX(0);
@@ -135,9 +138,6 @@
 
 .site-header__cta {
   display: none;
-  min-height: 44px;
-  padding: 0.5rem 1.4rem;
-  font-size: 0.75rem;
 }
 
 .site-header__toggle {
@@ -169,30 +169,50 @@
   }
 }
 
+/* Telas largas: marca à esquerda, menu no centro da página e botão à direita */
 @media (min-width: 1024px) {
-  .site-nav,
-  .site-header__cta {
+  .site-header__bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .brand {
+    justify-self: start;
+  }
+
+  .site-nav {
     display: block;
   }
 
   .site-header__cta {
     display: inline-flex;
+    justify-self: end;
+    min-height: clamp(44px, 3.96vw, 57px);
+    padding-inline: clamp(1.1rem, 2.3vw, 2.1rem);
+    font-size: clamp(0.8125rem, 0.197rem + 0.962vw, 1.0625rem);
   }
 
   .site-header__toggle {
     display: none;
   }
 
-  .brand__name {
-    font-size: 1.5rem;
+  .brand__crown {
+    width: clamp(32px, 3.1vw, 46px);
+    margin-bottom: 5px;
   }
 
-  .brand__crown {
-    width: 26px;
+  .brand__name {
+    font-size: clamp(1.25rem, 1.74vw, 1.625rem);
   }
 
   .brand__sub {
-    font-size: 0.5625rem;
+    margin-top: 6px;
+    font-size: clamp(0.5rem, 0.66vw, 0.625rem);
+  }
+
+  /* Ao rolar, o cabeçalho fica mais baixo e a marca encolhe junto */
+  .is-scrolled .brand {
+    transform: scale(0.82);
   }
 }
 

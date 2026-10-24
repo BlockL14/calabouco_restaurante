@@ -21,11 +21,12 @@ export function Ambience() {
         id={sectionIds.ambience}
         labelledBy="ambience-title"
         side="left"
-        media={<Picture image={ambience.image} sizes="(min-width: 900px) 54vw, 100vw" />}
+        className="ambience"
+        media={<Picture image={ambience.image} sizes="(min-width: 900px) 50vw, 100vw" />}
         caption={credit && `Foto: ${credit}`}
       >
         <p className="eyebrow">{ambience.eyebrow}</p>
-        <h2 id="ambience-title" className="display">
+        <h2 id="ambience-title" className="display display--sm">
           {ambience.title.map((line) => (
             <span key={line} className="display__line">
               {line}

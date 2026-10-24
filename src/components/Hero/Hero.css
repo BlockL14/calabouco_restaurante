@@ -78,68 +78,77 @@
 
 .hero__title {
   margin-bottom: 1.5rem;
-  font-size: var(--fs-display);
-  line-height: 1.06;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem 2rem;
-  margin-top: 2.25rem;
+  gap: 1rem 2.25rem;
+  margin-top: clamp(2rem, 1rem + 2.6vw, 3.75rem);
 }
 
-/* ---------- Telas largas: foto à direita, do topo ao rodapé ---------- */
+/* ---------- Telas largas: foto à direita, do topo à base da abertura ---------- */
 
 @media (min-width: 900px) {
   .hero {
     display: grid;
     align-items: center;
-    min-height: max(100svh, 640px);
+    /* Proporção da interface aprovada (855px de altura a 1440px), limitada à tela */
+    min-height: max(600px, min(100svh, 59.4vw));
   }
 
+  /* A foto começa um pouco abaixo do topo: a fatia fica à altura do título */
   .hero__media {
     position: absolute;
-    top: 0;
+    top: clamp(40px, 6vw, 96px);
     right: 0;
     bottom: 0;
-    width: 62vw;
+    width: 52vw;
     height: auto;
     margin-top: 0;
     -webkit-mask-image:
       linear-gradient(
         90deg,
         transparent 0,
-        rgb(0 0 0 / 0.08) 8%,
-        rgb(0 0 0 / 0.3) 18%,
-        rgb(0 0 0 / 0.62) 30%,
-        rgb(0 0 0 / 0.88) 42%,
-        #000 54%
+        rgb(0 0 0 / 0.1) 9%,
+        rgb(0 0 0 / 0.36) 19%,
+        rgb(0 0 0 / 0.7) 30%,
+        rgb(0 0 0 / 0.92) 40%,
+        #000 50%
       ),
-      linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, #000 18%, #000 72%, rgb(0 0 0 / 0.35) 90%, transparent 100%);
+      linear-gradient(180deg, transparent 0, #000 14%, #000 74%, rgb(0 0 0 / 0.4) 90%, transparent 100%);
     mask-image:
       linear-gradient(
         90deg,
         transparent 0,
-        rgb(0 0 0 / 0.08) 8%,
-        rgb(0 0 0 / 0.3) 18%,
-        rgb(0 0 0 / 0.62) 30%,
-        rgb(0 0 0 / 0.88) 42%,
-        #000 54%
+        rgb(0 0 0 / 0.1) 9%,
+        rgb(0 0 0 / 0.36) 19%,
+        rgb(0 0 0 / 0.7) 30%,
+        rgb(0 0 0 / 0.92) 40%,
+        #000 50%
       ),
-      linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, #000 18%, #000 72%, rgb(0 0 0 / 0.35) 90%, transparent 100%);
+      linear-gradient(180deg, transparent 0, #000 14%, #000 74%, rgb(0 0 0 / 0.4) 90%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-composite: intersect;
   }
 
   .hero__inner {
     margin-top: 0;
-    padding-block: calc(var(--header-h) + 2rem) 4rem;
+    /* Mais respiro embaixo que em cima: o bloco fica à altura da interface aprovada */
+    padding-block: calc(var(--header-top) + 0.5rem) clamp(3rem, 7vw, 6.5rem);
   }
 
   .hero__content {
-    max-width: min(40rem, 48vw);
+    max-width: min(42rem, 54vw);
+  }
+
+  .hero__content .eyebrow {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title {
+    margin-bottom: 2rem;
   }
 }
 

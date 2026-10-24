@@ -8,9 +8,10 @@
   --c-black-2: #120d0b;
   --c-coal: #1a1310;
   --c-ivory: #ecdcc6;
-  --c-muted: #cdbfae;
+  --c-muted: #d7ccbe;
   --c-faint: #a5927f;
   --c-tan: #bf946f;
+  --c-sand: #d8be9c;
   --c-copper: #d08771;
   --c-copper-line: #a0604a;
   --c-wine: #4a1517;
@@ -24,12 +25,17 @@
   --font-display: 'Cinzel Variable', Cinzel, Georgia, 'Times New Roman', serif;
   --font-body: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  --fs-eyebrow: 0.75rem;
-  --fs-small: 0.8125rem;
-  --fs-body: 0.9375rem;
-  --fs-lead: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-  --fs-h2: clamp(2rem, 1.3rem + 2.6vw, 3.5rem);
-  --fs-display: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem);
+  /* Escala fluida calibrada na interface aprovada (desenhada a 1440px de largura):
+     cresce em linha reta do celular (390px) até 1440px e para aí. */
+  --fs-eyebrow: clamp(0.75rem, 0.634rem + 0.476vw, 1.0625rem);
+  --fs-small: clamp(0.84375rem, 0.809rem + 0.143vw, 0.9375rem);
+  --fs-body: clamp(0.9375rem, 0.875rem + 0.25vw, 1.0625rem);
+  --fs-lead: clamp(1rem, 0.9rem + 0.381vw, 1.25rem);
+  --fs-ui: clamp(0.84375rem, 0.739rem + 0.4286vw, 1.125rem);
+  --fs-button: clamp(0.875rem, 0.76rem + 0.476vw, 1.1875rem);
+  --fs-h3: clamp(1.625rem, 0.43rem + 2.26vw, 2.5rem);
+  --fs-h2: clamp(1.875rem, min(9vw, 1.559rem + 1.81vw), 3.25rem);
+  --fs-display: clamp(1.875rem, min(9.6vw, 1.656rem + 2.952vw), 4.375rem);
 
   /* Parede de tijolos ao fundo (textura gerada por scripts/make-brick-texture.mjs) */
   --wall-size: 640px 446px;
@@ -37,6 +43,8 @@
 
   /* Layout */
   --header-h: 68px;
+  /* Altura do cabeçalho no topo da página (antes de rolar) */
+  --header-top: 68px;
   --gutter: clamp(1rem, 4vw, 6.25rem);
   --maxw: 1240px;
   --section-pad: clamp(4.5rem, 3rem + 5vw, 8rem);
@@ -59,7 +67,8 @@
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: 88px;
+    --header-h: 84px;
+    --header-top: clamp(96px, 8.9vw, 128px);
   }
 }
 
