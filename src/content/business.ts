@@ -34,16 +34,18 @@ export const business = {
 /** Âncoras das seções. Mantenha em sincronia com os `id` dos componentes. */
 export const sectionIds = {
   top: 'inicio',
-  flavors: 'sabores',
-  experience: 'experiencia',
-  house: 'a-casa',
+  about: 'sobre',
+  menu: 'cardapio',
+  menuList: 'cardapio-lista',
+  ambience: 'ambiente',
   visit: 'visite',
 } as const;
 
 /** Navegação principal, na mesma ordem em que as seções aparecem na página. */
 export const navigation = [
-  { label: 'Sabores', href: `#${sectionIds.flavors}` },
-  { label: 'Experiência', href: `#${sectionIds.experience}` },
-  { label: 'A casa', href: `#${sectionIds.house}` },
-  { label: 'Como chegar', href: `#${sectionIds.visit}` },
+  { label: 'Início', href: `#${sectionIds.top}` },
+  { label: 'Sobre', href: `#${sectionIds.about}` },
+  { label: 'Cardápio', href: `#${sectionIds.menu}` },
+  { label: 'Ambiente', href: `#${sectionIds.ambience}` },
+  { label: 'Visite', href: `#${sectionIds.visit}` },
 ] as const;

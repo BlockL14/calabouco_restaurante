@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { business, navigation, sectionIds } from '../../content/business';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
-import { ArrowRight, Close, Instagram, MenuIcon, Phone } from '../Icons';
+import { Close, CrownMark, Instagram, MenuIcon, Phone } from '../Icons';
 import './Header.css';
 
 const spyIds = navigation.map((item) => item.href.slice(1));
@@ -64,8 +64,9 @@ export function Header() {
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="site-header__bar">
         <a className="brand" href={`#${sectionIds.top}`}>
+          <CrownMark className="brand__crown" />
           <span className="brand__name">{business.name}</span>
-          <span className="brand__sub">Restaurante &amp; Pizzaria</span>
+          <span className="brand__sub">Restaurante e Pizzaria</span>
           <span className="sr-only"> — voltar ao início</span>
         </a>
 
@@ -85,8 +86,8 @@ export function Header() {
           </ul>
         </nav>
 
-        <a className="btn btn--light site-header__cta" href={`#${sectionIds.flavors}`}>
-          Explore os sabores
+        <a className="btn site-header__cta" href={`#${sectionIds.menu}`}>
+          Ver cardápio
         </a>
 
         <button
@@ -106,8 +107,9 @@ export function Header() {
       <dialog id="menu-mobile" ref={dialogRef} className="mobile-menu" aria-label="Menu">
         <div className="mobile-menu__top">
           <span className="brand" aria-hidden="true">
+            <CrownMark className="brand__crown" />
             <span className="brand__name">{business.name}</span>
-            <span className="brand__sub">Restaurante &amp; Pizzaria</span>
+            <span className="brand__sub">Restaurante e Pizzaria</span>
           </span>
           <button type="button" className="icon-btn" onClick={() => dialogRef.current?.close()} aria-label="Fechar menu">
             <Close />
@@ -128,9 +130,8 @@ export function Header() {
           </ol>
         </nav>
         <div className="mobile-menu__foot">
-          <a className="btn btn--primary" href={`#${sectionIds.flavors}`} onClick={(e) => navigateFromMenu(e, `#${sectionIds.flavors}`)}>
-            Explore os sabores
-            <ArrowRight className="btn__icon btn__icon--arrow" />
+          <a className="btn" href={`#${sectionIds.menu}`} onClick={(e) => navigateFromMenu(e, `#${sectionIds.menu}`)}>
+            Ver cardápio
           </a>
           <div className="mobile-menu__contacts">
             <a href={business.phone.href}>

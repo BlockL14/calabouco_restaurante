@@ -1,5 +1,5 @@
-// Funções comuns aos geradores da parede (make-brick-texture.mjs) e do arco
-// (make-arch.mjs): aleatoriedade determinística, curvas e a paleta dos tijolos,
+// Funções do gerador da parede (make-brick-texture.mjs), separadas para reúso em outros
+// elementos de alvenaria: aleatoriedade determinística, curvas e a paleta dos tijolos,
 // calibrada nas fotos da fachada e do corredor.
 
 // ---------- Aleatoriedade determinística ----------

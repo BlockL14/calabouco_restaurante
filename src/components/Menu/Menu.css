@@ -1,0 +1,333 @@
+/* ==========================================================================
+   Cardápio (abas + lista) e Coroa Real
+   ========================================================================== */
+
+.menu {
+  position: relative;
+  padding-bottom: clamp(2rem, 1rem + 3vw, 3.5rem);
+}
+
+/* Faixa de abas centralizada; rola na horizontal quando não cabe */
+.menu__tabs-wrap {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.menu__tabs-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2.5rem;
+  background: linear-gradient(90deg, transparent, var(--c-black));
+  pointer-events: none;
+}
+
+.menu__tabs {
+  position: relative;
+  display: flex;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.menu__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.menu__tab {
+  flex: none;
+  min-height: 52px;
+  padding: 0.5rem 1.25rem;
+  border: 0;
+  background: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--c-muted);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.menu__tab:hover {
+  color: var(--c-ivory);
+}
+
+.menu__tab[aria-selected='true'] {
+  color: var(--c-copper);
+}
+
+.menu__tab:focus-visible {
+  outline-offset: -4px;
+}
+
+.menu__indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--c-copper);
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    width var(--dur-slow) var(--ease-out);
+}
+
+.menu__panel {
+  display: grid;
+  gap: 2.5rem;
+  min-height: 26rem;
+  margin-top: 3rem;
+}
+
+.menu__panel:focus-visible {
+  outline-offset: 12px;
+}
+
+.menu__aside {
+  align-self: start;
+  animation: menu-in 700ms var(--ease-out) both;
+}
+
+.menu__count {
+  font-size: var(--fs-small);
+  color: var(--c-faint);
+  margin-bottom: 0.75rem;
+}
+
+.menu__count .numeral {
+  font-size: 1.125rem;
+  color: var(--c-tan);
+  margin-right: 0.25rem;
+}
+
+.menu__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--c-ivory);
+  margin-bottom: 1rem;
+}
+
+.menu__intro {
+  max-width: 24rem;
+  color: var(--c-muted);
+}
+
+.menu__groups {
+  display: grid;
+  gap: 2.25rem;
+  align-content: start;
+}
+
+.menu__group-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--c-line-strong);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-tan);
+}
+
+.menu__group-count {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  letter-spacing: 0;
+  color: var(--c-faint);
+}
+
+.menu__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--c-line);
+  break-inside: avoid;
+  animation: menu-in 620ms var(--ease-out) both;
+  animation-delay: calc(60ms + var(--i, 0) * 26ms);
+}
+
+.menu__item.is-extra {
+  animation-delay: 40ms;
+}
+
+.menu__item-name {
+  font-size: 0.9375rem;
+  color: var(--c-ivory);
+}
+
+.menu__item-note {
+  font-size: var(--fs-small);
+  color: var(--c-faint);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+.menu__more {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.5rem 1.25rem 0.5rem 0.75rem;
+  border: 1px solid var(--c-line-strong);
+  background: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+
+.menu__more:hover {
+  border-color: var(--c-copper);
+  background: rgb(236 220 198 / 0.04);
+}
+
+.menu__more-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--c-copper);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.menu__more-icon.is-open {
+  transform: rotate(45deg);
+}
+
+.menu__note {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--c-line);
+  font-size: var(--fs-small);
+  color: var(--c-faint);
+}
+
+@media (min-width: 700px) {
+  .menu__tabs-wrap {
+    margin-inline: 0;
+  }
+
+  .menu__tabs {
+    padding-inline: 0;
+  }
+
+  .menu__groups {
+    display: block;
+    columns: 2;
+    column-gap: 3rem;
+  }
+
+  .menu__group {
+    break-inside: avoid-column;
+    margin-bottom: 2.25rem;
+  }
+
+  .menu__group:has(.menu__item:nth-child(9)) {
+    break-inside: auto;
+  }
+
+  .menu__more {
+    column-span: all;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .menu__panel {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(3rem, 5vw, 6rem);
+  }
+
+  .menu__aside {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+
+  .menu__tabs-wrap::after {
+    display: none;
+  }
+}
+
+/* ---------- Coroa Real: coroa dourada sobre a luz das velas do salão ---------- */
+
+.signature {
+  --media-h: min(70vw, 400px);
+}
+
+.signature-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.signature-art__light,
+.signature-art__light img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* A foto das velas já é desfocada: escurecida, vira só a luz quente ao fundo */
+.signature-art__light img {
+  filter: blur(6px) brightness(0.55) saturate(1.1);
+  transform: scale(1.08);
+}
+
+.signature-art__crown {
+  position: relative;
+  width: min(58%, 340px);
+  height: auto;
+  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 26px rgb(232 176 98 / 0.3));
+}
+
+@media (min-width: 900px) {
+  .signature {
+    min-height: clamp(440px, 36vw, 580px);
+  }
+
+  .signature-art__crown {
+    width: min(46%, 380px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu__aside,
+  .menu__item {
+    animation: none;
+  }
+
+  .menu__indicator,
+  .menu__more-icon {
+    transition: none;
+  }
+}

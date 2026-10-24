@@ -1,16 +1,18 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { sectionIds } from '../../content/business';
-import { countItems, featuredDish, menuCategories, menuNote, type MenuCategoryId } from '../../content/menu';
-import { Ornament, Plus } from '../Icons';
+import { menuIntro } from '../../content/home';
+import { countItems, menuCategories, menuNote, type MenuCategoryId } from '../../content/menu';
+import { Plus } from '../Icons';
 import { Picture } from '../Picture';
-import './Flavors.css';
+import { Split } from '../Split/Split';
+import './Menu.css';
 
-type FlavorsProps = {
+type MenuProps = {
   category: MenuCategoryId;
   onCategoryChange: (id: MenuCategoryId) => void;
 };
 
-export function Flavors({ category, onCategoryChange }: FlavorsProps) {
+export function Menu({ category, onCategoryChange }: MenuProps) {
   const [expandedFor, setExpandedFor] = useState<MenuCategoryId | null>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -21,7 +23,7 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
   const total = countItems(current);
   const hasMore = total > current.preview;
 
-  // Posiciona o filete dourado sob a aba ativa e mantém a aba visível na faixa rolável.
+  // Posiciona o filete sob a aba ativa e mantém a aba visível na faixa rolável.
   useLayoutEffect(() => {
     const list = tabsRef.current;
     const tab = list?.querySelector<HTMLButtonElement>(`[data-id="${current.id}"]`);
@@ -70,76 +72,58 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
   let itemIndex = 0;
 
   return (
-    <section id={sectionIds.flavors} className="section flavors" aria-labelledby="flavors-title" tabIndex={-1}>
-      <div className="container">
-        <header className="flavors__head">
-          <div className="flavors__intro" data-reveal>
-            <p className="eyebrow">Sabores do Calabouço</p>
-            <h2 id="flavors-title" className="display">
-              Escolha o sabor da <em>sua noite.</em>
-            </h2>
-            <p className="lead">Conheça as especialidades e explore as opções da casa.</p>
-          </div>
-          <figure className="flavors__photo" data-reveal style={{ '--reveal-delay': '120ms' } as CSSProperties}>
-            <div className="flavors__photo-frame">
-              <Picture image="queijo" sizes="(min-width: 1024px) 400px, (min-width: 700px) 42vw, 86vw" className="feather" />
-            </div>
-            <figcaption>Da cozinha do Calabouço</figcaption>
-          </figure>
-        </header>
+    <>
+      <Split
+        id={sectionIds.menu}
+        labelledBy="menu-title"
+        side="right"
+        media={<Picture image={menuIntro.image} sizes="(min-width: 900px) 54vw, 100vw" />}
+      >
+        <p className="eyebrow">{menuIntro.eyebrow}</p>
+        <h2 id="menu-title" className="display">
+          {menuIntro.title.map((line) => (
+            <span key={line} className="display__line">
+              {line}
+            </span>
+          ))}
+        </h2>
+        <p className="lead">{menuIntro.text}</p>
+        <a className="btn" href={`#${sectionIds.menuList}`}>
+          {menuIntro.button}
+        </a>
+      </Split>
 
-        <article className="signature" aria-labelledby="signature-title" data-inview data-reveal>
-          <div className="signature__light" aria-hidden="true" />
-          <div className="signature__title">
-            <p className="eyebrow eyebrow--plain">{featuredDish.eyebrow}</p>
-            <h3 id="signature-title" className="signature__name">
-              {featuredDish.name}
-            </h3>
-          </div>
-          <div className="signature__body">
-            <Ornament className="signature__ornament" />
-            <p className="signature__desc">{featuredDish.description}</p>
-            <ul className="signature__components" role="list" aria-label="Componentes">
-              {featuredDish.components.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </article>
-
-        <div className="menu" data-reveal>
-          <div className="menu__top">
-            <h3 className="menu__kicker">Seleção do cardápio</h3>
-            <div className="menu__tabs-wrap">
-              <div ref={tabsRef} className="menu__tabs" role="tablist" aria-label="Categorias do cardápio">
-                {menuCategories.map((c, index) => {
-                  const selected = c.id === current.id;
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      role="tab"
-                      id={`tab-${c.id}`}
-                      data-id={c.id}
-                      aria-selected={selected}
-                      aria-controls="menu-panel"
-                      tabIndex={selected ? 0 : -1}
-                      className="menu__tab"
-                      onClick={() => select(c.id)}
-                      onKeyDown={(e) => onTabKeyDown(e, index)}
-                    >
-                      {c.label}
-                    </button>
-                  );
-                })}
-                {indicator && (
-                  <span
-                    className="menu__indicator"
-                    aria-hidden="true"
-                    style={{ transform: `translateX(${indicator.x}px)`, width: indicator.w }}
-                  />
-                )}
-              </div>
+      <section id={sectionIds.menuList} className="menu" aria-label="Seleção do cardápio" tabIndex={-1}>
+        <div className="container">
+          <div className="menu__tabs-wrap" data-reveal>
+            <div ref={tabsRef} className="menu__tabs" role="tablist" aria-label="Categorias do cardápio">
+              {menuCategories.map((c, index) => {
+                const selected = c.id === current.id;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    role="tab"
+                    id={`tab-${c.id}`}
+                    data-id={c.id}
+                    aria-selected={selected}
+                    aria-controls="menu-panel"
+                    tabIndex={selected ? 0 : -1}
+                    className="menu__tab"
+                    onClick={() => select(c.id)}
+                    onKeyDown={(e) => onTabKeyDown(e, index)}
+                  >
+                    {c.label}
+                  </button>
+                );
+              })}
+              {indicator && (
+                <span
+                  className="menu__indicator"
+                  aria-hidden="true"
+                  style={{ transform: `translateX(${indicator.x}px)`, width: indicator.w }}
+                />
+              )}
             </div>
           </div>
 
@@ -160,11 +144,6 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
                 {current.label}
               </p>
               <p className="menu__intro">{current.intro}</p>
-              {current.image && (
-                <div className="menu__image">
-                  <Picture image={current.image} sizes="(min-width: 1024px) 380px, 90vw" className="feather" />
-                </div>
-              )}
             </div>
 
             <div className="menu__groups" id="menu-items">
@@ -174,12 +153,12 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
                 remaining -= group.items.length;
                 return (
                   <div className="menu__group" key={group.title}>
-                    <h4 className="menu__group-title">
+                    <h3 className="menu__group-title">
                       {group.title}
                       <span className="menu__group-count" aria-hidden="true">
                         {group.items.length}
                       </span>
-                    </h4>
+                    </h3>
                     <ul role="list" className="menu__items">
                       {items.map((item) => {
                         const i = itemIndex++;
@@ -216,7 +195,7 @@ export function Flavors({ category, onCategoryChange }: FlavorsProps) {
 
           <p className="menu__note">{menuNote}</p>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

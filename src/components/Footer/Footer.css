@@ -1,6 +1,6 @@
 .site-footer {
   border-top: 1px solid var(--c-line);
-  background: rgb(var(--wall-shadow) / 0.78);
+  background: rgb(var(--wall-shadow) / 0.8);
 }
 
 .site-footer__inner {
@@ -15,12 +15,19 @@
 .site-footer__brand {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 1rem;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.site-footer__crown {
+  width: 22px;
+  height: auto;
+  color: var(--c-gold);
 }
 
 .site-footer__brand .brand__name {
-  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  font-size: 1.125rem;
 }
 
 .site-footer__meta,

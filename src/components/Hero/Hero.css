@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Abertura — título à esquerda, fotografia da casa à direita se dissolvendo
+   no fundo escuro (no celular: foto em cima, texto sobre a base dela).
+   ========================================================================== */
+
+.hero {
+  --media-h: min(64svh, 128vw);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.hero__media {
+  position: relative;
+  height: var(--media-h);
+  /* No celular, a foto começa abaixo do cabeçalho (a marca fica sobre o fundo escuro) */
+  margin-top: var(--header-h);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.55) 0,
+    #000 18%,
+    #000 48%,
+    rgb(0 0 0 / 0.74) 62%,
+    rgb(0 0 0 / 0.32) 78%,
+    rgb(0 0 0 / 0.08) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.55) 0,
+    #000 18%,
+    #000 48%,
+    rgb(0 0 0 / 0.74) 62%,
+    rgb(0 0 0 / 0.32) 78%,
+    rgb(0 0 0 / 0.08) 90%,
+    transparent 100%
+  );
+}
+
+.hero__media picture,
+.hero__img {
+  width: 100%;
+  height: 100%;
+}
+
+.hero__img {
+  transform-origin: 60% 40%;
+  animation: hero-settle 2600ms var(--ease-out) both;
+}
+
+@keyframes hero-settle {
+  from {
+    transform: scale(1.06);
+  }
+}
+
+.hero__inner {
+  position: relative;
+  margin-top: calc(var(--media-h) * -0.12);
+  padding-bottom: clamp(3.5rem, 8vw, 5rem);
+}
+
+.hero__content {
+  max-width: 36rem;
+  animation: hero-in 1100ms var(--ease-out) 150ms both;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+}
+
+.hero__content .eyebrow {
+  margin-bottom: 1.25rem;
+}
+
+.hero__title {
+  margin-bottom: 1.5rem;
+  font-size: var(--fs-display);
+  line-height: 1.06;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  margin-top: 2.25rem;
+}
+
+/* ---------- Telas largas: foto à direita, do topo ao rodapé ---------- */
+
+@media (min-width: 900px) {
+  .hero {
+    display: grid;
+    align-items: center;
+    min-height: max(100svh, 640px);
+  }
+
+  .hero__media {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 62vw;
+    height: auto;
+    margin-top: 0;
+    -webkit-mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        rgb(0 0 0 / 0.08) 8%,
+        rgb(0 0 0 / 0.3) 18%,
+        rgb(0 0 0 / 0.62) 30%,
+        rgb(0 0 0 / 0.88) 42%,
+        #000 54%
+      ),
+      linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, #000 18%, #000 72%, rgb(0 0 0 / 0.35) 90%, transparent 100%);
+    mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        rgb(0 0 0 / 0.08) 8%,
+        rgb(0 0 0 / 0.3) 18%,
+        rgb(0 0 0 / 0.62) 30%,
+        rgb(0 0 0 / 0.88) 42%,
+        #000 54%
+      ),
+      linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, #000 18%, #000 72%, rgb(0 0 0 / 0.35) 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  .hero__inner {
+    margin-top: 0;
+    padding-block: calc(var(--header-h) + 2rem) 4rem;
+  }
+
+  .hero__content {
+    max-width: min(40rem, 48vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__img,
+  .hero__content {
+    animation: none;
+  }
+}

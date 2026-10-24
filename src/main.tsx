@@ -1,10 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@fontsource-variable/inter/wght.css';
-// Cinzel (títulos), Grenze Gotisch (destaques) e UnifrakturCook (só o nome, como no letreiro)
+// Cinzel (títulos) e Poppins (texto), só o necessário: o navegador baixa apenas o que usa
 import '@fontsource-variable/cinzel/wght.css';
-import '@fontsource/grenze-gotisch/700.css';
-import '@fontsource/unifrakturcook/700.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import App from './App';

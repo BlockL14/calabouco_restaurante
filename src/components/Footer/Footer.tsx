@@ -1,5 +1,5 @@
 import { business, sectionIds } from '../../content/business';
-import { ArrowUp } from '../Icons';
+import { ArrowUp, CrownMark } from '../Icons';
 import './Footer.css';
 
 export function Footer() {
@@ -7,6 +7,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container site-footer__inner">
         <p className="site-footer__brand">
+          <CrownMark className="site-footer__crown" />
           <span className="brand__name">{business.name}</span>
           <span className="site-footer__meta">
             Restaurante e Pizzaria · {business.address.city} — {business.address.state}

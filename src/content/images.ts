@@ -24,8 +24,8 @@ type ImageMeta = Omit<ImageAsset, 'key' | 'width' | 'height' | 'widths' | 'glow'
 const meta: Record<keyof typeof manifest, ImageMeta> = {
   corredor: {
     alt: 'Corredor de tijolos aparentes com arcos sucessivos, grades de ferro, uma tocha acesa e um escudo pendurado no portão ao fundo.',
-    // Mantém o crédito do fotógrafo (borda direita) visível e fora dos controles da abertura.
-    position: { base: '78% 50%', md: '0% 50%' },
+    // Mantém o crédito do fotógrafo (borda direita) visível.
+    position: { base: '50% 50%' },
     credit: '@gabrielmessine',
   },
   'corredor-arte': {
@@ -44,7 +44,8 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   },
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',
-    position: { base: '50% 18%' },
+    // Prioriza o letreiro e o arco da entrada
+    position: { base: '50% 6%', md: '50% 4%' },
   },
   pizza: {
     alt: 'Pizza servida em forma escura: metade com rodelas de tomate, azeitonas pretas e manjericão; metade com cebola e azeitonas verdes.',

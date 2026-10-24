@@ -1,65 +1,50 @@
 /* Tokens de design — cores, tipografia, espaçamento e movimento.
-   As durações também são lidas pelo JavaScript da abertura (src/lib/motion.ts). */
+   As durações também são lidas pelo JavaScript (src/lib/motion.ts). */
 
 :root {
-  /* Paleta */
-  --c-black: #100d0b;
-  --c-black-2: #14100d;
-  --c-coal: #1b1613;
-  --c-coal-2: #241c17;
-  --c-red: #8f2029;
-  --c-red-2: #a82c36;
-  --c-gold: #b28a50;
-  --c-gold-2: #d4b47e;
-  --c-ivory: #f3eadf;
-  --c-muted: #c8bbaa;
-  --c-faint: #a39584;
-  --c-line: rgb(178 138 80 / 0.22);
-  --c-line-strong: rgb(178 138 80 / 0.48);
-  --c-glass: rgb(16 13 11 / 0.82);
+  /* Paleta: fundo quase preto e quente, títulos em marfim, sobretítulos em bronze,
+     links em cobre e botões em vinho com filete de cobre. */
+  --c-black: #0b0807;
+  --c-black-2: #120d0b;
+  --c-coal: #1a1310;
+  --c-ivory: #ecdcc6;
+  --c-muted: #cdbfae;
+  --c-faint: #a5927f;
+  --c-tan: #bf946f;
+  --c-copper: #d08771;
+  --c-copper-line: #a0604a;
+  --c-wine: #4a1517;
+  --c-wine-2: #611d1f;
+  --c-gold: #c9a46a;
+  --c-line: rgb(191 148 111 / 0.2);
+  --c-line-strong: rgb(191 148 111 / 0.42);
+  --c-glass: rgb(11 8 7 / 0.86);
 
-  /* Tipografia — a mesma dupla das artes da casa: capitulares romanas (Cinzel) nos
-     títulos e letra gótica nas palavras em destaque. A gótica dos destaques (Grenze
-     Gotisch) tem o “d” reto e se lê de imediato; a fraktur do letreiro (UnifrakturCook)
-     fica só no nome.
-     --font-display: títulos, números e rótulos de destaque
-     --font-accent + --accent-style: o trecho em destaque dos títulos (<em>)
-     --font-brand: o nome “Calabouço” no cabeçalho e no rodapé */
+  /* Tipografia: títulos em capitulares romanas (Cinzel), texto em sans geométrica (Poppins) */
   --font-display: 'Cinzel Variable', Cinzel, Georgia, 'Times New Roman', serif;
-  --font-accent: 'Grenze Gotisch', 'Cinzel Variable', Georgia, serif;
-  --accent-style: normal;
-  --accent-weight: 700;
-  --display-italic: normal; /* Cinzel não tem itálico: números e detalhes ficam em pé */
-  --font-brand: 'UnifrakturCook', 'Grenze Gotisch', Georgia, serif;
-  --font-label: var(--font-display); /* rótulos em versal (sobretítulos, legendas de dados) */
-  --font-body: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
-  /* Parede de tijolos (textura gerada por scripts/make-brick-texture.mjs) */
-  --wall-size: 640px 446px;
-  --wall-shadow: 12 9 8;
+  --font-body: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --fs-eyebrow: 0.75rem;
-  --fs-small: 0.875rem;
-  --fs-body: 1rem;
-  --fs-lead: clamp(1.0625rem, 0.98rem + 0.3vw, 1.1875rem);
-  --fs-h3: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
-  --fs-h2: clamp(2.375rem, 1.5rem + 3.2vw, 4.5rem);
-  --fs-display: clamp(2.625rem, 1.2rem + 4.4vw, 5.75rem);
+  --fs-small: 0.8125rem;
+  --fs-body: 0.9375rem;
+  --fs-lead: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --fs-h2: clamp(2rem, 1.3rem + 2.6vw, 3.5rem);
+  --fs-display: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem);
+
+  /* Parede de tijolos ao fundo (textura gerada por scripts/make-brick-texture.mjs) */
+  --wall-size: 640px 446px;
+  --wall-shadow: 11 8 7;
 
   /* Layout */
-  --header-h: 64px;
-  --gutter: clamp(1rem, 4vw, 4.5rem);
-  --maxw: 1320px;
-  --section-pad: clamp(5rem, 3rem + 7vw, 10rem);
-  --radius: 4px;
+  --header-h: 68px;
+  --gutter: clamp(1rem, 4vw, 6.25rem);
+  --maxw: 1240px;
+  --section-pad: clamp(4.5rem, 3rem + 5vw, 8rem);
 
   /* Movimento */
   --dur-fast: 180ms;
   --dur-base: 320ms;
   --dur-slow: 720ms;
-  --dur-fade: 1400ms; /* fusão entre as fotos da abertura */
-  --dur-text-out: 220ms;
-  --dur-text-in: 620ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -74,15 +59,12 @@
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: 80px;
+    --header-h: 88px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     --dur-slow: 1ms;
-    --dur-fade: 1ms;
-    --dur-text-out: 1ms;
-    --dur-text-in: 1ms;
   }
 }

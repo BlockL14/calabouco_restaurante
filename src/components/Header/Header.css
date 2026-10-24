@@ -14,9 +14,9 @@
 .site-header::before {
   content: '';
   position: absolute;
-  inset: 0 0 -40px;
+  inset: 0 0 -56px;
   z-index: -1;
-  background: linear-gradient(180deg, rgb(16 13 11 / 0.78), rgb(16 13 11 / 0));
+  background: linear-gradient(180deg, rgb(11 8 7 / 0.88), rgb(11 8 7 / 0.6) 55%, rgb(11 8 7 / 0));
   pointer-events: none;
   transition: opacity var(--dur-slow) var(--ease-out);
 }
@@ -42,34 +42,42 @@
   padding-inline: var(--gutter);
 }
 
-/* ---------- Marca (provisória, tipográfica) ---------- */
+/* ---------- Marca (provisória, tipográfica: coroa + nome; não substitui o brasão) ---------- */
 
 .brand {
   display: inline-flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   min-height: 44px;
   text-decoration: none;
   line-height: 1;
 }
 
+.brand__crown {
+  width: 22px;
+  height: auto;
+  margin-bottom: 4px;
+  color: var(--c-gold);
+}
+
 .brand__name {
-  font-family: var(--font-brand);
-  font-synthesis: none;
-  font-size: 1.625rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--c-ivory);
 }
 
 .brand__sub {
   margin-top: 4px;
-  font-family: var(--font-label);
-  font-size: 0.5625rem;
-  font-weight: 600;
-  letter-spacing: 0.32em;
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--c-gold-2);
+  color: var(--c-tan);
 }
 
 /* ---------- Navegação ---------- */
@@ -81,7 +89,7 @@
 
 .site-nav ul {
   display: flex;
-  gap: clamp(1rem, 2vw, 2.25rem);
+  gap: clamp(1.25rem, 2.6vw, 2.75rem);
   margin: 0;
   padding: 0;
 }
@@ -91,8 +99,12 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.9375rem;
-  color: var(--c-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-ivory);
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.7);
   text-decoration: none;
   transition: color var(--dur-base) var(--ease-out);
 }
@@ -104,7 +116,7 @@
   right: 0;
   bottom: 8px;
   height: 1px;
-  background: var(--c-gold-2);
+  background: var(--c-copper);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform var(--dur-slow) var(--ease-out);
@@ -124,8 +136,8 @@
 .site-header__cta {
   display: none;
   min-height: 44px;
-  padding: 0.6rem 1.15rem;
-  font-size: 0.875rem;
+  padding: 0.5rem 1.4rem;
+  font-size: 0.75rem;
 }
 
 .site-header__toggle {
@@ -137,8 +149,8 @@
   padding: 0 14px;
   border: 1px solid var(--c-line-strong);
   border-radius: 999px;
-  background: rgb(16 13 11 / 0.4);
-  font-size: 0.875rem;
+  background: rgb(11 8 7 / 0.4);
+  font-size: 0.8125rem;
   font-weight: 500;
 }
 
@@ -149,7 +161,7 @@
 
 @media (max-width: 359.98px) {
   .brand__sub {
-    letter-spacing: 0.2em;
+    letter-spacing: 0.12em;
   }
 
   .site-header__toggle {
@@ -172,7 +184,15 @@
   }
 
   .brand__name {
-    font-size: 1.875rem;
+    font-size: 1.5rem;
+  }
+
+  .brand__crown {
+    width: 26px;
+  }
+
+  .brand__sub {
+    font-size: 0.5625rem;
   }
 }
 
@@ -191,7 +211,7 @@
   padding: 0 var(--gutter) max(24px, env(safe-area-inset-bottom));
   border: 0;
   background:
-    radial-gradient(120% 60% at 100% 0%, rgb(143 32 41 / 0.28), transparent 60%),
+    radial-gradient(120% 60% at 100% 0%, rgb(74 21 23 / 0.5), transparent 60%),
     var(--c-black);
   color: var(--c-ivory);
   display: none;
@@ -252,15 +272,16 @@
   gap: 1rem;
   padding: 1.1rem 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 9vw, 3rem);
-  font-weight: 500;
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  font-weight: 400;
   line-height: 1.1;
+  text-transform: uppercase;
   text-decoration: none;
 }
 
 .mobile-menu__num {
   font-size: 1rem;
-  color: var(--c-gold-2);
+  color: var(--c-tan);
 }
 
 .mobile-menu__foot {

@@ -14,7 +14,7 @@ type LightboxProps = {
 /**
  * Visualização ampliada em <dialog> modal: o navegador contém o foco e torna o
  * restante da página inerte. Esc fecha; setas e gesto lateral navegam.
- * O foco volta ao elemento de origem (tratado em Experience).
+ * O foco volta ao elemento de origem (tratado em Ambience).
  */
 export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -112,7 +112,7 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
             </div>
             <figcaption>
               {item.caption}
-              {asset.credit && <span className="experience__credit">Crédito: {asset.credit}</span>}
+              {asset.credit && <span className="lightbox__credit">Crédito: {asset.credit}</span>}
             </figcaption>
           </figure>
 

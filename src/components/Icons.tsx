@@ -84,3 +84,71 @@ export const Ornament = ({ className }: IconProps) => (
     <circle cx="60" cy="6" r="1" fill="currentColor" />
   </svg>
 );
+
+export const Clock = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 2" />
+  </svg>
+);
+
+/** Coroa em traço (destaques “Desde 1991”). */
+export const Crown = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M4.5 17.5 3.5 8l4.6 3.6L12 5.5l3.9 6.1L20.5 8l-1 9.5Z" />
+    <path d="M5 20h14" />
+  </svg>
+);
+
+export const PizzaSlice = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M12 21 3.6 6.4A17 17 0 0 1 20.4 6.4Z" />
+    <path d="M5.2 9.2a14 14 0 0 1 13.6 0" />
+    <circle cx="10" cy="11.5" r="1.1" />
+    <circle cx="14" cy="12.5" r="0.9" />
+    <circle cx="12" cy="16" r="0.9" />
+  </svg>
+);
+
+export const Candle = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M12 3.5c1.6 1.8 2 3.2 0 5-2-1.8-1.6-3.2 0-5Z" />
+    <rect x="9" y="10.5" width="6" height="9" rx="0.8" />
+    <path d="M6.5 20.5h11" />
+  </svg>
+);
+
+export const Book = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Z" />
+    <path d="M12 6.5v13" />
+  </svg>
+);
+
+/** Moldura octogonal dos ícones de destaque, com pontos no alto e na base. */
+export const Octagon = ({ className }: IconProps) => (
+  <svg viewBox="0 0 64 64" fill="none" aria-hidden focusable={false} className={className}>
+    <path d="M22 3h20l19 19v20L42 61H22L3 42V22Z" stroke="currentColor" strokeWidth="1" />
+    <circle cx="32" cy="3" r="1.6" fill="currentColor" />
+    <circle cx="32" cy="61" r="1.6" fill="currentColor" />
+  </svg>
+);
+
+/** Coroa cheia da marca (ornamento do nome, não substitui o brasão oficial). */
+export const CrownMark = ({ className }: IconProps) => (
+  <svg viewBox="0 0 40 26" aria-hidden focusable={false} className={className}>
+    <path
+      d="M5 20 3 7.5l7.3 5.4L20 2l9.7 10.9L37 7.5 35 20Z"
+      fill="currentColor"
+      fillOpacity="0.22"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinejoin="round"
+    />
+    <path d="M5.5 23.5h29" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    <circle cx="20" cy="2" r="1.6" fill="currentColor" />
+    <circle cx="3" cy="7.5" r="1.4" fill="currentColor" />
+    <circle cx="37" cy="7.5" r="1.4" fill="currentColor" />
+  </svg>
+);
+
