@@ -1,10 +1,10 @@
-import { About } from './components/About/About';
+import { ActionBar } from './components/ActionBar/ActionBar';
 import { Ambience } from './components/Ambience/Ambience';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
-import { Hero } from './components/Hero/Hero';
+import { HERO_ACTIONS_ID, Hero } from './components/Hero/Hero';
 import { Menu } from './components/Menu/Menu';
-import { Signature } from './components/Menu/Signature';
+import { Reasons } from './components/Reasons/Reasons';
 import { Visit } from './components/Visit/Visit';
 import { useInitialHashScroll } from './hooks/useInitialHashScroll';
 import { useRevealOnScroll } from './hooks/useRevealOnScroll';
@@ -21,13 +21,13 @@ export default function App() {
       <Header />
       <main id="conteudo" tabIndex={-1}>
         <Hero />
-        <About />
+        <Reasons />
         <Menu />
-        <Signature />
         <Ambience />
         <Visit />
       </main>
       <Footer />
+      <ActionBar after={HERO_ACTIONS_ID} />
     </>
   );
 }

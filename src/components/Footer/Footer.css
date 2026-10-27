@@ -1,131 +1,52 @@
-/* ==========================================================================
-   Rodapé — faixa escura com filete de cobre e ornamento, marca empilhada como
-   no cabeçalho e colunas de navegação, contato e endereço.
-   ========================================================================== */
+/* Rodapé curto, na mesma faixa escura do ambiente */
 
+/* O espaço da barra fixa do celular fica dentro do rodapé, na mesma cor */
 .site-footer {
-  position: relative;
-  margin-top: clamp(1rem, 2vw, 2rem);
-  padding-top: clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
-  background: linear-gradient(180deg, rgb(0 0 0 / 0.35), rgb(0 0 0 / 0.68) 40%);
+  padding-bottom: var(--action-bar-h);
+  background: var(--c-char);
+  color: var(--c-on-char-2);
 }
 
-/* Filete que se apaga nas pontas, com o losango no centro */
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 8%;
-  right: 8%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--c-copper-line) 30%, var(--c-copper-line) 70%, transparent);
-  opacity: 0.7;
-}
-
-.site-footer__ornament {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 120px;
-  height: auto;
-  padding-inline: 12px;
-  transform: translate(-50%, -50%);
-  background: var(--c-black);
-  color: var(--c-copper);
-}
-
-.site-footer__grid {
-  display: grid;
-  gap: 2.5rem 2rem;
-}
-
-.site-footer__brand .brand {
-  align-items: flex-start;
-}
-
-.site-footer__brand .brand__crown {
-  width: 34px;
-}
-
-.site-footer__about {
-  max-width: 22rem;
-  margin-top: 1.25rem;
-  font-size: var(--fs-small);
-  line-height: 1.7;
-  color: var(--c-muted);
-}
-
-.site-footer__title {
-  margin-bottom: 1.1rem;
-  font-size: var(--fs-eyebrow);
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--c-tan);
-}
-
-.site-footer__links {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.site-footer__links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  min-height: 44px;
-  font-size: var(--fs-body);
-  color: var(--c-muted);
-  text-decoration: none;
-  transition: color var(--dur-base) var(--ease-out);
-}
-
-.site-footer__links a:hover,
-.site-footer__links a[aria-current] {
-  color: var(--c-ivory);
-}
-
-.site-footer__links a[aria-current] {
-  text-decoration: underline;
-  text-decoration-color: var(--c-copper);
-  text-underline-offset: 6px;
-}
-
-.site-footer__icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  flex: none;
-  color: var(--c-gold);
-}
-
-.site-footer__address {
-  display: flex;
-  gap: 0.7rem;
-  font-size: var(--fs-body);
-  font-style: normal;
-  line-height: 1.7;
-  color: var(--c-muted);
-}
-
-.site-footer__address .site-footer__icon {
-  margin-top: 0.2rem;
-}
-
-.site-footer__maps {
-  margin-top: 0.75rem;
-}
-
-.site-footer__bottom {
+.site-footer__inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 2rem;
-  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
-  padding-block: 1.25rem max(1.25rem, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--c-line);
+  gap: 1rem 2rem;
+  padding-block: 2rem;
+}
+
+.site-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 44px;
+  color: var(--c-on-char);
+  text-decoration: none;
+}
+
+.site-footer__crown {
+  width: 36px;
+  height: auto;
+  color: #f0a98f;
+}
+
+.site-footer__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.site-footer__meta {
+  display: block;
   font-size: var(--fs-small);
-  color: var(--c-faint);
+  color: var(--c-on-char-2);
+}
+
+.site-footer__credit {
+  font-size: var(--fs-small);
 }
 
 .site-footer__top {
@@ -133,31 +54,18 @@
   align-items: center;
   gap: 0.5rem;
   min-height: 44px;
-  color: var(--c-muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--c-on-char);
   text-decoration: none;
 }
 
-.site-footer__top:hover {
-  color: var(--c-ivory);
-}
-
 .site-footer__top svg {
+  width: 1.1rem;
+  height: 1.1rem;
   transition: transform var(--dur-base) var(--ease-out);
 }
 
 .site-footer__top:hover svg {
   transform: translateY(-3px);
-}
-
-@media (min-width: 640px) {
-  .site-footer__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .site-footer__grid {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.1fr);
-    gap: 2rem clamp(2rem, 4vw, 4rem);
-  }
 }

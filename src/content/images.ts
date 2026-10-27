@@ -27,15 +27,9 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
     position: { base: '50% 50%' },
     credit: '@gabrielmessine',
   },
-  'corredor-arte': {
-    alt: 'Arte do Calabouço: corredor de tijolos com arcos, grades e tocha acesa, com a frase “Abra as portas para uma noite diferente”.',
-    position: { base: '50% 50%' },
-    credit: '@gabrielmessine',
-  },
   queijo: {
     alt: 'Massa assada e dourada, com orégano por cima, sendo servida com o queijo derretido se esticando; ao fundo, paredes de tijolo e velas acesas.',
-    // Foto espelhada no tratamento: o queijo fica à direita.
-    position: { base: '62% 28%', md: '60% 30%', lg: '50% 0%' },
+    position: { base: '40% 30%' },
   },
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',
@@ -43,7 +37,7 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   },
   pizza: {
     alt: 'Pizza servida em forma escura: metade com rodelas de tomate, azeitonas pretas e manjericão; metade com cebola e azeitonas verdes.',
-    position: { base: '50% 60%', md: '50% 55%' },
+    position: { base: '50% 55%' },
   },
   letreiro: {
     alt: 'Letreiro de madeira com o nome Calabouço, “restaurante” e “pizzaria”, sobre o arco de tijolos da entrada.',

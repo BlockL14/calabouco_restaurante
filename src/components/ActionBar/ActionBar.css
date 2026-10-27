@@ -1,0 +1,49 @@
+/* Barra fixa do celular: as duas ações que levam o cliente até a casa */
+
+.action-bar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 45;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  padding: 0.6rem var(--gutter) calc(0.6rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--c-line);
+  background: rgb(246 239 230 / 0.92);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    visibility 0s;
+}
+
+/* Escondida enquanto os botões da abertura estão na tela (fora do foco e do leitor de tela) */
+.action-bar.is-hidden {
+  visibility: hidden;
+  transform: translateY(110%);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    visibility 0s var(--dur-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-bar,
+  .action-bar.is-hidden {
+    transition: none;
+  }
+}
+
+.action-bar__btn {
+  min-height: 50px;
+  padding-inline: 0.75rem;
+}
+
+.action-bar .btn--ghost {
+  background: var(--c-paper);
+}
+
+@media (min-width: 900px) {
+  .action-bar {
+    display: none;
+  }
+}

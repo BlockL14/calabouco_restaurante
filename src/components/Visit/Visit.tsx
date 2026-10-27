@@ -1,67 +1,90 @@
+import type { ReactNode } from 'react';
 import { business, sectionIds } from '../../content/business';
-import { visit } from '../../content/home';
-import { Clock, Instagram, Phone, Pin } from '../Icons';
-import { Split } from '../Split/Split';
-import { BannerArt } from './BannerArt';
+import { visit } from '../../content/site';
+import { Clock, ExternalArrow, Instagram, Phone, Pin } from '../Icons';
 import './Visit.css';
 
+type InfoRowProps = { icon: ReactNode; label: string; children: ReactNode; action?: ReactNode };
+
+function InfoRow({ icon, label, children, action }: InfoRowProps) {
+  return (
+    <li className="info">
+      <span className="info__icon" aria-hidden="true">
+        {icon}
+      </span>
+      <div className="info__body">
+        <h3 className="info__label">{label}</h3>
+        <p className="info__value">{children}</p>
+      </div>
+      {action}
+    </li>
+  );
+}
+
+/** Fim da página: história da casa e contato, cada informação com o seu botão. */
 export function Visit() {
   const { address, phone, links } = business;
   return (
-    <Split
-      id={sectionIds.visit}
-      labelledBy="visit-title"
-      side="right"
-      className="visit"
-      media={<BannerArt />}
-    >
-      <p className="eyebrow">{visit.eyebrow}</p>
-      <h2 id="visit-title" className="display">
-        {visit.title}
-      </h2>
-      <p className="lead">{visit.text}</p>
+    <section id={sectionIds.visit} className="visit section" aria-labelledby="visit-title" tabIndex={-1}>
+      <div className="container visit__grid">
+        <div className="visit__story" data-reveal>
+          <p className="kicker">{visit.kicker}</p>
+          <h2 id="visit-title" className="title">
+            {visit.title}
+          </h2>
+          {visit.story.map((paragraph) => (
+            <p key={paragraph} className="lead">
+              {paragraph}
+            </p>
+          ))}
+        </div>
 
-      <address className="visit__info">
-        <p className="visit__item">
-          <Pin className="visit__icon" />
-          <span>
-            {address.street}
+        <ul className="visit__info" role="list" data-reveal>
+          <InfoRow
+            icon={<Pin />}
+            label="Endereço"
+            action={
+              <a className="btn btn--small" href={links.maps} target="_blank" rel="noopener noreferrer">
+                Como chegar
+                <ExternalArrow />
+                <span className="sr-only"> (abre o Google Maps em nova aba)</span>
+              </a>
+            }
+          >
+            {address.street} — {address.district}
             <br />
-            <span className="visit__muted">
-              {address.district} – {address.city}/{address.state}
-              <br />
-              CEP {address.postalCode}
-            </span>
-          </span>
-        </p>
-        <p className="visit__item">
-          <Clock className="visit__icon" />
-          <span>
-            {visit.hoursLabel}
-            <br />
-            <span className="visit__muted">{visit.hoursText}</span>
-          </span>
-        </p>
-        <a className="visit__item visit__link" href={phone.href}>
-          <Phone className="visit__icon" />
-          <span>
+            {address.city}/{address.state} · CEP {address.postalCode}
+          </InfoRow>
+          <InfoRow
+            icon={<Phone />}
+            label="Telefone"
+            action={
+              <a className="btn btn--small btn--ghost" href={phone.href}>
+                Ligar
+                <span className="sr-only"> para {phone.display}</span>
+              </a>
+            }
+          >
             {phone.display}
-            <span className="sr-only"> (ligar)</span>
-          </span>
-        </a>
-        <a className="visit__item visit__link" href={links.instagram} target="_blank" rel="noopener noreferrer">
-          <Instagram className="visit__icon" />
-          <span>
+          </InfoRow>
+          <InfoRow icon={<Clock />} label="Horários">
+            {visit.hours}
+          </InfoRow>
+          <InfoRow
+            icon={<Instagram />}
+            label="Instagram"
+            action={
+              <a className="btn btn--small btn--ghost" href={links.instagram} target="_blank" rel="noopener noreferrer">
+                Abrir
+                <ExternalArrow />
+                <span className="sr-only"> o Instagram em nova aba</span>
+              </a>
+            }
+          >
             {links.instagramHandle}
-            <span className="sr-only"> (Instagram, abre em nova aba)</span>
-          </span>
-        </a>
-      </address>
-
-      <a className="btn visit__btn" href={links.maps} target="_blank" rel="noopener noreferrer">
-        {visit.button}
-        <span className="sr-only"> (abre o Google Maps em nova aba)</span>
-      </a>
-    </Split>
+          </InfoRow>
+        </ul>
+      </div>
+    </section>
   );
 }

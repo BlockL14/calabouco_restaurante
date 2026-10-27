@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Calabouço Restaurante e Pizzaria | Curitiba</title>
+    <title>Calabouço Restaurante e Pizzaria | Pizza à luz de velas no Centro Cívico, Curitiba</title>
     <meta
       name="description"
-      content="Restaurante e pizzaria à luz de velas no Centro Cívico de Curitiba. Pizzas, massas e vinhos em ambiente de inspiração medieval, desde 1991."
+      content="Pizzaria e restaurante à luz de velas no Centro Cívico de Curitiba, desde 1991. Pizzas da casa com nomes de castelo, massas, mignon e vinhos. Veja o cardápio, ligue ou trace a rota."
     />
-    <meta name="theme-color" content="#090706" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#f6efe6" />
+    <meta name="color-scheme" content="light" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="canonical" href="%SITE_URL%" />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
@@ -25,22 +25,22 @@
     <meta property="og:title" content="Calabouço Restaurante e Pizzaria | Curitiba" />
     <meta
       property="og:description"
-      content="Pizzas, massas e vinhos à luz de velas, em ambiente de inspiração medieval no Centro Cívico de Curitiba."
+      content="Pizza, massas e vinho à luz de velas no Centro Cívico de Curitiba, desde 1991. Veja o cardápio."
     />
     <meta property="og:image" content="%SITE_URL%og-calabouco.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Calabouço Restaurante e Pizzaria: queijo derretido se esticando de uma massa assada, à luz de velas." />
+    <meta property="og:image:alt" content="Calabouço Restaurante e Pizzaria: “Pizza, massas e vinho à luz de velas”, ao lado da foto de queijo derretido se esticando de uma massa assada." />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Imagem inicial da abertura: prioridade máxima (mesmo srcset/sizes do componente Hero). -->
+    <!-- Foto principal da abertura: prioridade máxima (mesmo srcset/sizes do componente Hero) -->
     <link
       rel="preload"
       as="image"
       type="image/avif"
       fetchpriority="high"
       imagesrcset="%BASE_URL%images/queijo-360.avif 360w, %BASE_URL%images/queijo-420.avif 420w, %BASE_URL%images/queijo-646.avif 646w, %BASE_URL%images/queijo-1020.avif 1020w"
-      imagesizes="(min-width: 900px) 52vw, 100vw"
+      imagesizes="(min-width: 900px) 33vw, 62vw"
     />
 
     <script type="application/ld+json">
@@ -48,10 +48,10 @@
         "@context": "https://schema.org",
         "@type": "Restaurant",
         "name": "Calabouço Restaurante e Pizzaria",
-        "description": "Restaurante e pizzaria à luz de velas, com pizzas, massas e vinhos em ambiente de inspiração medieval.",
+        "description": "Pizzaria e restaurante à luz de velas, com pizzas, massas e vinhos em ambiente de inspiração medieval.",
         "url": "%SITE_URL%",
         "image": "%SITE_URL%og-calabouco.jpg",
-        "hasMenu": "%SITE_URL%cardapio.html",
+        "hasMenu": "%SITE_URL%#cardapio",
         "servesCuisine": ["Pizza", "Massas"],
         "telephone": "+55 41 3254-6112",
         "foundingDate": "1991",
@@ -66,11 +66,13 @@
         "sameAs": ["https://www.instagram.com/calaboucorestaurante/"]
       }
     </script>
+    <!-- Dados estruturados do cardápio (gerados no build a partir de src/content/menu.ts) -->
+    <!--menu-json-ld-->
   </head>
   <body>
     <div id="root"></div>
     <noscript>
-      <p style="padding: 2rem; font-family: system-ui, sans-serif; color: #f3eadf; background: #100d0b">
+      <p style="padding: 2rem; font-family: system-ui, sans-serif; color: #1e1613; background: #f6efe6">
         Calabouço Restaurante e Pizzaria — Rua Mateus Leme, 1000, Centro Cívico, Curitiba/PR · (41) 3254-6112.
       </p>
     </noscript>

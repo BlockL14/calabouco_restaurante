@@ -1,4 +1,4 @@
-// Informações comerciais — fonte única para cabeçalho, seção Visite, rodapé e SEO.
+// Informações comerciais — fonte única para cabeçalho, abertura, seção Visite, rodapé e SEO.
 // Antes de publicar novos dados (horários, WhatsApp, link de cardápio), confirme com a casa.
 
 const address = {
@@ -31,24 +31,17 @@ export const business = {
   },
 } as const;
 
-/** Âncoras das seções da página inicial. Mantenha em sincronia com os `id` dos componentes. */
+/** Âncoras das seções. Mantenha em sincronia com os `id` dos componentes. */
 export const sectionIds = {
   top: 'inicio',
-  about: 'sobre',
   menu: 'cardapio',
-  menuList: 'cardapio-lista',
   ambience: 'ambiente',
   visit: 'visite',
 } as const;
 
-/**
- * Navegação principal, na mesma ordem em que as seções aparecem na página inicial.
- * Na página do cardápio completo, “Cardápio” aponta para a própria página.
- */
+/** Links do cabeçalho, na ordem das seções. */
 export const navigation = [
-  { label: 'Início', section: sectionIds.top },
-  { label: 'Sobre', section: sectionIds.about },
-  { label: 'Cardápio', section: sectionIds.menu, page: 'menu' },
+  { label: 'Cardápio', section: sectionIds.menu },
   { label: 'Ambiente', section: sectionIds.ambience },
   { label: 'Visite', section: sectionIds.visit },
 ] as const;

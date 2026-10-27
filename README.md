@@ -1,26 +1,26 @@
 # Calabouço Restaurante e Pizzaria — site
 
-Site do Calabouço (Rua Mateus Leme, 1000 — Centro Cívico, Curitiba/PR), feito com React + TypeScript + Vite. São três páginas estáticas:
+Site do Calabouço (Rua Mateus Leme, 1000 — Centro Cívico, Curitiba/PR), feito com React + TypeScript + Vite.
+
+O objetivo é que o cliente, em poucos segundos, entenda o que é a casa, se convença a ir e saiba como fazer isso: o que tem no cardápio, onde fica e como ligar. Por isso a página é uma só, com poucos botões, todos levando a uma ação concreta (ver o cardápio, ligar, traçar a rota, abrir o Instagram).
 
 | Página | Arquivo | Conteúdo |
 |---|---|---|
-| Inicial | `index.html` | Abertura, Sobre, destaques, prévia do cardápio, Coroa Real, Ambiente e Visite |
-| Cardápio completo | `cardapio.html` | Todas as categorias, com abas presas abaixo do cabeçalho e versão para impressão |
-| Página não encontrada | `404.html` | Usada pelo GitHub Pages para qualquer endereço inexistente |
+| Inicial | `index.html` | Abertura, motivos para ir, cardápio completo, ambiente, história e contato |
+| Página não encontrada | `404.html` | Usada pelo GitHub Pages para qualquer endereço inexistente; leva ao cardápio e à inicial |
 
-Não tem backend, formulários, analytics nem rastreadores, e não carrega fontes ou scripts externos.
+Não tem backend, formulários, login, carrinho, reservas, analytics nem rastreadores, e não carrega fontes ou scripts externos.
 
 ## Como executar
 
 ```bash
 npm install
-npm run dev        # desenvolvimento em http://localhost:5173 (o cardápio fica em /cardapio.html)
+npm run dev        # desenvolvimento em http://localhost:5173
 npm run build      # gera dist/ (typecheck + build)
 npm run preview    # serve o build em http://localhost:4173
 npm run lint       # ESLint
+npm run typecheck  # TypeScript
 npm run images     # regera as imagens otimizadas a partir dos originais
-npm run texture    # regera a textura de pedra do fundo (duas resoluções)
-npm run wall       # regera a parede de pedra iluminada da seção Visite
 npm run icons      # regera favicon, ícones de celular e o manifesto
 npm run og         # regera a imagem de compartilhamento (requer Playwright)
 ```
@@ -39,7 +39,7 @@ Para ativar, uma única vez:
 2. Em **Build and deployment → Source**, escolha **GitHub Actions**.
 3. Abra **Actions** → **Publicar site** → **Run workflow** (ou faça qualquer push na branch padrão).
 
-O site fica em `https://blockl14.github.io/calabouco_restaurante/` (o cardápio em `…/cardapio`). Enquanto o Pages não estiver ativado, o workflow só gera o site e mostra um aviso, sem falhar.
+O site fica em `https://blockl14.github.io/calabouco_restaurante/` (o cardápio em `…/#cardapio`). Enquanto o Pages não estiver ativado, o workflow só gera o site e mostra um aviso, sem falhar.
 
 **Domínio próprio:** em Settings → Pages → **Custom domain**, informe o domínio e crie no provedor de DNS o registro indicado pelo GitHub (CNAME para `blockl14.github.io`, ou registros A para o domínio raiz). O workflow passa o endereço do Pages para o build, então canonical, Open Graph, dados estruturados e sitemap passam a usar o domínio novo na publicação seguinte.
 
@@ -57,94 +57,88 @@ Se o site ficar numa subpasta e você quiser caminhos absolutos (necessário par
 
 - `robots.txt` e `sitemap.xml` (gerados com `SITE_URL`).
 - Canonical, Open Graph e Twitter Card com endereço absoluto e imagem de compartilhamento 1200 × 630 (`public/og-calabouco.jpg`).
-- Dados estruturados: `Restaurant` na inicial (endereço, telefone, link do cardápio) e `Menu` no cardápio completo (todas as seções e itens, gerados de `src/content/menu.ts`).
+- Dados estruturados: `Restaurant` (endereço, telefone, Instagram, link do cardápio) e `Menu` (todas as categorias, grupos e itens, gerados de `src/content/menu.ts`).
 - Favicon em SVG e PNG, ícone para iPhone/Android e `site.webmanifest`.
 - Política de segurança de conteúdo (CSP) em cada página: só recursos do próprio site.
 
-## Estrutura
+## Estrutura da página
 
-A página inicial segue a interface aprovada pelo cliente (mockup de outubro de 2026), medida seção por seção numa tela de 1440 px; o cardápio completo, o rodapé, o menu do celular, a galeria e a 404 usam o mesmo fundo, fontes, filetes, botões e proporções. Abaixo de 1440 px tudo diminui na mesma proporção; no celular, a imagem vem antes do texto.
-
-| Parte | Componente | Observações |
+| Parte | Componente | O que faz |
 |---|---|---|
-| Cabeçalho | `src/components/Header` | Coroa sobre o nome, menu em versal centralizado, botão “Ver cardápio” (no cardápio, “Como chegar”); encolhe ao rolar; no celular, menu em `<dialog>` |
-| Abertura | `src/components/Hero` | “Uma experiência além da pizza”, “Explorar cardápio” e “Conhecer o ambiente”; foto do queijo à direita |
-| Sobre nós + destaques | `src/components/About` | “Tradição em cada detalhe” com o letreiro da entrada; faixa com quatro destaques em moldura octogonal |
-| Cardápio (inicial) | `src/components/Menu/Menu.tsx` | “Sabores que marcam”; abas Pizzas, Entradas, Pratos, Sobremesas e Bebidas com prévia de cada categoria e link para a categoria completa |
-| Coroa Real | `src/components/Menu/Signature.tsx` | Faixa inteira; coroa ilustrada (`CrownIllustration.tsx`) sobre uma mesa, com a luz das velas ao fundo; “Ver no cardápio” abre o destaque no cardápio completo |
-| Ambiente | `src/components/Ambience` | Corredor de arcos; o link abre a galeria ampliada (`<dialog>`, quatro imagens) |
-| Visite | `src/components/Visit` | Endereço, horário (“consulte pelo telefone”), telefone e Instagram; “Como chegar”; estandarte ilustrado com lampião (`BannerArt.tsx`) |
-| Rodapé | `src/components/Footer` | Marca, navegação, contato, endereço e “Como chegar” |
-| Cardápio completo | `src/pages/MenuPage.tsx` | Abertura com a pizza, abas presas, uma seção por categoria (ícone em moldura octogonal), Coroa Real em destaque, impressão |
-| 404 | `src/pages/NotFoundPage.tsx` | Mensagem e links para a inicial e o cardápio |
+| Cabeçalho | `src/components/Header` | Fixo. Marca, links Cardápio · Ambiente · Visite (marca a seção visível) e o telefone. No celular, só a marca e “Cardápio” |
+| Abertura | `src/components/Hero` | O que é, onde fica e desde quando, em uma frase; “Ver o cardápio” e “Como chegar”; endereço e telefone; mosaico com três fotos da casa e o selo “desde 1991” |
+| Motivos | `src/components/Reasons` | Faixa curta: ambiente medieval, pizzas da casa, desde 1991 |
+| Cardápio | `src/components/Menu` | Destaques (pizzas com nomes de castelo, Coroa Real, pizzas doces, cada um com link para a categoria) e o cardápio completo em abas: Pizzas, Entradas, Pratos, Sobremesas e Bebidas. No celular, cada categoria mostra 12 itens e “Ver todos” |
+| Ambiente | `src/components/Ambience` | Faixa escura com quatro fotos da casa e legendas |
+| Visite | `src/components/Visit` | História curta e um cartão com endereço (“Como chegar”), telefone (“Ligar”), horários (“consulte pelo telefone”) e Instagram (“Abrir”) |
+| Rodapé | `src/components/Footer` | Marca, crédito da foto e “Voltar ao topo” |
+| Barra do celular | `src/components/ActionBar` | Abaixo de 900 px: “Ligar” e “Como chegar” fixos na base da tela, que aparecem quando os botões da abertura saem da tela |
+| 404 | `src/pages/NotFoundPage.tsx` | Mensagem e botões para o cardápio e a inicial |
 
-Cada página tem a sua entrada (`src/main.tsx`, `src/menu-main.tsx`, `src/notfound-main.tsx`), todas com a base comum de `src/setup.ts`. Os links entre páginas usam `src/lib/routes.ts`.
+Cada página tem a sua entrada (`src/main.tsx`, `src/notfound-main.tsx`), com a base comum de `src/setup.ts`. Os links entre páginas usam `src/lib/routes.ts`.
+
+### Acessibilidade e uso
+
+- Link “Pular para o conteúdo”, regiões (`header`, `nav`, `main`, `footer`) e títulos em ordem.
+- Abas do cardápio no padrão ARIA, com setas, Home e End no teclado; o botão “Ver todos” informa se a lista está aberta.
+- Foco sempre visível; alvos de toque com pelo menos 44 px; sem rolagem horizontal de 320 px em diante.
+- Com “reduzir movimento” ativado no sistema, sem rolagem suave nem animações de entrada.
+- Contraste de todo o texto medido sobre o fundo real (inclusive fotos) de 320 a 1920 px: o menor é 5,5:1.
 
 ## Onde editar
 
 | O quê | Arquivo |
 |---|---|
 | Nome, endereço, telefone, links e menu de navegação | `src/content/business.ts` |
-| Textos das seções da inicial e imagem de cada uma | `src/content/home.ts` |
+| Textos das seções (abertura, motivos, cardápio, ambiente, visite) | `src/content/site.ts` |
 | Cardápio (categorias, grupos, itens, Coroa Real, observação) | `src/content/menu.ts` |
-| Fotos da galeria do ambiente | `src/content/gallery.ts` |
 | Texto alternativo, enquadramento por breakpoint e crédito das imagens | `src/content/images.ts` |
 | Cores, fontes, espaçamentos e durações de animação | `src/styles/tokens.css` |
-| Botões, molduras, links de texto, sobretítulos e fundo | `src/styles/base.css` |
-| Título, descrição e dados de compartilhamento de cada página | `index.html`, `cardapio.html` |
+| Botões, links de texto, sobretítulos e títulos | `src/styles/base.css` |
+| Título, descrição e dados de compartilhamento | `index.html` |
 | Endereço do site, CSP, sitemap e dados estruturados do cardápio | `vite.config.ts` |
 
 ### Trocar ou acrescentar fotos
 
 1. Coloque o original em `assets-src/originais/` (os originais nunca são alterados).
 2. Registre-o em `JOBS` no arquivo `scripts/optimize-images.mjs` (recorte opcional e larguras).
-3. Rode `npm run images`. O script gera AVIF + WebP em `public/images/` e atualiza `src/content/image-manifest.json`. Cada foto pode receber um tratamento de cor (`grade`): escurece médios e sombras, puxa vermelhos e amarelos para o âmbar e tira o excesso de vermelho da iluminação, para chegar ao tom escuro do mockup. Só cor e luz mudam; nada é acrescentado ou removido da cena. A foto da abertura é espelhada (`flop`) para o queijo ficar do lado de fora da página.
+3. Rode `npm run images`. O script gera AVIF + WebP em `public/images/` e atualiza `src/content/image-manifest.json`. As fotos não recebem tratamento de cor.
 4. Descreva a imagem e ajuste o enquadramento (`position.base / md / lg`) em `src/content/images.ts`.
 
-O logotipo está provisoriamente em tipografia, com a coroa da interface (classe `.brand`); não é o brasão oficial. Quando houver arquivo vetorial do logo, basta substituir esse bloco e rodar `npm run icons` com a nova marca.
+O logotipo está provisoriamente em tipografia, com uma coroa desenhada para a interface (classe `.brand`); não é o brasão oficial. Quando houver arquivo vetorial do logo, basta substituir esse bloco e rodar `npm run icons` com a nova marca.
 
 ## Identidade visual
 
-- **Títulos:** Cinzel em versal, fina, em marfim (a Coroa Real em areia).
-- **Texto, menu, botões e sobretítulos:** Poppins (400 e 500).
-- **Cores:** fundo `#090706`, texto corrido em marfim claro, sobretítulos em bronze com filete e ponta de seta, links e aba ativa em cobre, botões em vinho com filete de cobre e cantos recortados em quarto de círculo (`.btn`; a mesma moldura em painéis: `.ticket-frame`), ícones e coroa em dourado. Todos os textos foram medidos sobre fotos e fundo com contraste de pelo menos 6,3:1.
-- **Tamanhos:** escala fluida em `tokens.css`, calibrada no mockup a 1440 px (título da abertura ≈ 69 px, títulos de seção ≈ 51 px, texto corrido 20 px, botões 68 px de altura).
-- **Fundo:** pedra quase preta com manchas e veios discretos, como o fundo do mockup (textura procedimental sem emenda, `npm run texture`), com faixas mais escuras nos destaques, nas abas e no rodapé.
-- **Fotos × fundo:** as fotos à direita sangram até a borda e se dissolvem em direção ao texto; as da esquerda formam um bloco na metade da tela, com a borda do lado do texto dissolvida.
-- **Ilustrações:** a coroa da Coroa Real e o estandarte da seção Visite são desenhos em SVG; a parede de pedra atrás do estandarte é gerada por `npm run wall`. Nenhuma imagem gerada por IA foi usada.
-- **Peso das fontes:** Cinzel (26 KB) e Poppins 400 e 500 (8 KB cada), só o subconjunto latino, pré-carregadas.
+- **Títulos:** Fraunces (serifada, peso 600). **Texto, botões e sobretítulos:** Manrope. Só o subconjunto latino de cada uma, pré-carregado (37 KB e 25 KB).
+- **Cores:** fundo creme `#f6efe6`, texto marrom quase preto `#1e1613`, terracota dos arcos de tijolo `#a3361d` nos botões e destaques, faixas escuras `#18110e` no ambiente e no rodapé.
+- **Fotos:** as da casa, sem tratamento de cor, em cantos arredondados; nenhuma é esticada além da proporção original. Nenhuma imagem gerada por IA foi usada.
+- **Ícones e selo:** desenhados em SVG para o site (coroa, arco, fatia de pizza, selo “desde 1991”).
 
 ## Materiais usados
 
 | Original (em `assets-src/`) | Conteúdo | Dimensões | Uso |
 |---|---|---|---|
-| `originais/arte-corredor-abra-as-portas.webp` | Corredor de arcos, grades, tocha e escudo; frase “Abra as portas…”; crédito @gabrielmessine | 683×857 | Recorte sem a frase (com o crédito) na seção Ambiente; arte completa na galeria |
-| `originais/foto-queijo-puxado.webp` | Massa assada com queijo esticando; salão com velas ao fundo | 680×849 | Abertura (espelhada, sem o fragmento “…uço” da borda); imagem de compartilhamento; recorte das velas |
-| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Recorte só da pizza (seção Cardápio e abertura do cardápio completo) |
-| `originais/arte-fachada-tradicao-curitibana.webp` | Entrada em arco com o letreiro; faixa “Tradição curitibana” | 686×856 | Recorte do letreiro em Sobre nós; arte completa na galeria |
+| `originais/arte-corredor-abra-as-portas.webp` | Corredor de arcos, grades, tocha e escudo; frase “Abra as portas…”; crédito @gabrielmessine | 683×857 | Recorte sem a frase (com o crédito) no mosaico da abertura e no Ambiente |
+| `originais/foto-queijo-puxado.webp` | Massa assada com queijo esticando; salão com velas ao fundo | 680×849 | Foto principal da abertura (sem o fragmento “…uço” da borda); recorte das velas no Ambiente; imagem de compartilhamento |
+| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Recorte só da pizza no destaque “Pizzas com nomes de castelo” |
+| `originais/arte-fachada-tradicao-curitibana.webp` | Entrada em arco com o letreiro; faixa “Tradição curitibana” | 686×856 | Recorte do letreiro no mosaico da abertura e no Ambiente; arte completa no Ambiente |
 | `referencias/cardapio-fotografado.webp` | Cardápio fotografado | 556×829 | Fonte do cardápio (não publicado) |
 
-Os originais têm cerca de 680 px de largura, o que limita a nitidez em telas grandes. Por isso as fotos ocupam meia tela (ou pouco mais) e se dissolvem no escuro, em vez de serem esticadas para a largura inteira.
-
-## Referências de design
-
-- **Interface aprovada (mockup):** estrutura, ordem das seções, proporções das faixas, fundo, tipografia, cores, botões, links em versal com seta, destaques com ícones octogonais, abas do cardápio (Pizzas, Entradas, Pratos, Sobremesas, Bebidas), Coroa Real em faixa inteira e estandarte com lampião.
-- **Do mockup não foram usados:** as imagens (geradas por IA, não são da casa), o endereço “Rua Via Veneto, 1450 — Santa Felicidade”, o telefone “(41) 99705-2205”, o horário “Terça a Domingo, 18h às 23h30” e os textos com afirmações não confirmadas (história da fundação, “massas artesanais”, “ingredientes selecionados”, “nossa especialidade”, “criação exclusiva… maiores símbolos”). No lugar, entram as fotos reais (com tratamento de cor), ilustrações e os dados e textos já verificados.
-- **Links “Conheça nossa história” e “Conheça a Coroa Real”:** não há página de história nem foto do prato. Viraram “Venha nos visitar” (leva ao endereço) e “Ver no cardápio” (abre o destaque da Coroa Real no cardápio completo).
+Os originais têm cerca de 680 px de largura, o que limita a nitidez em telas grandes. Por isso as fotos aparecem em blocos de até cerca de meia tela, em vez de ocupar a largura inteira.
 
 ## Decisões de conteúdo
 
 - **Cardápio transcrito da foto do cardápio da casa**, apenas dos trechos legíveis, com a grafia original (“alici”, “caipira”, “spaghetti, tagliarini ou penne”). Ficaram de fora as linhas apagadas ou ilegíveis na foto (algumas entradas, sucos e rótulos de vinho). A “Burrata com rúcula e pesto genovese” veio da lista do briefing.
 - **Bebidas** (vinhos, caipiras e batidas, aperitivos, cervejas, whiskies, licores, refrigerantes e sucos, café e chá) também vêm da foto. Os vinhos aparecem numa lista única, como no cardápio, sem separar por cor.
-- **Nada de preços, gramaturas ou tamanhos**: há versões do cardápio com valores diferentes. A página traz “Consulte a casa sobre valores e disponibilidade”.
+- **Nada de preços, gramaturas ou tamanhos**: há versões do cardápio com valores diferentes. A página traz “Consulte a casa sobre valores e disponibilidade”, com o telefone ao lado.
 - **Não publicados**, por estarem na foto mas poderem ter mudado: taxa de serviço e formas de pagamento.
-- **A foto do queijo não foi identificada como Coroa Real.** O prato parece compatível, mas o nome não está confirmado. A Coroa Real aparece com a descrição do cardápio e uma coroa ilustrada.
-- **Também não foram publicados**: horários, WhatsApp, avaliações, história dos proprietários e prêmios.
+- **A foto do queijo não foi identificada como Coroa Real.** O prato parece compatível, mas o nome não está confirmado. A Coroa Real aparece com a descrição do cardápio e um ícone de coroa.
+- **Também não foram publicados**: horários, WhatsApp, delivery, avaliações, história dos proprietários e prêmios. Do mockup de uma versão anterior não foram usados o endereço, o telefone e o horário (que não conferem com a casa) nem as imagens geradas por IA.
 
 ## Pendências que dependem da casa
 
 - Logotipo em arquivo utilizável (SVG/PNG em alta resolução).
 - Fotografias originais em alta resolução, de preferência do salão e dos pratos (com o nome de cada um), incluindo a Coroa Real.
-- Confirmação do cardápio atual (itens, grafias, rótulos de vinho e bebidas).
+- Confirmação do cardápio atual (itens, grafias, rótulos de vinho e bebidas) e, se a casa quiser, dos preços.
 - Horários completos e se o telefone também atende por WhatsApp.
 - Domínio definitivo, se não for usar o endereço do GitHub Pages.

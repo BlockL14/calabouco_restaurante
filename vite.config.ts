@@ -14,12 +14,12 @@ import { menuCategories, featuredDish } from './src/content/menu';
 const SITE_URL = (process.env.SITE_URL || 'https://blockl14.github.io/calabouco_restaurante').replace(/\/?$/, '/');
 const BASE = process.env.BASE_PATH !== undefined ? `${process.env.BASE_PATH.replace(/\/$/, '')}/` : './';
 
-const PAGES = { main: 'index.html', cardapio: 'cardapio.html', notfound: '404.html' };
+const PAGES = { main: 'index.html', notfound: '404.html' };
 
 /**
- * Pré-carrega as fontes da abertura (Cinzel) e as do texto (Poppins 400 e 500), apenas o
- * subconjunto latino. Sem isso, o navegador só descobre as fontes depois
- * que o React monta a página e o título aparece primeiro na fonte reserva.
+ * Pré-carrega as fontes (Fraunces nos títulos, Manrope no texto), apenas o subconjunto
+ * latino. Sem isso, o navegador só descobre as fontes depois que o React monta a
+ * página e o título aparece primeiro na fonte reserva.
  */
 function preloadFonts(patterns: RegExp[]): Plugin {
   return {
@@ -47,7 +47,7 @@ function menuJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Menu',
     name: 'Cardápio do Calabouço Restaurante e Pizzaria',
-    url: `${SITE_URL}cardapio.html`,
+    url: `${SITE_URL}#cardapio`,
     inLanguage: 'pt-BR',
     hasMenuSection: menuCategories.map((category) => ({
       '@type': 'MenuSection',
@@ -78,7 +78,7 @@ function seo(): Plugin {
     },
     generateBundle() {
       const today = new Date().toISOString().slice(0, 10);
-      const urls = ['', 'cardapio.html']
+      const urls = ['']
         .map((path) => `  <url>\n    <loc>${SITE_URL}${path}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
         .join('\n');
       this.emitFile({
@@ -97,14 +97,14 @@ function seo(): Plugin {
 
 /**
  * Política de segurança de conteúdo (só no build: o servidor de desenvolvimento injeta
- * scripts próprios). Tudo vem do próprio site; `data:` cobre os ornamentos SVG do CSS.
+ * scripts próprios). Tudo vem do próprio site.
  */
 function contentSecurityPolicy(): Plugin {
   const policy = [
     "default-src 'self'",
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data:",
+    "img-src 'self'",
     "font-src 'self'",
     "connect-src 'self'",
     "object-src 'none'",
@@ -132,19 +132,19 @@ export default defineConfig({
     react(),
     seo(),
     contentSecurityPolicy(),
-    preloadFonts([
-      /cinzel-latin-wght-normal-[^/]+\.woff2$/,
-      /poppins-latin-400-normal-[^/]+\.woff2$/,
-      /poppins-latin-500-normal-[^/]+\.woff2$/,
-    ]),
+    preloadFonts([/fraunces-latin-wght-normal-[^/]+\.woff2$/, /manrope-latin-wght-normal-[^/]+\.woff2$/]),
   ],
   build: {
     target: 'es2022',
     cssCodeSplit: false,
+    // Fontes sempre como arquivo (nunca embutidas em data:), para caberem na CSP (font-src 'self')
+    assetsInlineLimit: (file) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined),
     rollupOptions: {
       input: Object.fromEntries(
         Object.entries(PAGES).map(([name, file]) => [name, fileURLToPath(new URL(file, import.meta.url))]),
       ),
+      // React num arquivo próprio: muda pouco entre publicações e fica no cache do visitante
+      output: { manualChunks: { react: ['react', 'react-dom', 'react-dom/client'] } },
     },
   },
 });

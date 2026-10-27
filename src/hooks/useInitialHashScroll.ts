@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 /**
- * Ao chegar de outra página com um endereço como `…/#sobre`, a seção ainda não existe
- * quando o navegador tenta rolar até ela (a página é montada pelo React). Rola depois
- * da primeira renderização.
+ * Ao abrir um endereço como `…/#cardapio` (link compartilhado ou vindo da 404), a seção
+ * ainda não existe quando o navegador tenta rolar até ela (a página é montada pelo React).
+ * Rola depois da primeira renderização.
  */
 export function useInitialHashScroll() {
   useEffect(() => {
