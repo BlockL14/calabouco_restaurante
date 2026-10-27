@@ -25,9 +25,9 @@ jobs:
     outputs:
       publish: ${{ steps.pages-check.outputs.publish }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -53,7 +53,7 @@ jobs:
             if [ "$status" = "200" ] && [ "$(jq -r .build_type pages.json)" = "workflow" ]; then
               publish=true
             else
-              echo "::notice title=GitHub Pages ainda não ativado::Abra Settings → Pages e escolha Source: GitHub Actions. Depois rode este workflow de novo (Actions → Publicar site → Run workflow)."
+              echo "::notice title=GitHub Pages ainda não ativado (HTTP $status)::Abra Settings → Pages e escolha Source: GitHub Actions. Depois rode este workflow de novo (Actions → Publicar site → Run workflow)."
             fi
           fi
           echo "publish=$publish" >> "$GITHUB_OUTPUT"
