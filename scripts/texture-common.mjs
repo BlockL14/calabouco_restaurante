@@ -1,6 +1,5 @@
-// Funções do gerador da parede (make-brick-texture.mjs), separadas para reúso em outros
-// elementos de alvenaria: aleatoriedade determinística, curvas e a paleta dos tijolos,
-// calibrada nas fotos da fachada e do corredor.
+// Funções compartilhadas pelos geradores de textura (make-stone-texture.mjs e
+// make-visit-wall.mjs): aleatoriedade determinística, curvas e conversão de cor.
 
 // ---------- Aleatoriedade determinística ----------
 
@@ -27,15 +26,3 @@ export function hsl(h, s, l) {
   };
   return [f(0), f(8), f(4)];
 }
-
-/** Cor-base de cada tijolo: terracota, ocre e alguns queimados (mais escuros). */
-export function brickColor(col, row) {
-  const r = hash(col, row, 7);
-  const j1 = hash(col, row, 11);
-  const j2 = hash(col, row, 13);
-  if (r < 0.09) return hsl(12 + j1 * 6, 0.4 + j2 * 0.08, 0.17 + j2 * 0.04); // queimado
-  if (r < 0.2) return hsl(22 + j1 * 5, 0.42 + j2 * 0.08, 0.29 + j2 * 0.04); // ocre claro
-  return hsl(15 + j1 * 7, 0.46 + j2 * 0.1, 0.25 + j2 * 0.05); // terracota
-}
-
-export const MORTAR = [0.4, 0.35, 0.29];

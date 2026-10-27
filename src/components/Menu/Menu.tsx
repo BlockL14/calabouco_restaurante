@@ -2,26 +2,25 @@ import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEve
 import { sectionIds } from '../../content/business';
 import { menuIntro } from '../../content/home';
 import { countItems, menuCategories, menuNote, type MenuCategoryId } from '../../content/menu';
-import { CrownMark, Plus } from '../Icons';
+import { menuSection, routes } from '../../lib/routes';
+import { ArrowRight, CrownMark } from '../Icons';
 import { Picture } from '../Picture';
 import { Split } from '../Split/Split';
 import './Menu.css';
+import { DisplayLines } from '../DisplayLines';
 
-type MenuProps = {
-  category: MenuCategoryId;
-  onCategoryChange: (id: MenuCategoryId) => void;
-};
-
-export function Menu({ category, onCategoryChange }: MenuProps) {
-  const [expandedFor, setExpandedFor] = useState<MenuCategoryId | null>(null);
+/**
+ * Cardápio na página inicial: faixa “Sabores que marcam” e, abaixo, as abas da
+ * interface aprovada com uma prévia de cada categoria. A lista completa fica na
+ * página do cardápio (cardapio.html).
+ */
+export function Menu() {
+  const [category, setCategory] = useState<MenuCategoryId>(menuCategories[0].id);
   const tabsRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState<{ x: number; w: number } | null>(null);
 
   const current = menuCategories.find((c) => c.id === category) ?? menuCategories[0];
-  const expanded = expandedFor === current.id;
   const total = countItems(current);
-  const hasMore = total > current.preview;
 
   // Posiciona o filete sob o nome da aba ativa e mantém a aba visível na faixa rolável.
   useLayoutEffect(() => {
@@ -31,17 +30,14 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
     if (!list || !tab || !label) return;
     const measure = () => setIndicator({ x: tab.offsetLeft + label.offsetLeft, w: label.offsetWidth });
     measure();
-    const left = tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2;
-    list.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    if (list.scrollWidth > list.clientWidth) {
+      const left = tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2;
+      list.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    }
     const ro = new ResizeObserver(measure);
     ro.observe(list);
     return () => ro.disconnect();
   }, [current.id]);
-
-  const select = (id: MenuCategoryId) => {
-    onCategoryChange(id);
-    setExpandedFor(null);
-  };
 
   // Padrão de abas com ativação automática (setas, Home e End).
   const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -55,21 +51,11 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
     if (!(e.key in keys)) return;
     e.preventDefault();
     const next = menuCategories[keys[e.key]];
-    select(next.id);
+    setCategory(next.id);
     tabsRef.current?.querySelector<HTMLButtonElement>(`[data-id="${next.id}"]`)?.focus();
   };
 
-  const toggleExpanded = () => {
-    if (expanded) {
-      setExpandedFor(null);
-      const top = panelRef.current?.getBoundingClientRect().top ?? 0;
-      if (top < 0) panelRef.current?.scrollIntoView({ block: 'start' });
-    } else {
-      setExpandedFor(current.id);
-    }
-  };
-
-  let remaining = expanded ? Number.POSITIVE_INFINITY : current.preview;
+  let remaining = current.preview;
   let itemIndex = 0;
 
   return (
@@ -83,20 +69,15 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
       >
         <p className="eyebrow">{menuIntro.eyebrow}</p>
         <h2 id="menu-title" className="display display--xl">
-          {menuIntro.title.map((line) => (
-            <span key={line} className="display__line">
-              {line}
-            </span>
-          ))}
+          <DisplayLines lines={menuIntro.title} />
         </h2>
         <p className="lead">{menuIntro.text}</p>
-        {/* Leva à lista e já abre todos os itens da categoria escolhida */}
-        <a className="btn" href={`#${sectionIds.menuList}`} onClick={() => setExpandedFor(current.id)}>
+        <a className="btn" href={routes.menu}>
           {menuIntro.button}
         </a>
       </Split>
 
-      <section id={sectionIds.menuList} className="menu" aria-label="Seleção do cardápio" tabIndex={-1}>
+      <section id={sectionIds.menuList} className="menu" aria-label="Prévia do cardápio" tabIndex={-1}>
         <div className="container">
           <div className="menu__tabs-wrap" data-reveal>
             <div ref={tabsRef} className="menu__tabs" role="tablist" aria-label="Categorias do cardápio">
@@ -113,7 +94,7 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
                     aria-controls="menu-panel"
                     tabIndex={selected ? 0 : -1}
                     className="menu__tab"
-                    onClick={() => select(c.id)}
+                    onClick={() => setCategory(c.id)}
                     onKeyDown={(e) => onTabKeyDown(e, index)}
                   >
                     <span className="menu__tab-label">{c.label}</span>
@@ -131,7 +112,6 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
           </div>
 
           <div
-            ref={panelRef}
             key={current.id}
             id="menu-panel"
             role="tabpanel"
@@ -146,7 +126,7 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
               <span className="menu__intro">{current.intro}</span>
             </p>
 
-            <div className="menu__groups" id="menu-items">
+            <div className="menu__groups">
               {current.groups.map((group) => {
                 if (remaining <= 0) return null;
                 const items = group.items.slice(0, remaining);
@@ -165,9 +145,7 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
                         return (
                           <li
                             key={item.name}
-                            className={['menu__item', i >= current.preview && 'is-extra', item.featured && 'is-featured']
-                              .filter(Boolean)
-                              .join(' ')}
+                            className={['menu__item', item.featured && 'is-featured'].filter(Boolean).join(' ')}
                             style={{ '--i': Math.min(i, 14) } as CSSProperties}
                           >
                             <span className="menu__item-name">
@@ -182,23 +160,23 @@ export function Menu({ category, onCategoryChange }: MenuProps) {
                   </div>
                 );
               })}
+            </div>
 
-              {hasMore && (
-                <button
-                  type="button"
-                  className="menu__more"
-                  aria-expanded={expanded}
-                  aria-controls="menu-items"
-                  onClick={toggleExpanded}
-                >
-                  <Plus className={`menu__more-icon${expanded ? ' is-open' : ''}`} />
-                  {expanded ? 'Mostrar menos' : `Ver todos os ${total} itens`}
-                </button>
-              )}
+            <div className="menu__more-row">
+              <a className="btn menu__more" href={menuSection(current.id)}>
+                Ver todos os {total} itens
+                <span className="sr-only"> de {current.label} no cardápio completo</span>
+              </a>
             </div>
           </div>
 
-          <p className="menu__note">{menuNote}</p>
+          <p className="menu__note">
+            {menuNote}{' '}
+            <a className="text-link menu__note-link" href={routes.menu}>
+              <span className="text-link__label">Abrir o cardápio completo</span>
+              <ArrowRight />
+            </a>
+          </p>
         </div>
       </section>
     </>

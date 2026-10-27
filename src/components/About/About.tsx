@@ -5,6 +5,7 @@ import { ArrowRight, Book, Candle, Crown, Octagon, PizzaSlice } from '../Icons';
 import { Picture } from '../Picture';
 import { Split } from '../Split/Split';
 import './About.css';
+import { DisplayLines } from '../DisplayLines';
 
 const ICONS: Record<FeatureIcon, ComponentType<{ className?: string }>> = {
   crown: Crown,
@@ -25,11 +26,7 @@ export function About() {
       >
         <p className="eyebrow">{about.eyebrow}</p>
         <h2 id="about-title" className="display">
-          {about.title.map((line) => (
-            <span key={line} className="display__line">
-              {line}
-            </span>
-          ))}
+          <DisplayLines lines={about.title} />
         </h2>
         <p className="lead">{about.text}</p>
         <a className="text-link" href={`#${sectionIds.visit}`}>

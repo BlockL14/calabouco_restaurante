@@ -8,12 +8,18 @@
       name="description"
       content="Restaurante e pizzaria à luz de velas no Centro Cívico de Curitiba. Pizzas, massas e vinhos em ambiente de inspiração medieval, desde 1991."
     />
-    <meta name="theme-color" content="#0b0807" />
+    <meta name="theme-color" content="#090706" />
     <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="canonical" href="%SITE_URL%" />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
 
-    <!-- Compartilhamento. Quando houver domínio definido, troque og:image por uma URL absoluta. -->
+    <!-- Compartilhamento (endereço absoluto definido no build por SITE_URL, ver vite.config.ts) -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="%SITE_URL%" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Calabouço Restaurante e Pizzaria" />
     <meta property="og:title" content="Calabouço Restaurante e Pizzaria | Curitiba" />
@@ -21,10 +27,10 @@
       property="og:description"
       content="Pizzas, massas e vinhos à luz de velas, em ambiente de inspiração medieval no Centro Cívico de Curitiba."
     />
-    <meta property="og:image" content="%BASE_URL%images/og-calabouco.jpg" />
-    <meta property="og:image:width" content="683" />
-    <meta property="og:image:height" content="664" />
-    <meta property="og:image:alt" content="Corredor de tijolos com arcos, grades de ferro e tocha acesa no Calabouço." />
+    <meta property="og:image" content="%SITE_URL%og-calabouco.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Calabouço Restaurante e Pizzaria: queijo derretido se esticando de uma massa assada, à luz de velas." />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Imagem inicial da abertura: prioridade máxima (mesmo srcset/sizes do componente Hero). -->
@@ -43,6 +49,10 @@
         "@type": "Restaurant",
         "name": "Calabouço Restaurante e Pizzaria",
         "description": "Restaurante e pizzaria à luz de velas, com pizzas, massas e vinhos em ambiente de inspiração medieval.",
+        "url": "%SITE_URL%",
+        "image": "%SITE_URL%og-calabouco.jpg",
+        "hasMenu": "%SITE_URL%cardapio.html",
+        "servesCuisine": ["Pizza", "Massas"],
         "telephone": "+55 41 3254-6112",
         "foundingDate": "1991",
         "address": {

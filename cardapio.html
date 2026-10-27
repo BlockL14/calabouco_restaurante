@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Cardápio | Calabouço Restaurante e Pizzaria, Curitiba</title>
+    <meta
+      name="description"
+      content="Cardápio do Calabouço: pizzas da casa com nomes de castelo, tradicionais e calzones, entradas, mignon, massas, sobremesas, vinhos e bebidas. Centro Cívico, Curitiba."
+    />
+    <meta name="theme-color" content="#090706" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="canonical" href="%SITE_URL%cardapio.html" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%SITE_URL%cardapio.html" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Calabouço Restaurante e Pizzaria" />
+    <meta property="og:title" content="Cardápio | Calabouço Restaurante e Pizzaria" />
+    <meta
+      property="og:description"
+      content="Pizzas da casa com nomes de castelo, tradicionais e calzones, entradas, pratos, sobremesas e bebidas."
+    />
+    <meta property="og:image" content="%SITE_URL%og-calabouco.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Calabouço Restaurante e Pizzaria: queijo derretido se esticando de uma massa assada, à luz de velas." />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Foto da abertura: prioridade máxima (mesmo srcset/sizes do componente) -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      fetchpriority="high"
+      imagesrcset="%BASE_URL%images/pizza-420.avif 420w, %BASE_URL%images/pizza-684.avif 684w, %BASE_URL%images/pizza-1020.avif 1020w"
+      imagesizes="(min-width: 900px) 61vw, 100vw"
+    />
+    <!-- Dados estruturados do cardápio (gerados no build a partir de src/content/menu.ts) -->
+    <!--menu-json-ld-->
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: system-ui, sans-serif; color: #f3eadf; background: #100d0b">
+        Cardápio do Calabouço Restaurante e Pizzaria — Rua Mateus Leme, 1000, Centro Cívico, Curitiba/PR · (41) 3254-6112.
+      </p>
+    </noscript>
+    <script type="module" src="/src/menu-main.tsx"></script>
+  </body>
+</html>

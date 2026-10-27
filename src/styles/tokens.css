@@ -4,7 +4,7 @@
 :root {
   /* Paleta: fundo quase preto e quente, títulos em marfim, sobretítulos em bronze,
      links em cobre e botões em vinho com filete de cobre. */
-  --c-black: #0b0807;
+  --c-black: #090706;
   --c-black-2: #120d0b;
   --c-coal: #1a1310;
   --c-ivory: #ecdcc6;
@@ -37,9 +37,9 @@
   --fs-h2: clamp(1.875rem, min(9vw, 1.559rem + 1.81vw), 3.25rem);
   --fs-display: clamp(1.875rem, min(9.6vw, 1.656rem + 2.952vw), 4.375rem);
 
-  /* Parede de tijolos ao fundo (textura gerada por scripts/make-brick-texture.mjs) */
-  --wall-size: 640px 446px;
-  --wall-shadow: 11 8 7;
+  /* Pedra ao fundo (textura gerada por scripts/make-stone-texture.mjs) */
+  --wall-size: 640px 640px;
+  --wall-shadow: 9 7 6;
 
   /* Layout */
   --header-h: 68px;
@@ -58,10 +58,9 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* Tijolos em escala de parede: ~5 por fiada no celular, ~11 numa tela de 1440px */
 @media (min-width: 700px) {
   :root {
-    --wall-size: 845px 589px;
+    --wall-size: 960px 960px;
   }
 }
 

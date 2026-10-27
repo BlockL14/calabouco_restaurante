@@ -188,12 +188,6 @@ async function run() {
     console.log(`✓ ${job.name} (${meta.width}×${meta.height}) → ${widths.join(', ')}`);
   }
 
-  // Imagem de compartilhamento (og:image): o recorte do corredor, em JPEG.
-  await sharp(path.join(SRC, 'arte-corredor-abra-as-portas.webp'))
-    .extract({ left: 0, top: 0, width: 683, height: 664 })
-    .jpeg({ quality: 84, mozjpeg: true })
-    .toFile(path.join(OUT, 'og-calabouco.jpg'));
-
   await writeFile(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
   console.log(`Manifesto: ${path.relative(root, MANIFEST)}`);
 }

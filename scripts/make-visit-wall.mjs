@@ -11,7 +11,7 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { clamp01, hash, hsl, lerp, smooth, smoothstep } from './brick-common.mjs';
+import { clamp01, hash, hsl, lerp, smooth, smoothstep } from './texture-common.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUT = path.join(root, 'src', 'assets', 'textures');

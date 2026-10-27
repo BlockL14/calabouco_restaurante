@@ -194,3 +194,66 @@ export const CrownMark = ({ className }: IconProps) => (
     <circle cx="31.5" cy="24.8" r="0.9" fill="currentColor" />
   </svg>
 );
+
+/* Ícones das categorias do cardápio, no mesmo desenho dos destaques. */
+
+/** Queijo em fatia (Entradas). */
+export const Cheese = ({ className }: IconProps) => (
+  <svg {...glyph} className={className}>
+    <path d="M7 31 36 15l6 5v11Z" fill="currentColor" fillOpacity="0.32" />
+    <path d="M7 31h35v9H7Z" fill="currentColor" fillOpacity="0.16" />
+    <path d="M7 31 36 15l6 5v20H7Z" />
+    <path d="M7 31h35" />
+    <circle cx="15" cy="36" r="1.9" fill="currentColor" />
+    <circle cx="25.5" cy="35.4" r="1.4" fill="currentColor" />
+    <circle cx="35" cy="36.4" r="1.8" fill="currentColor" />
+    <ellipse cx="30" cy="24.5" rx="2.1" ry="1.2" fill="currentColor" />
+    <ellipse cx="20" cy="27.6" rx="1.5" ry="0.9" fill="currentColor" />
+  </svg>
+);
+
+/** Prato coberto com cloche (Pratos). */
+export const Cloche = ({ className }: IconProps) => (
+  <svg {...glyph} className={className}>
+    <path d="M8 34a16 16 0 0 1 32 0Z" fill="currentColor" fillOpacity="0.2" />
+    <path d="M8 34a16 16 0 0 1 32 0" />
+    <path d="M13.5 27.5a11 11 0 0 1 6.5-7.2" strokeOpacity="0.75" />
+    <circle cx="24" cy="15.6" r="2.4" fill="currentColor" />
+    <path d="M24 18v-1" />
+    <path d="M5 37.5h38" />
+    <path d="M10 41h28" strokeOpacity="0.6" />
+  </svg>
+);
+
+/** Bolo com calda e uma bola de sorvete (Sobremesas). */
+export const Dessert = ({ className }: IconProps) => (
+  <svg {...glyph} className={className}>
+    <ellipse cx="24" cy="36" rx="18" ry="4.2" />
+    <path d="M11 34c0-8.5 5.8-14 13-14s13 5.5 13 14Z" fill="currentColor" fillOpacity="0.22" />
+    <path d="M11 34c0-8.5 5.8-14 13-14s13 5.5 13 14" />
+    <path d="M14 25.5c2.2 2.2 4.4 1.2 6-.4s3.8-2.2 6 0 3.8 2.2 5.8.6" />
+    <path d="M18.5 26.6v3.4M30.5 26.4v2.6" strokeOpacity="0.8" />
+    <circle cx="24" cy="16.4" r="2.6" fill="currentColor" />
+    <path d="M24.6 13.9c.6-2.2 2-3.6 4-4.4" />
+  </svg>
+);
+
+/** Taça de vinho (Bebidas). */
+export const WineGlass = ({ className }: IconProps) => (
+  <svg {...glyph} className={className}>
+    <path d="M15 6h18c0 10.5-3.8 17-9 17s-9-6.5-9-17Z" />
+    <path d="M15.9 13h16.2c-.9 6-3.9 9.6-8.1 9.6s-7.2-3.6-8.1-9.6Z" fill="currentColor" fillOpacity="0.4" />
+    <path d="M18.5 9.5c.2 2.4.7 4.4 1.4 6" strokeOpacity="0.7" />
+    <path d="M24 23v14" />
+    <path d="M16 41c2-2.4 4.7-3.6 8-3.6s6 1.2 8 3.6Z" fill="currentColor" fillOpacity="0.3" />
+    <path d="M16 41h16" />
+  </svg>
+);
+
+/** Impressora (imprimir o cardápio). */
+export const Printer = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M7 9V4h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" />
+    <path d="M7 14h10v6H7Z" />
+  </svg>
+);

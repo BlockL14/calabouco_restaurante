@@ -18,7 +18,10 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: rgb(10 8 7 / 0.97);
+  background:
+    linear-gradient(rgb(9 7 6 / 0.9), rgb(9 7 6 / 0.9)),
+    var(--wall-image) 0 0 / var(--wall-size),
+    var(--c-black);
   color: var(--c-ivory);
 }
 

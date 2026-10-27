@@ -232,6 +232,7 @@
   border: 0;
   background:
     radial-gradient(120% 60% at 100% 0%, rgb(74 21 23 / 0.5), transparent 60%),
+    var(--wall-image) 0 0 / var(--wall-size),
     var(--c-black);
   color: var(--c-ivory);
   display: none;
@@ -302,6 +303,11 @@
 .mobile-menu__num {
   font-size: 1rem;
   color: var(--c-tan);
+}
+
+/* Página ou seção atual */
+.mobile-menu__list a[aria-current] {
+  color: var(--c-copper);
 }
 
 .mobile-menu__foot {

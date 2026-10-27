@@ -31,7 +31,7 @@ export const business = {
   },
 } as const;
 
-/** Âncoras das seções. Mantenha em sincronia com os `id` dos componentes. */
+/** Âncoras das seções da página inicial. Mantenha em sincronia com os `id` dos componentes. */
 export const sectionIds = {
   top: 'inicio',
   about: 'sobre',
@@ -41,11 +41,14 @@ export const sectionIds = {
   visit: 'visite',
 } as const;
 
-/** Navegação principal, na mesma ordem em que as seções aparecem na página. */
+/**
+ * Navegação principal, na mesma ordem em que as seções aparecem na página inicial.
+ * Na página do cardápio completo, “Cardápio” aponta para a própria página.
+ */
 export const navigation = [
-  { label: 'Início', href: `#${sectionIds.top}` },
-  { label: 'Sobre', href: `#${sectionIds.about}` },
-  { label: 'Cardápio', href: `#${sectionIds.menu}` },
-  { label: 'Ambiente', href: `#${sectionIds.ambience}` },
-  { label: 'Visite', href: `#${sectionIds.visit}` },
+  { label: 'Início', section: sectionIds.top },
+  { label: 'Sobre', section: sectionIds.about },
+  { label: 'Cardápio', section: sectionIds.menu, page: 'menu' },
+  { label: 'Ambiente', section: sectionIds.ambience },
+  { label: 'Visite', section: sectionIds.visit },
 ] as const;

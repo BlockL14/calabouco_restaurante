@@ -3,6 +3,7 @@ import { hero } from '../../content/home';
 import { ArrowRight } from '../Icons';
 import { Picture } from '../Picture';
 import './Hero.css';
+import { DisplayLines } from '../DisplayLines';
 
 /** Mesmo `sizes` do pré-carregamento em index.html. */
 export const HERO_SIZES = '(min-width: 900px) 52vw, 100vw';
@@ -19,11 +20,7 @@ export function Hero() {
           <p className="eyebrow eyebrow--plain">{hero.eyebrow}</p>
           <h1 id="hero-title" className="display display--xl hero__title">
             <span className="sr-only">{business.legalName}: </span>
-            {hero.title.map((line) => (
-              <span key={line} className="display__line">
-                {line}
-              </span>
-            ))}
+            <DisplayLines lines={hero.title} />
           </h1>
           <p className="lead">{hero.text}</p>
           <div className="hero__actions">

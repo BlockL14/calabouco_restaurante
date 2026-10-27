@@ -1,18 +1,38 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { business, navigation, sectionIds } from '../../content/business';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
+import { homeSection, routes, type Page } from '../../lib/routes';
 import { Close, CrownMark, Instagram, MenuIcon, Phone } from '../Icons';
 import './Header.css';
 
-const spyIds = navigation.map((item) => item.href.slice(1));
+type NavItem = (typeof navigation)[number];
 
-export function Header() {
+const HOME_SPY = navigation.map((item) => item.section);
+const NO_SPY: string[] = [];
+
+/** Na página do cardápio, “Cardápio” leva à própria página; o resto, às seções da inicial. */
+const hrefFor = (item: NavItem, page: Page) =>
+  'page' in item && item.page === page ? routes.menu : homeSection(item.section, page);
+
+export function Header({ page = 'home' }: { page?: Page }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const navigating = useRef(false);
-  const activeSection = useScrollSpy(spyIds);
+  const activeSection = useScrollSpy(page === 'home' ? HOME_SPY : NO_SPY);
+
+  const currentFor = (item: NavItem) => {
+    if (page === 'home') return activeSection === item.section ? ('location' as const) : undefined;
+    return 'page' in item && item.page === page ? ('page' as const) : undefined;
+  };
+
+  // Na inicial, o botão leva ao cardápio completo; no cardápio, ao mapa.
+  const cta =
+    page === 'menu'
+      ? { label: 'Como chegar', href: business.links.maps, external: true }
+      : { label: 'Ver cardápio', href: routes.menu, external: false };
+  const ctaProps = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -46,9 +66,10 @@ export function Header() {
     return () => dialog.removeEventListener('close', onClose);
   }, []);
 
-  // Fecha o menu e rola até a seção, movendo o foco para ela.
+  // Fecha o menu e rola até a seção, movendo o foco para ela. Links para outra página
+  // seguem a navegação normal.
   const navigateFromMenu = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
-    const target = document.getElementById(href.slice(1));
+    const target = href.startsWith('#') ? document.getElementById(href.slice(1)) : null;
     if (!target) return;
     event.preventDefault();
     navigating.current = true;
@@ -63,7 +84,7 @@ export function Header() {
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="site-header__bar">
-        <a className="brand" href={`#${sectionIds.top}`}>
+        <a className="brand" href={page === 'home' ? `#${sectionIds.top}` : routes.home}>
           <CrownMark className="brand__crown" />
           <span className="brand__name">{business.name}</span>
           <span className="brand__sub">Restaurante e Pizzaria</span>
@@ -73,12 +94,8 @@ export function Header() {
         <nav className="site-nav" aria-label="Principal">
           <ul role="list">
             {navigation.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="site-nav__link"
-                  aria-current={activeSection === item.href.slice(1) ? 'location' : undefined}
-                >
+              <li key={item.section}>
+                <a href={hrefFor(item, page)} className="site-nav__link" aria-current={currentFor(item)}>
                   {item.label}
                 </a>
               </li>
@@ -86,8 +103,9 @@ export function Header() {
           </ul>
         </nav>
 
-        <a className="btn site-header__cta" href={`#${sectionIds.menu}`}>
-          Ver cardápio
+        <a className="btn site-header__cta" href={cta.href} {...ctaProps}>
+          {cta.label}
+          {cta.external && <span className="sr-only"> (abre o Google Maps em nova aba)</span>}
         </a>
 
         <button
@@ -118,8 +136,12 @@ export function Header() {
         <nav aria-label="Menu principal">
           <ol className="mobile-menu__list" role="list">
             {navigation.map((item, index) => (
-              <li key={item.href} style={{ '--i': index } as CSSProperties}>
-                <a href={item.href} onClick={(e) => navigateFromMenu(e, item.href)}>
+              <li key={item.section} style={{ '--i': index } as CSSProperties}>
+                <a
+                  href={hrefFor(item, page)}
+                  aria-current={currentFor(item)}
+                  onClick={(e) => navigateFromMenu(e, hrefFor(item, page))}
+                >
                   <span className="mobile-menu__num numeral" aria-hidden="true">
                     {String(index + 1).padStart(2, '0')}
                   </span>
@@ -130,8 +152,9 @@ export function Header() {
           </ol>
         </nav>
         <div className="mobile-menu__foot">
-          <a className="btn" href={`#${sectionIds.menu}`} onClick={(e) => navigateFromMenu(e, `#${sectionIds.menu}`)}>
-            Ver cardápio
+          <a className="btn" href={cta.href} {...ctaProps}>
+            {cta.label}
+            {cta.external && <span className="sr-only"> (abre o Google Maps em nova aba)</span>}
           </a>
           <div className="mobile-menu__contacts">
             <a href={business.phone.href}>

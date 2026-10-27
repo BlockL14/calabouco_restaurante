@@ -8,6 +8,7 @@ import { Picture } from '../Picture';
 import { Split } from '../Split/Split';
 import { Lightbox } from './Lightbox';
 import './Ambience.css';
+import { DisplayLines } from '../DisplayLines';
 
 export function Ambience() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -27,11 +28,7 @@ export function Ambience() {
       >
         <p className="eyebrow">{ambience.eyebrow}</p>
         <h2 id="ambience-title" className="display display--sm">
-          {ambience.title.map((line) => (
-            <span key={line} className="display__line">
-              {line}
-            </span>
-          ))}
+          <DisplayLines lines={ambience.title} />
         </h2>
         <p className="lead">{ambience.text}</p>
         <button ref={trigger} type="button" className="text-link" aria-haspopup="dialog" onClick={() => setOpenIndex(0)}>

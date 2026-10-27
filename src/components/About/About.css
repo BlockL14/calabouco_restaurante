@@ -13,7 +13,8 @@
 .features {
   position: relative;
   padding-block: clamp(2.75rem, 1.5rem + 3.6vw, 4.5rem);
-  background: linear-gradient(180deg, rgb(11 8 7 / 0.35), rgb(11 8 7 / 0.7) 30%, rgb(11 8 7 / 0.7) 70%, rgb(11 8 7 / 0.35));
+  /* Faixa preta, como a dos destaques no mockup */
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.66) 22%, rgb(0 0 0 / 0.66) 78%, rgb(0 0 0 / 0.3));
 }
 
 .features__list {
