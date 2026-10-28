@@ -5,7 +5,7 @@ import { Picture } from '../Picture';
 import './Hero.css';
 
 /** Mesmo `sizes` do pré-carregamento em index.html (a pizza grande da abertura). */
-export const HERO_SIZES = '(min-width: 900px) 64vw, 150vw';
+export const HERO_SIZES = '(min-width: 900px) 62vw, 100vw';
 
 /** Botões da abertura: a barra fixa do celular aparece quando eles saem da tela. */
 export const HERO_ACTIONS_ID = 'abertura-acoes';
@@ -40,10 +40,6 @@ export function Hero() {
   const { address, phone, links } = business;
   return (
     <section id={sectionIds.top} className="hero" aria-labelledby="hero-title" tabIndex={-1}>
-      {/* Luz de velas ao fundo: a foto real das velas do salão, desfocada (decorativa) */}
-      <div className="hero__ambient" aria-hidden="true">
-        <Picture image="velas" alt="" sizes="40vw" />
-      </div>
       <div className="container hero__grid">
         <div className="hero__text">
           <p className="kicker hero__eyebrow">{hero.eyebrow}</p>
@@ -83,7 +79,8 @@ export function Hero() {
         </div>
 
         <figure className="hero__pizza">
-          <Picture image="pizza" sizes={HERO_SIZES} priority imgClassName="hero__pizza-img" />
+          <Picture image="pizza-ia" sizes={HERO_SIZES} priority imgClassName="hero__pizza-img" />
+          <figcaption className="hero__pizza-note">Imagem ilustrativa</figcaption>
           <Seal />
         </figure>
       </div>

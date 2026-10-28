@@ -1,4 +1,13 @@
 {
+  "pizza-ia": {
+    "width": 905,
+    "height": 920,
+    "widths": [
+      480,
+      905,
+      1360
+    ]
+  },
   "queijo": {
     "width": 646,
     "height": 849,
@@ -25,16 +34,6 @@
       420,
       686,
       1020
-    ]
-  },
-  "pizza": {
-    "width": 684,
-    "height": 320,
-    "widths": [
-      420,
-      684,
-      1020,
-      1368
     ]
   },
   "arte-fachada": {

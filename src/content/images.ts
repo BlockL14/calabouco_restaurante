@@ -27,6 +27,10 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
     position: { base: '50% 50%' },
     credit: '@gabrielmessine',
   },
+  'pizza-ia': {
+    alt: 'Imagem ilustrativa: pizza com rodelas de tomate e folhas de manjericão sobre tábua de madeira, ao lado de uma lanterna com vela e de uma taça de vinho tinto.',
+    position: { base: '50% 45%' },
+  },
   queijo: {
     alt: 'Massa assada e dourada, com orégano por cima, sendo servida com o queijo derretido se esticando; ao fundo, paredes de tijolo e velas acesas.',
     position: { base: '45% 72%' },
@@ -34,10 +38,6 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',
     position: { base: '50% 50%' },
-  },
-  pizza: {
-    alt: 'Pizza servida em forma escura: metade com rodelas de tomate, azeitonas pretas e manjericão; metade com cebola e azeitonas verdes.',
-    position: { base: '50% 55%' },
   },
   letreiro: {
     alt: 'Letreiro de madeira com o nome Calabouço, “restaurante” e “pizzaria”, sobre o arco de tijolos da entrada.',

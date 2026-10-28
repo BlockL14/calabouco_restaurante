@@ -10,8 +10,7 @@
   /* Luz quente atrás da pizza (só um degradê, sem efeitos de fogo) */
   background:
     radial-gradient(60% 55% at 78% 62%, rgb(184 49 42 / 0.22), transparent 70%),
-    radial-gradient(40% 50% at 72% 18%, rgb(240 160 80 / 0.1), transparent 70%),
-    var(--c-bg);
+        var(--c-bg);
 }
 
 .hero__grid {
@@ -95,21 +94,15 @@
   color: var(--c-text);
 }
 
-/* ---------- Luz de velas ao fundo (só nas telas largas) ---------- */
+/* ---------- Pizza (imagem ilustrativa) ---------- */
 
-.hero__ambient {
-  display: none;
-}
-
-/* ---------- Pizza ---------- */
-
-/* Celular: no alto, maior que a tela (as bordas da pizza saem pelos lados) */
+/* Celular: no alto, de borda a borda, dissolvendo-se no fundo embaixo */
 .hero__pizza {
   position: relative;
   order: -1;
-  width: 150vw;
-  margin: 0 0 1.5rem calc(50% - 75vw);
-  aspect-ratio: 684 / 320;
+  width: 100vw;
+  margin: 0 0 1.5rem calc(50% - 50vw);
+  aspect-ratio: 4 / 3.4;
 }
 
 .hero__pizza picture,
@@ -118,10 +111,20 @@
   height: 100%;
 }
 
-/* As bordas escuras da foto se dissolvem no fundo */
 .hero__pizza-img {
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+
+.hero__pizza-note {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 18%;
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: rgb(23 17 13 / 0.7);
+  font-size: 0.75rem;
+  color: var(--c-text-2);
 }
 
 .hero__seal {
@@ -155,8 +158,8 @@
   font-family: var(--font-display);
 }
 
-/* Telas largas: texto à esquerda; a pizza à direita, bem maior que a coluna,
-   cortada pela borda direita da tela */
+/* Telas largas: texto à esquerda; a imagem da pizza ocupa a metade direita da
+   abertura, de cima a baixo */
 @media (min-width: 900px) {
   .hero {
     display: grid;
@@ -166,13 +169,8 @@
   }
 
   .hero__grid {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     gap: 2rem;
-  }
-
-  .hero__grid {
-    position: relative;
-    z-index: 1;
   }
 
   .hero__text {
@@ -180,50 +178,35 @@
     z-index: 1;
   }
 
-  /* Velas desfocadas no alto à direita, como a luz do salão atrás da pizza */
-  .hero__ambient {
+  /* A imagem ocupa a metade direita da abertura, de cima a baixo, e se dissolve
+     no fundo do lado do texto */
+  .hero__pizza {
     position: absolute;
     top: 0;
     right: 0;
-    display: block;
-    width: 58%;
-    height: 78%;
-    opacity: 0.45;
-    pointer-events: none;
-    -webkit-mask-image: radial-gradient(70% 70% at 70% 30%, #000 20%, transparent 75%);
-    mask-image: radial-gradient(70% 70% at 70% 30%, #000 20%, transparent 75%);
-  }
-
-  .hero__ambient picture,
-  .hero__ambient img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .hero__ambient img {
-    filter: blur(10px) saturate(1.15);
-    transform: scale(1.1);
-  }
-
-  .hero__pizza {
-    order: 0;
-    width: 160%;
-    margin: 0 0 0 -6%;
+    bottom: 0;
+    width: 62vw;
+    margin: 0;
+    aspect-ratio: auto;
   }
 
   .hero__pizza-img {
     -webkit-mask-image:
-      linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%),
-      linear-gradient(90deg, transparent 0, #000 10%);
+      linear-gradient(90deg, transparent 0, #000 32%),
+      linear-gradient(180deg, #000 82%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%),
-      linear-gradient(90deg, transparent 0, #000 10%);
+      linear-gradient(90deg, transparent 0, #000 32%),
+      linear-gradient(180deg, #000 82%, transparent 100%);
     mask-composite: intersect;
   }
 
+  .hero__pizza-note {
+    bottom: 1.5rem;
+  }
+
   .hero__seal {
-    left: 6%;
-    bottom: 8%;
+    left: 18%;
+    bottom: 9%;
   }
 }

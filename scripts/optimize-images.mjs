@@ -28,6 +28,13 @@ const QUALITY = { avif: 56, webp: 80 };
  */
 const JOBS = [
   {
+    // Imagem ilustrativa gerada por IA (fornecida pelo cliente): recorte só da foto,
+    // sem os textos da maquete de onde ela veio.
+    name: 'pizza-ia',
+    source: 'ia-pizza-abertura.png',
+    widths: [480, 905, 1360],
+  },
+  {
     name: 'queijo',
     source: 'foto-queijo-puxado.webp',
     // O recorte tira da borda esquerda o fragmento de letreiro (“…uço”) no avental.
@@ -47,13 +54,6 @@ const JOBS = [
     // Letreiro e arco da entrada, acima da faixa gráfica “Tradição curitibana”.
     crop: { left: 0, top: 0, width: 686, height: 366 },
     widths: [420, 686, 1020],
-  },
-  {
-    name: 'pizza',
-    source: 'arte-pizza-desde-1991.webp',
-    // Apenas a pizza, abaixo do texto “Desde 1991”: a pizza grande da abertura.
-    crop: { left: 0, top: 535, width: 684, height: 320 },
-    widths: [420, 684, 1020, 1368],
   },
   {
     // Arte da casa inteira (entrada com o letreiro e a faixa “Tradição curitibana”).

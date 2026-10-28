@@ -1,6 +1,6 @@
 // Gera a imagem de compartilhamento (Open Graph, 1200 × 630) em public/og-calabouco.jpg,
-// no visual do site: fundo escuro, logo oficial, título na fonte do cardápio e a pizza
-// grande da abertura. Renderiza com o Chromium do Playwright para usar as fontes do site.
+// no visual do site: fundo escuro, logo oficial, título na fonte do cardápio e a imagem da
+// pizza da abertura. Renderiza com o Chromium do Playwright para usar as fontes do site.
 //
 //   npm run og        (requer: npm i -D playwright && npx playwright install chromium)
 
@@ -36,8 +36,8 @@ const html = `<!doctype html>
   * { box-sizing: border-box; margin: 0; }
   body { width: 1200px; height: 630px; overflow: hidden; color: ${C.text}; font-family: Texturina;
     background: radial-gradient(60% 70% at 80% 70%, rgb(184 49 42 / .28), transparent 70%), ${C.bg}; }
-  .pizza { position: absolute; right: -330px; bottom: 20px; width: 960px; height: auto;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 86%, transparent 100%), linear-gradient(90deg, transparent 0, #000 14%);
+  .pizza { position: absolute; right: -30px; top: -40px; width: 720px; height: auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%), linear-gradient(180deg, #000 85%, transparent 100%);
     -webkit-mask-composite: source-in; }
   .content { position: absolute; left: 72px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; }
   .logo { width: 300px; height: auto; }
@@ -46,7 +46,7 @@ const html = `<!doctype html>
   .place { margin-top: 24px; font-size: 23px; font-weight: 600; color: ${C.text2}; }
 </style></head>
 <body>
-  <img class="pizza" src="${file('public/images/pizza-1020.webp')}" alt="" />
+  <img class="pizza" src="${file('public/images/pizza-ia-905.webp')}" alt="" />
   <div class="content">
     <img class="logo" src="${png('public/logo/logo-escuro-738.png')}" alt="" />
     <h1>Pizza, massas e vinho <span>à luz de velas</span></h1>

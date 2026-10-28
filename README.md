@@ -67,7 +67,7 @@ Se o site ficar numa subpasta e você quiser caminhos absolutos (necessário par
 | Parte | Componente | O que faz |
 |---|---|---|
 | Cabeçalho | `src/components/Header` | Fixo. Logo oficial (brasão + nome), links Cardápio · Ambiente · Visite (marca a seção visível) e o telefone. No celular, só a marca e “Cardápio” |
-| Abertura | `src/components/Hero` | O que é, onde fica e desde quando, em uma frase; “Ver o cardápio” e “Como chegar”; endereço e telefone; uma pizza da casa em tamanho grande, saindo pela borda da tela, com o selo “desde 1991” |
+| Abertura | `src/components/Hero` | O que é, onde fica e desde quando, em uma frase; “Ver o cardápio” e “Como chegar”; endereço e telefone; imagem ilustrativa de pizza (gerada por IA, aprovada pelo cliente) ocupando a metade direita, com o aviso “Imagem ilustrativa” e o selo “desde 1991” |
 | Motivos | `src/components/Reasons` | Faixa curta: ambiente medieval, pizzas da casa, desde 1991 |
 | Cardápio | `src/components/Menu` | Destaques (pizzas com nomes de castelo, Coroa Real, pizzas doces, cada um com link para a categoria) e o cardápio completo em abas: Pizzas, Entradas, Pratos, Sobremesas e Bebidas, cada item com preço e descrição. No celular, cada categoria mostra 12 itens e “Ver todos” |
 | Ambiente | `src/components/Ambience` | Faixa escura com quatro fotos da casa e legendas |
@@ -113,7 +113,7 @@ A logo oficial está em `assets-src/originais/logo-calabouco.png` (fundo branco,
 - **Logo:** a oficial (brasão com espadas e “Calabouço — restaurante & pizzaria”), no cabeçalho, no rodapé, na 404, nos ícones e na imagem de compartilhamento.
 - **Letras:** as góticas do cardápio impresso da casa. **Pirata One** (textura estreita, a mais próxima da do cardápio entre as fontes livres) nos títulos, nas abas e nos nomes dos pratos; **Texturina** (gótica desenhada para leitura) no texto, nas descrições e nos preços. Só o subconjunto latino, pré-carregado (9 KB e 51 KB). Texto corrido inteiro em Pirata One ficaria difícil de ler; por isso a segunda fonte.
 - **Cores:** fundo marrom-escuro quente `#211813` (escuro, mas não preto), texto marfim `#f3e9dc`, vermelho do brasão `#b8312a` nos botões e `#f08a72` nos destaques de texto, preços em dourado `#c9a46a`, faixas mais fundas `#17110d` no ambiente e no rodapé.
-- **Fotos:** as da casa, sem tratamento de cor. A pizza da abertura vem da arte “Restaurante e Pizzaria à la carte — Desde 1991”, que tem só 684 px de largura: em tamanho grande ela fica um pouco suave. Uma foto de pizza em alta resolução deixaria a abertura nítida.
+- **Fotos:** as da casa, sem tratamento de cor, exceto a da abertura: uma imagem ilustrativa gerada por IA, fornecida e aprovada pelo cliente (recortada da maquete de referência, sem os textos dela). Ela traz o aviso “Imagem ilustrativa” na página e no texto alternativo. Quando houver uma foto real de uma pizza da casa em boa resolução, basta trocar `assets-src/originais/ia-pizza-abertura.png` (e o nome e o texto em `src/content/images.ts`) e rodar `npm run images`.
 
 ## Materiais usados
 
@@ -121,8 +121,9 @@ A logo oficial está em `assets-src/originais/logo-calabouco.png` (fundo branco,
 |---|---|---|---|
 | `originais/arte-corredor-abra-as-portas.webp` | Corredor de arcos, grades, tocha e escudo; frase “Abra as portas…”; crédito @gabrielmessine | 683×857 | Recorte sem a frase (com o crédito) no mosaico da abertura e no Ambiente |
 | `originais/foto-queijo-puxado.webp` | Massa assada com queijo esticando; salão com velas ao fundo | 680×849 | Destaque “Pizzas com nomes de castelo” (sem o fragmento “…uço” da borda); recorte das velas no Ambiente |
-| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Recorte só da pizza: a pizza grande da abertura e a imagem de compartilhamento |
+| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Não usada no momento (a abertura passou a usar a imagem ilustrativa) |
 | `originais/arte-fachada-tradicao-curitibana.webp` | Entrada em arco com o letreiro; faixa “Tradição curitibana” | 686×856 | Recorte do letreiro no mosaico da abertura e no Ambiente; arte completa no Ambiente |
+| `originais/ia-pizza-abertura.png` | Imagem gerada por IA: pizza com tomate e manjericão, lanterna com vela e taça de vinho; recortada da maquete de referência, sem textos | 905×920 | Abertura e imagem de compartilhamento, com aviso de imagem ilustrativa |
 | `originais/logo-calabouco.png` | Logo oficial: brasão e nome | 447×447 | Cabeçalho, rodapé, 404, ícones e compartilhamento (versão para fundo escuro) |
 | `referencias/cardapio-fotografado.webp` | Cardápio fotografado | 556×829 | Fonte do cardápio (não publicado) |
 
@@ -136,12 +137,12 @@ Os originais têm cerca de 680 px de largura, o que limita a nitidez em telas gr
 - **Descrições** escritas a partir do nome de cada prato (ou da definição do prato clássico, como marguerita e parmegiana), porque a foto não traz ingredientes. Nas receitas da casa e nas tradicionais cuja composição muda de pizzaria para pizzaria (portuguesa, paulista, napolitana etc.), o texto pede que o cliente pergunte ao garçom.
 - **Não publicados**, por estarem na foto mas poderem ter mudado: formas de pagamento.
 - **A foto do queijo não foi identificada como Coroa Real.** O prato parece compatível, mas o nome não está confirmado. A Coroa Real aparece com a descrição do cardápio e um ícone de coroa.
-- **Também não foram publicados**: horários, WhatsApp, delivery, avaliações, história dos proprietários e prêmios. Do mockup de uma versão anterior não foram usados o endereço, o telefone e o horário (que não conferem com a casa) nem as imagens geradas por IA.
+- **Também não foram publicados**: horários, WhatsApp, delivery, avaliações, história dos proprietários e prêmios. Do mockup de uma versão anterior não foram usados o endereço, o telefone e o horário (que não conferem com a casa) nem as imagens geradas por IA daquele mockup (a única imagem por IA no site é a da abertura, aprovada pelo cliente e marcada como ilustrativa).
 
 ## Pendências que dependem da casa
 
 - Fotografias originais em alta resolução, de preferência do salão e dos pratos (com o nome de cada um), incluindo a Coroa Real.
 - Conferência dos preços marcados com `// conferir` e dos que faltam (“consulte”), e os ingredientes das pizzas da casa e das tradicionais de composição variável.
-- Logo em vetor (SVG) e foto de pizza em alta resolução para a abertura.
+- Logo em vetor (SVG) e, se possível, uma foto real de pizza da casa para substituir a imagem ilustrativa da abertura.
 - Horários completos e se o telefone também atende por WhatsApp.
 - Domínio definitivo, se não for usar o endereço do GitHub Pages.
