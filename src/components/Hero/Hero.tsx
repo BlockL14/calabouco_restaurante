@@ -1,6 +1,6 @@
 import { business, sectionIds } from '../../content/business';
 import { hero } from '../../content/site';
-import { Phone, Pin } from '../Icons';
+import { ArrowRight, Phone, Pin } from '../Icons';
 import { Picture } from '../Picture';
 import './Hero.css';
 
@@ -40,6 +40,10 @@ export function Hero() {
   const { address, phone, links } = business;
   return (
     <section id={sectionIds.top} className="hero" aria-labelledby="hero-title" tabIndex={-1}>
+      {/* Luz de velas ao fundo: a foto real das velas do salão, desfocada (decorativa) */}
+      <div className="hero__ambient" aria-hidden="true">
+        <Picture image="velas" alt="" sizes="40vw" />
+      </div>
       <div className="container hero__grid">
         <div className="hero__text">
           <p className="kicker hero__eyebrow">{hero.eyebrow}</p>
@@ -53,6 +57,7 @@ export function Hero() {
           <div id={HERO_ACTIONS_ID} className="hero__actions">
             <a className="btn" href={`#${sectionIds.menu}`}>
               {hero.primary}
+              <ArrowRight />
             </a>
             <a className="btn btn--ghost" href={links.maps} target="_blank" rel="noopener noreferrer">
               {hero.secondary}
