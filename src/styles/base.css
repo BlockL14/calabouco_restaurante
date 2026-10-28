@@ -11,8 +11,10 @@ html {
   text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + 12px);
   scroll-padding-bottom: var(--action-bar-h);
-  background: var(--c-cream);
-  color-scheme: light;
+  background: var(--c-bg);
+  color-scheme: dark;
+  /* Pirata One tem um só peso: nada de negrito ou itálico falsos */
+  font-synthesis: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -24,10 +26,11 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--c-cream);
-  color: var(--c-ink);
+  background: var(--c-bg);
+  color: var(--c-text);
   font-family: var(--font-body);
   font-size: var(--fs-body);
+  font-weight: 400;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -98,7 +101,7 @@ figure {
 }
 
 :focus-visible {
-  outline: 3px solid var(--c-brick);
+  outline: 3px solid var(--c-accent);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -128,8 +131,8 @@ figure {
   z-index: 100;
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  background: var(--c-ink);
-  color: var(--c-cream);
+  background: var(--c-text);
+  color: var(--c-bg);
   font-weight: 700;
   text-decoration: none;
   transform: translateY(-160%);
@@ -162,15 +165,14 @@ figure {
   line-height: 1.4;
   text-transform: uppercase;
   text-wrap: balance;
-  color: var(--c-brick);
+  color: var(--c-accent);
 }
 
 .title {
   font-family: var(--font-display);
   font-size: var(--fs-h2);
-  font-weight: 600;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  line-height: 1;
   text-wrap: balance;
 }
 
@@ -178,7 +180,7 @@ figure {
   max-width: 34em;
   font-size: var(--fs-lead);
   line-height: 1.6;
-  color: var(--c-ink-2);
+  color: var(--c-text-2);
   text-wrap: pretty;
 }
 
@@ -217,15 +219,15 @@ figure {
 }
 
 .btn--ghost {
-  border-color: var(--c-ink);
+  border-color: var(--c-line-strong);
   background: transparent;
-  color: var(--c-ink);
+  color: var(--c-text);
 }
 
 .btn--ghost:hover {
-  border-color: var(--c-ink);
-  background: var(--c-ink);
-  color: var(--c-cream);
+  border-color: var(--c-text);
+  background: var(--c-text);
+  color: var(--c-bg);
 }
 
 .btn--small {
@@ -246,7 +248,7 @@ figure {
   align-items: center;
   gap: 0.45rem;
   min-height: 44px;
-  color: var(--c-brick);
+  color: var(--c-accent);
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -254,7 +256,7 @@ figure {
 }
 
 .link:hover {
-  color: var(--c-brick-dark);
+  color: var(--c-text);
 }
 
 .link svg {

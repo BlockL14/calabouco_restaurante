@@ -32,7 +32,7 @@ const JOBS = [
     source: 'foto-queijo-puxado.webp',
     // O recorte tira da borda esquerda o fragmento de letreiro (“…uço”) no avental.
     crop: { left: 34, top: 0, width: 646, height: 849 },
-    widths: [360, 420, 646, 1020],
+    widths: [420, 646, 1020],
   },
   {
     name: 'corredor',
@@ -51,9 +51,9 @@ const JOBS = [
   {
     name: 'pizza',
     source: 'arte-pizza-desde-1991.webp',
-    // Apenas a pizza, abaixo do texto “Desde 1991”.
+    // Apenas a pizza, abaixo do texto “Desde 1991”: a pizza grande da abertura.
     crop: { left: 0, top: 535, width: 684, height: 320 },
-    widths: [420, 684, 1020],
+    widths: [420, 684, 1020, 1368],
   },
   {
     // Arte da casa inteira (entrada com o letreiro e a faixa “Tradição curitibana”).

@@ -21,7 +21,8 @@ npm run preview    # serve o build em http://localhost:4173
 npm run lint       # ESLint
 npm run typecheck  # TypeScript
 npm run images     # regera as imagens otimizadas a partir dos originais
-npm run icons      # regera favicon, ícones de celular e o manifesto
+npm run logo       # prepara a logo oficial para o fundo escuro (public/logo/)
+npm run icons      # regera favicon e ícones de celular a partir do brasão
 npm run og         # regera a imagem de compartilhamento (requer Playwright)
 ```
 
@@ -65,10 +66,10 @@ Se o site ficar numa subpasta e você quiser caminhos absolutos (necessário par
 
 | Parte | Componente | O que faz |
 |---|---|---|
-| Cabeçalho | `src/components/Header` | Fixo. Marca, links Cardápio · Ambiente · Visite (marca a seção visível) e o telefone. No celular, só a marca e “Cardápio” |
-| Abertura | `src/components/Hero` | O que é, onde fica e desde quando, em uma frase; “Ver o cardápio” e “Como chegar”; endereço e telefone; mosaico com três fotos da casa e o selo “desde 1991” |
+| Cabeçalho | `src/components/Header` | Fixo. Logo oficial (brasão + nome), links Cardápio · Ambiente · Visite (marca a seção visível) e o telefone. No celular, só a marca e “Cardápio” |
+| Abertura | `src/components/Hero` | O que é, onde fica e desde quando, em uma frase; “Ver o cardápio” e “Como chegar”; endereço e telefone; uma pizza da casa em tamanho grande, saindo pela borda da tela, com o selo “desde 1991” |
 | Motivos | `src/components/Reasons` | Faixa curta: ambiente medieval, pizzas da casa, desde 1991 |
-| Cardápio | `src/components/Menu` | Destaques (pizzas com nomes de castelo, Coroa Real, pizzas doces, cada um com link para a categoria) e o cardápio completo em abas: Pizzas, Entradas, Pratos, Sobremesas e Bebidas. No celular, cada categoria mostra 12 itens e “Ver todos” |
+| Cardápio | `src/components/Menu` | Destaques (pizzas com nomes de castelo, Coroa Real, pizzas doces, cada um com link para a categoria) e o cardápio completo em abas: Pizzas, Entradas, Pratos, Sobremesas e Bebidas, cada item com preço e descrição. No celular, cada categoria mostra 12 itens e “Ver todos” |
 | Ambiente | `src/components/Ambience` | Faixa escura com quatro fotos da casa e legendas |
 | Visite | `src/components/Visit` | História curta e um cartão com endereço (“Como chegar”), telefone (“Ligar”), horários (“consulte pelo telefone”) e Instagram (“Abrir”) |
 | Rodapé | `src/components/Footer` | Marca, crédito da foto e “Voltar ao topo” |
@@ -83,7 +84,7 @@ Cada página tem a sua entrada (`src/main.tsx`, `src/notfound-main.tsx`), com a 
 - Abas do cardápio no padrão ARIA, com setas, Home e End no teclado; o botão “Ver todos” informa se a lista está aberta.
 - Foco sempre visível; alvos de toque com pelo menos 44 px; sem rolagem horizontal de 320 px em diante.
 - Com “reduzir movimento” ativado no sistema, sem rolagem suave nem animações de entrada.
-- Contraste de todo o texto medido sobre o fundo real (inclusive fotos) de 320 a 1920 px: o menor é 5,5:1.
+- Contraste de todo o texto medido sobre o fundo real (inclusive fotos) de 320 a 1440 px: o menor é 4,8:1 (sobretítulo branco no cartão vermelho da Coroa Real).
 
 ## Onde editar
 
@@ -105,23 +106,24 @@ Cada página tem a sua entrada (`src/main.tsx`, `src/notfound-main.tsx`), com a 
 3. Rode `npm run images`. O script gera AVIF + WebP em `public/images/` e atualiza `src/content/image-manifest.json`. As fotos não recebem tratamento de cor.
 4. Descreva a imagem e ajuste o enquadramento (`position.base / md / lg`) em `src/content/images.ts`.
 
-O logotipo está provisoriamente em tipografia, com uma coroa desenhada para a interface (classe `.brand`); não é o brasão oficial. Quando houver arquivo vetorial do logo, basta substituir esse bloco e rodar `npm run icons` com a nova marca.
+A logo oficial está em `assets-src/originais/logo-calabouco.png` (fundo branco, 447 px). `npm run logo` gera a versão para fundo escuro sem redesenhar nada: o brasão mantém as cores originais e só o branco de fora do desenho fica transparente; o nome passa de preto a creme. Quando houver a logo em vetor (SVG) ou em alta resolução, troque o arquivo e rode `npm run logo && npm run icons`.
 
 ## Identidade visual
 
-- **Títulos:** Fraunces (serifada, peso 600). **Texto, botões e sobretítulos:** Manrope. Só o subconjunto latino de cada uma, pré-carregado (37 KB e 25 KB).
-- **Cores:** fundo creme `#f6efe6`, texto marrom quase preto `#1e1613`, terracota dos arcos de tijolo `#a3361d` nos botões e destaques, faixas escuras `#18110e` no ambiente e no rodapé.
-- **Fotos:** as da casa, sem tratamento de cor, em cantos arredondados; nenhuma é esticada além da proporção original. Nenhuma imagem gerada por IA foi usada.
-- **Ícones e selo:** desenhados em SVG para o site (coroa, arco, fatia de pizza, selo “desde 1991”).
+- **Logo:** a oficial (brasão com espadas e “Calabouço — restaurante & pizzaria”), no cabeçalho, no rodapé, na 404, nos ícones e na imagem de compartilhamento.
+- **Letras:** as góticas do cardápio impresso da casa. **Pirata One** (textura estreita, a mais próxima da do cardápio entre as fontes livres) nos títulos, nas abas e nos nomes dos pratos; **Texturina** (gótica desenhada para leitura) no texto, nas descrições e nos preços. Só o subconjunto latino, pré-carregado (9 KB e 51 KB). Texto corrido inteiro em Pirata One ficaria difícil de ler; por isso a segunda fonte.
+- **Cores:** fundo marrom-escuro quente `#211813` (escuro, mas não preto), texto marfim `#f3e9dc`, vermelho do brasão `#b8312a` nos botões e `#f08a72` nos destaques de texto, preços em dourado `#c9a46a`, faixas mais fundas `#17110d` no ambiente e no rodapé.
+- **Fotos:** as da casa, sem tratamento de cor. A pizza da abertura vem da arte “Restaurante e Pizzaria à la carte — Desde 1991”, que tem só 684 px de largura: em tamanho grande ela fica um pouco suave. Uma foto de pizza em alta resolução deixaria a abertura nítida.
 
 ## Materiais usados
 
 | Original (em `assets-src/`) | Conteúdo | Dimensões | Uso |
 |---|---|---|---|
 | `originais/arte-corredor-abra-as-portas.webp` | Corredor de arcos, grades, tocha e escudo; frase “Abra as portas…”; crédito @gabrielmessine | 683×857 | Recorte sem a frase (com o crédito) no mosaico da abertura e no Ambiente |
-| `originais/foto-queijo-puxado.webp` | Massa assada com queijo esticando; salão com velas ao fundo | 680×849 | Foto principal da abertura (sem o fragmento “…uço” da borda); recorte das velas no Ambiente; imagem de compartilhamento |
-| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Recorte só da pizza no destaque “Pizzas com nomes de castelo” |
+| `originais/foto-queijo-puxado.webp` | Massa assada com queijo esticando; salão com velas ao fundo | 680×849 | Destaque “Pizzas com nomes de castelo” (sem o fragmento “…uço” da borda); recorte das velas no Ambiente |
+| `originais/arte-pizza-desde-1991.webp` | Forno, logotipo, “Restaurante e Pizzaria à la carte — Desde 1991”, pizza | 684×855 | Recorte só da pizza: a pizza grande da abertura e a imagem de compartilhamento |
 | `originais/arte-fachada-tradicao-curitibana.webp` | Entrada em arco com o letreiro; faixa “Tradição curitibana” | 686×856 | Recorte do letreiro no mosaico da abertura e no Ambiente; arte completa no Ambiente |
+| `originais/logo-calabouco.png` | Logo oficial: brasão e nome | 447×447 | Cabeçalho, rodapé, 404, ícones e compartilhamento (versão para fundo escuro) |
 | `referencias/cardapio-fotografado.webp` | Cardápio fotografado | 556×829 | Fonte do cardápio (não publicado) |
 
 Os originais têm cerca de 680 px de largura, o que limita a nitidez em telas grandes. Por isso as fotos aparecem em blocos de até cerca de meia tela, em vez de ocupar a largura inteira.
@@ -130,15 +132,16 @@ Os originais têm cerca de 680 px de largura, o que limita a nitidez em telas gr
 
 - **Cardápio transcrito da foto do cardápio da casa**, apenas dos trechos legíveis, com a grafia original (“alici”, “caipira”, “spaghetti, tagliarini ou penne”). Ficaram de fora as linhas apagadas ou ilegíveis na foto (algumas entradas, sucos e rótulos de vinho). A “Burrata com rúcula e pesto genovese” veio da lista do briefing.
 - **Bebidas** (vinhos, caipiras e batidas, aperitivos, cervejas, whiskies, licores, refrigerantes e sucos, café e chá) também vêm da foto. Os vinhos aparecem numa lista única, como no cardápio, sem separar por cor.
-- **Nada de preços, gramaturas ou tamanhos**: há versões do cardápio com valores diferentes. A página traz “Consulte a casa sobre valores e disponibilidade”, com o telefone ao lado.
-- **Não publicados**, por estarem na foto mas poderem ter mudado: taxa de serviço e formas de pagamento.
+- **Preços** transcritos da foto do cardápio impresso (pizzas e calzones no tamanho médio, como no cardápio). A coluna da direita da foto está cortada (mignon, frango, salmão, lasanhas, capeletti, acompanhamentos, sobremesas, café e chá) e alguns valores de bebidas estão apagados: esses itens mostram “consulte”. Os valores de leitura duvidosa estão marcados com `// conferir` em `src/content/menu.ts`. A página avisa que os valores são do cardápio impresso, sujeitos a alteração, e que não incluem a taxa de serviço de 10% (informação do próprio cardápio).
+- **Descrições** escritas a partir do nome de cada prato (ou da definição do prato clássico, como marguerita e parmegiana), porque a foto não traz ingredientes. Nas receitas da casa e nas tradicionais cuja composição muda de pizzaria para pizzaria (portuguesa, paulista, napolitana etc.), o texto pede que o cliente pergunte ao garçom.
+- **Não publicados**, por estarem na foto mas poderem ter mudado: formas de pagamento.
 - **A foto do queijo não foi identificada como Coroa Real.** O prato parece compatível, mas o nome não está confirmado. A Coroa Real aparece com a descrição do cardápio e um ícone de coroa.
 - **Também não foram publicados**: horários, WhatsApp, delivery, avaliações, história dos proprietários e prêmios. Do mockup de uma versão anterior não foram usados o endereço, o telefone e o horário (que não conferem com a casa) nem as imagens geradas por IA.
 
 ## Pendências que dependem da casa
 
-- Logotipo em arquivo utilizável (SVG/PNG em alta resolução).
 - Fotografias originais em alta resolução, de preferência do salão e dos pratos (com o nome de cada um), incluindo a Coroa Real.
-- Confirmação do cardápio atual (itens, grafias, rótulos de vinho e bebidas) e, se a casa quiser, dos preços.
+- Conferência dos preços marcados com `// conferir` e dos que faltam (“consulte”), e os ingredientes das pizzas da casa e das tradicionais de composição variável.
+- Logo em vetor (SVG) e foto de pizza em alta resolução para a abertura.
 - Horários completos e se o telefone também atende por WhatsApp.
 - Domínio definitivo, se não for usar o endereço do GitHub Pages.

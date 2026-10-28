@@ -3,8 +3,8 @@
 /* O espaço da barra fixa do celular fica dentro do rodapé, na mesma cor */
 .site-footer {
   padding-bottom: var(--action-bar-h);
-  background: var(--c-char);
-  color: var(--c-on-char-2);
+  background: var(--c-deep);
+  color: var(--c-text-2);
 }
 
 .site-footer__inner {
@@ -21,28 +21,27 @@
   align-items: center;
   gap: 0.8rem;
   min-height: 44px;
-  color: var(--c-on-char);
+  color: var(--c-text);
   text-decoration: none;
 }
 
-.site-footer__crown {
-  width: 36px;
-  height: auto;
-  color: #f0a98f;
+.site-footer__emblem img {
+  width: auto;
+  height: 48px;
 }
 
 .site-footer__name {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 400;
   line-height: 1.1;
 }
 
 .site-footer__meta {
   display: block;
   font-size: var(--fs-small);
-  color: var(--c-on-char-2);
+  color: var(--c-text-2);
 }
 
 .site-footer__credit {
@@ -56,7 +55,7 @@
   min-height: 44px;
   font-size: var(--fs-small);
   font-weight: 700;
-  color: var(--c-on-char);
+  color: var(--c-text);
   text-decoration: none;
 }
 

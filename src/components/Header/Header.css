@@ -8,7 +8,7 @@
   z-index: 50;
   height: var(--header-h);
   border-bottom: 1px solid transparent;
-  background: rgb(246 239 230 / 0.82);
+  background: rgb(33 24 19 / 0.86);
   backdrop-filter: blur(14px) saturate(1.3);
   -webkit-backdrop-filter: blur(14px) saturate(1.3);
   transition:
@@ -18,7 +18,7 @@
 
 .site-header.is-scrolled {
   border-bottom-color: var(--c-line);
-  box-shadow: 0 6px 24px -18px rgb(30 22 19 / 0.5);
+  box-shadow: 0 10px 30px -18px rgb(0 0 0 / 0.8);
 }
 
 .site-header__bar {
@@ -28,42 +28,27 @@
   height: 100%;
 }
 
-/* ---------- Marca (provisória: coroa + nome; não substitui o brasão) ---------- */
+/* ---------- Marca: logo oficial (brasão + nome) ---------- */
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.55rem;
   min-height: 44px;
   margin-right: auto;
-  color: var(--c-ink);
   text-decoration: none;
 }
 
-.brand__crown {
-  width: 34px;
-  height: auto;
-  color: var(--c-brick);
+.brand img {
+  width: auto;
 }
 
-.brand__text {
-  display: grid;
-  line-height: 1.05;
+.brand__emblem img {
+  height: 40px;
 }
 
-.brand__name {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-}
-
-.brand__sub {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--c-ink-3);
+.brand__name img {
+  height: 32px;
 }
 
 /* ---------- Links ---------- */
@@ -93,28 +78,32 @@
 }
 
 .site-nav .is-key a {
-  background: var(--c-ink);
-  color: var(--c-cream);
+  background: var(--c-text);
+  color: var(--c-bg);
 }
 
 .site-nav a:hover {
-  background: var(--c-cream-2);
-  color: var(--c-ink);
+  background: var(--c-surface-2);
+  color: var(--c-text);
 }
 
 .site-nav a[aria-current] {
-  background: var(--c-brick-soft);
-  color: var(--c-brick-dark);
+  background: var(--c-brick-tint);
+  color: var(--c-accent);
 }
 
 .site-header__call {
   display: none;
 }
 
-/* Telas muito estreitas: só o nome, sem a linha de baixo */
+/* Telas muito estreitas: brasão e nome um pouco menores */
 @media (max-width: 369.98px) {
-  .brand__sub {
-    display: none;
+  .brand__emblem img {
+    height: 34px;
+  }
+
+  .brand__name img {
+    height: 27px;
   }
 }
 
@@ -129,12 +118,12 @@
   }
 
   .site-nav .is-key a:hover {
-    background: var(--c-cream-2);
+    background: var(--c-surface-2);
   }
 
   .site-nav .is-key a[aria-current] {
-    background: var(--c-brick-soft);
-    color: var(--c-brick-dark);
+    background: var(--c-brick-tint);
+    color: var(--c-accent);
   }
 
   .site-header__call {
@@ -143,11 +132,11 @@
 }
 
 @media (min-width: 1024px) {
-  .brand__crown {
-    width: 40px;
+  .brand__emblem img {
+    height: 50px;
   }
 
-  .brand__name {
-    font-size: 1.5rem;
+  .brand__name img {
+    height: 40px;
   }
 }

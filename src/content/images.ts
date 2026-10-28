@@ -29,7 +29,7 @@ const meta: Record<keyof typeof manifest, ImageMeta> = {
   },
   queijo: {
     alt: 'Massa assada e dourada, com orégano por cima, sendo servida com o queijo derretido se esticando; ao fundo, paredes de tijolo e velas acesas.',
-    position: { base: '40% 30%' },
+    position: { base: '45% 72%' },
   },
   'arte-fachada': {
     alt: 'Arte do Calabouço: entrada em arco de tijolos sob o letreiro “Calabouço — restaurante, pizzaria”, com a faixa “Tradição curitibana”.',

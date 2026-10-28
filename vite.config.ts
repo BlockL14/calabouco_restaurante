@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
-import { menuCategories, featuredDish } from './src/content/menu';
+import { menuCategories } from './src/content/menu';
 
 /**
  * Endereços do site publicado, definidos no build:
@@ -17,7 +17,7 @@ const BASE = process.env.BASE_PATH !== undefined ? `${process.env.BASE_PATH.repl
 const PAGES = { main: 'index.html', notfound: '404.html' };
 
 /**
- * Pré-carrega as fontes (Fraunces nos títulos, Manrope no texto), apenas o subconjunto
+ * Pré-carrega as fontes (Pirata One nos títulos, Texturina no texto), apenas o subconjunto
  * latino. Sem isso, o navegador só descobre as fontes depois que o React monta a
  * página e o título aparece primeiro na fonte reserva.
  */
@@ -59,7 +59,10 @@ function menuJsonLd() {
         hasMenuItem: group.items.map((item) => ({
           '@type': 'MenuItem',
           name: item.name,
-          ...(item.featured ? { description: featuredDish.description } : item.note ? { description: item.note } : {}),
+          description: item.description,
+          ...(item.price !== undefined
+            ? { offers: { '@type': 'Offer', price: item.price.toFixed(2), priceCurrency: 'BRL' } }
+            : {}),
         })),
       })),
     })),
@@ -132,7 +135,7 @@ export default defineConfig({
     react(),
     seo(),
     contentSecurityPolicy(),
-    preloadFonts([/fraunces-latin-wght-normal-[^/]+\.woff2$/, /manrope-latin-wght-normal-[^/]+\.woff2$/]),
+    preloadFonts([/pirata-one-latin-400-normal-[^/]+\.woff2$/, /texturina-latin-wght-normal-[^/]+\.woff2$/]),
   ],
   build: {
     target: 'es2022',

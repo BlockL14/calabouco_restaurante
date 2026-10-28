@@ -12,11 +12,10 @@
   max-width: 44rem;
 }
 
-.not-found__crown {
-  width: 64px;
+.not-found__logo img {
+  width: 170px;
   height: auto;
-  margin-bottom: 1.25rem;
-  color: var(--c-brick);
+  margin-bottom: 1.5rem;
 }
 
 .not-found .kicker {

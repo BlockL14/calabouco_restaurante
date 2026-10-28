@@ -1,6 +1,6 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import { business, sectionIds } from '../../content/business';
-import { countItems, featuredDish, menuCategories, menuNote, type MenuCategoryId } from '../../content/menu';
+import { countItems, featuredDish, formatPrice, menuCategories, menuNote, type MenuCategoryId, type MenuItem } from '../../content/menu';
 import { menuText } from '../../content/site';
 import { ArrowRight, Crown, CrownMark, Minus, Phone, Plus } from '../Icons';
 import { Picture } from '../Picture';
@@ -25,13 +25,34 @@ function ShowIn({ label, onClick }: { label: string; onClick: () => void }) {
   );
 }
 
+/** Uma linha do cardápio: nome e preço lado a lado, descrição embaixo. */
+function Item({ item }: { item: MenuItem }) {
+  return (
+    <>
+      <span className="menu__item-head">
+        <span className="menu__item-name">
+          {item.featured && <CrownMark className="menu__item-crown" />}
+          {item.name}
+        </span>
+        <span className="menu__item-dots" aria-hidden="true" />
+        {item.price !== undefined ? (
+          <span className="menu__item-price">{formatPrice(item.price)}</span>
+        ) : (
+          <span className="menu__item-price is-ask">consulte</span>
+        )}
+      </span>
+      <span className="menu__item-desc">{item.description}</span>
+    </>
+  );
+}
+
 /** Destaques da casa: pizzas com nomes de castelo, Coroa Real e pizzas doces. */
 function Featured({ onShow }: { onShow: (id: MenuCategoryId) => void }) {
   return (
     <div className="menu__featured">
       <article className="feature feature--house" data-reveal>
         <div className="feature__media">
-          <Picture image="pizza" sizes="(min-width: 1024px) 40vw, 100vw" />
+          <Picture image="queijo" sizes="(min-width: 1024px) 40vw, 100vw" />
         </div>
         <div className="feature__body">
           <p className="kicker">Receitas da casa</p>
@@ -50,6 +71,7 @@ function Featured({ onShow }: { onShow: (id: MenuCategoryId) => void }) {
         <p className="kicker">{featuredDish.eyebrow}</p>
         <h3 className="feature__title">{featuredDish.name}</h3>
         <p className="feature__text">{featuredDish.description}</p>
+        <p className="feature__price">{formatPrice(featuredDish.price)}</p>
         <ShowIn label="Ver em Pratos" onClick={() => onShow('pratos')} />
       </article>
 
@@ -181,7 +203,10 @@ export function Menu() {
                 index += group.items.length;
                 return (
                   <div key={group.title} className={`menu__group${first >= PREVIEW ? ' is-extra' : ''}`}>
-                    <h3 className="menu__group-title">{group.title}</h3>
+                    <h3 className="menu__group-title">
+                      {group.title}
+                      {group.note && <span className="menu__group-note">{group.note}</span>}
+                    </h3>
                     <ul role="list" className="menu__items">
                       {group.items.map((item, i) => (
                         <li
@@ -194,11 +219,7 @@ export function Menu() {
                             .filter(Boolean)
                             .join(' ')}
                         >
-                          <span className="menu__item-name">
-                            {item.featured && <CrownMark className="menu__item-crown" />}
-                            {item.name}
-                          </span>
-                          {item.note && <span className="menu__item-note">{item.note}</span>}
+                          <Item item={item} />
                         </li>
                       ))}
                     </ul>
@@ -219,9 +240,7 @@ export function Menu() {
             <Phone />
             <span>
               {menuNote}{' '}
-              <a href={business.phone.href}>
-                Ligar: {business.phone.display}
-              </a>
+              <a href={business.phone.href}>Ligar: {business.phone.display}</a>
             </span>
           </p>
         </div>

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { business, navigation, sectionIds } from '../../content/business';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
 import { homeSection, routes, type Page } from '../../lib/routes';
-import { CrownMark, Phone } from '../Icons';
+import { Phone } from '../Icons';
+import { Logo } from '../Logo';
 import './Header.css';
 
 const SPY_IDS = navigation.map((item) => item.section);
@@ -28,11 +29,8 @@ export function Header({ page = 'home' }: { page?: Page }) {
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="container site-header__bar">
         <a className="brand" href={page === 'home' ? `#${sectionIds.top}` : routes.home}>
-          <CrownMark className="brand__crown" />
-          <span className="brand__text">
-            <span className="brand__name">{business.name}</span>
-            <span className="brand__sub">{business.tagline}</span>
-          </span>
+          <Logo variant="brasao" alt="" className="brand__emblem" priority />
+          <Logo variant="nome" alt={`${business.name} — restaurante & pizzaria`} className="brand__name" priority />
           <span className="sr-only"> — início</span>
         </a>
 

@@ -1,19 +1,18 @@
 import { business, sectionIds } from '../../content/business';
-import { images } from '../../content/images';
 import { hero } from '../../content/site';
 import { Phone, Pin } from '../Icons';
 import { Picture } from '../Picture';
 import './Hero.css';
 
-/** Mesmo `sizes` do pré-carregamento em index.html (foto principal do mosaico). */
-export const HERO_SIZES = '(min-width: 900px) 33vw, 62vw';
+/** Mesmo `sizes` do pré-carregamento em index.html (a pizza grande da abertura). */
+export const HERO_SIZES = '(min-width: 900px) 64vw, 150vw';
 
 /** Botões da abertura: a barra fixa do celular aparece quando eles saem da tela. */
 export const HERO_ACTIONS_ID = 'abertura-acoes';
 
 /**
  * Selo circular “desde 1991” sobre o mosaico (decorativo: a informação está no texto).
- * O texto do contorno foi medido para fechar a volta (2π·44 ≈ 276 unidades) com a Manrope:
+ * O texto do contorno foi medido para fechar a volta (2π·44 ≈ 276 unidades) com a Texturina:
  * ao mudar o texto, o corpo ou o espaçamento, meça de novo para não cortar o fim.
  */
 function Seal() {
@@ -24,7 +23,7 @@ function Seal() {
       </defs>
       <circle className="hero__seal-bg" cx="60" cy="60" r="58" />
       <circle className="hero__seal-ring" cx="60" cy="60" r="31" />
-      <text className="hero__seal-text" fontSize="10" letterSpacing="1.89">
+      <text className="hero__seal-text" fontSize="10" letterSpacing="1.42">
         <textPath href="#selo-circulo">CALABOUÇO · CENTRO CÍVICO · CURITIBA ·</textPath>
       </text>
       <text className="hero__seal-text" x="60" y="55" textAnchor="middle" fontSize="10" letterSpacing="1.5">
@@ -78,19 +77,10 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="hero__collage">
-          <figure className="hero__photo hero__photo--main">
-            <Picture image="queijo" sizes={HERO_SIZES} priority />
-          </figure>
-          <figure className="hero__photo hero__photo--side">
-            <Picture image="corredor" sizes="(min-width: 900px) 22vw, 38vw" priority />
-            <figcaption className="hero__credit">Foto: {images.corredor.credit}</figcaption>
-          </figure>
-          <figure className="hero__photo hero__photo--wide">
-            <Picture image="letreiro" sizes="(min-width: 900px) 22vw, 38vw" />
-          </figure>
+        <figure className="hero__pizza">
+          <Picture image="pizza" sizes={HERO_SIZES} priority imgClassName="hero__pizza-img" />
           <Seal />
-        </div>
+        </figure>
       </div>
     </section>
   );

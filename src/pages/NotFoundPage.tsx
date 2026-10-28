@@ -1,7 +1,7 @@
 import { ActionBar } from '../components/ActionBar/ActionBar';
 import { Footer } from '../components/Footer/Footer';
 import { Header } from '../components/Header/Header';
-import { CrownMark } from '../components/Icons';
+import { Logo } from '../components/Logo';
 import { sectionIds } from '../content/business';
 import { homeSection, routes } from '../lib/routes';
 import './NotFoundPage.css';
@@ -17,7 +17,7 @@ export function NotFoundPage() {
       <main id="conteudo" tabIndex={-1}>
         <section className="not-found" aria-labelledby="erro-titulo">
           <div className="container not-found__inner">
-            <CrownMark className="not-found__crown" />
+            <Logo variant="completa" alt="Calabouço — restaurante & pizzaria" className="not-found__logo" priority />
             <p className="kicker">Erro 404</p>
             <h1 id="erro-titulo" className="title">
               Página não encontrada

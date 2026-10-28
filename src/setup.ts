@@ -1,6 +1,7 @@
 // Base comum às páginas: fontes e estilos globais.
-// Fraunces (títulos) e Manrope (texto), variáveis e só no subconjunto latino.
-import '@fontsource-variable/fraunces/wght.css';
-import '@fontsource-variable/manrope/wght.css';
+// Pirata One (títulos) e Texturina (texto), só no subconjunto latino: as letras góticas
+// do cardápio impresso da casa, com uma versão feita para leitura no texto corrido.
+import '@fontsource/pirata-one/latin-400.css';
+import '@fontsource-variable/texturina/wght.css';
 import './styles/tokens.css';
 import './styles/base.css';

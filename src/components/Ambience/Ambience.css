@@ -1,8 +1,8 @@
 /* Ambiente — faixa escura com quatro fotos reais em grade */
 
 .ambience {
-  background: var(--c-char);
-  color: var(--c-on-char);
+  background: var(--c-deep);
+  color: var(--c-text);
 }
 
 .ambience .kicker {
@@ -14,7 +14,7 @@
 }
 
 .ambience .lead {
-  color: var(--c-on-char-2);
+  color: var(--c-text-2);
 }
 
 .ambience__grid {
@@ -34,7 +34,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: var(--radius-sm);
-  background: var(--c-char-2);
+  background: var(--c-deep-2);
 }
 
 .ambience__photo picture,
